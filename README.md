@@ -6,6 +6,8 @@
 
 A secure clipboard filtering application that automatically detects and masks sensitive information in real-time.
 
+![image](https://50bvd.com/assets/img/Capture%20d%e2%80%99%c3%a9cran%202025-12-27%20185145.png)
+
 ## ✨ Features
 
 - 🔒 **112 pre-configured filters** across 7 categories
@@ -159,3 +161,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **⭐ Star this repo if you find it useful!**
+
