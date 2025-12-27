@@ -1,0 +1,149 @@
+{
+  "app": {
+    "name": "ClipboardFilter",
+    "trayTooltip": "ClipboardFilter"
+  },
+  "menu": {
+    "show": "Afficher",
+    "about": "A propos",
+    "quit": "Quitter"
+  },
+  "about": {
+    "title": "A propos",
+    "version": "Version 1.0.0",
+    "developer": "DÃ©veloppÃ© par",
+    "description": "Outil de filtrage sÃ©curisÃ© du presse-papiers avec dÃ©tection automatique de donnÃ©es sensibles",
+    "shortcuts": "Raccourcis",
+    "copyShortcut": "Copier",
+    "pasteShortcut": "Coller",
+    "instructions": "Configuration"
+  },
+  "config": {
+    "title": "Configuration",
+    "filtersTab": "Filtres",
+    "settingsTab": "Parametres",
+    "testTab": "Test",
+    "addFilter": "Ajouter un filtre",
+    "editFilter": "Modifier",
+    "deleteFilter": "Supprimer",
+    "testFilters": "Tester",
+    "enabled": "Active",
+    "description": "Description",
+    "pattern": "Pattern",
+    "noFilters": "Aucun filtre",
+    "deleteConfirm": "Supprimer ?",
+    "deleteTitle": "Confirmer"
+  },
+  "filterForm": {
+    "title": "Configuration du filtre",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "ex: Cles API",
+    "patternLabel": "Pattern a filtrer",
+    "patternPlaceholder": "ex: sk-[a-zA-Z0-9]+",
+    "replacementLabel": "Remplacement",
+    "replacementPlaceholder": "ex: XXXX",
+    "useRegex": "Expression reguliere",
+    "enabled": "Active",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "patternRequired": "Pattern requis",
+    "invalidRegex": "Regex invalide",
+    "categoryLabel": "Nom de la categorie",
+    "noCategoryOption": "Aucun dossier"
+  },
+  "test": {
+    "title": "Test",
+    "inputLabel": "Original",
+    "inputPlaceholder": "Texte...",
+    "outputLabel": "Filtre",
+    "applyFilters": "Appliquer",
+    "noInput": "Entrez du texte",
+    "filtered": "{count} filtre(s)",
+    "noFilters": "Aucun",
+    "noMatches": "Aucun"
+  },
+  "settings": {
+    "title": "Parametres",
+    "language": "Langue",
+    "autoStart": "Demarrage auto",
+    "notifications": "Notifications",
+    "theme": "Theme",
+    "themeLight": "Clair",
+    "themeDark": "Sombre",
+    "themeAuto": "Auto",
+    "shortcutsTitle": "Raccourcis",
+    "copyShortcut": "Copier",
+    "pasteShortcut": "Coller",
+    "shortcutHelp": "Modifier",
+    "hintLabel": "Astuce :",
+    "hintText": "Cliquez sur Modifier puis appuyez sur votre combinaison de touches",
+    "deleteAllConfirm": "Supprimer TOUS les filtres et categories personnalises ?\\n\\n{0} filtres seront supprimes.\\n\\nCette action est irreversible !",
+    "resetAllConfirm": "Reinitialiser TOUS les filtres par defaut ?\\n\\nCela activera tous les filtres desactives mais ne supprimera pas vos filtres personnalises.",
+    "resetCategoryConfirm": "Reinitialiser tous les filtres de la categorie",
+    "categoryReset": "Categorie",
+    "reset": "reinitialisee",
+    "filtersReset": "filtres par defaut reinitialises",
+    "noCustomFilters": "Aucun filtre personnalise a supprimer.",
+    "customFiltersDeleted": "filtres personnalises",
+    "and": "et",
+    "foldersDeleted": "dossiers supprimes",
+    "dataManagement": "Gestion des donnees",
+    "resetAllDefaults": "Reinitialiser tous les filtres par defaut",
+    "deleteAllCustom": "Supprimer toutes les categories/filtres personnalises",
+    "changeShortcut": "🎙 Modifier"
+  },
+  "notifications": {
+    "copyFiltered": "Copie",
+    "pasteFiltered": "Colle",
+    "itemsFiltered": "{count} masque(s)"
+  },
+  "errors": {
+    "title": "Erreur",
+    "unknown": "Erreur",
+    "cannotDeleteDefault": "Impossible de supprimer une categorie par defaut."
+  },
+  "categories": {
+    "Developer": "Developpeur",
+    "Finance": "Finance",
+    "Personal": "Personnel",
+    "Health": "Sante",
+    "HR": "RH",
+    "System": "Systeme",
+    "Communication": "Communication"
+  },
+  "folders": {
+    "createFolder": "Nouvelle categorie",
+    "folderName": "Nom de la categorie",
+    "deleteFolder": "Supprimer ?",
+    "createPrompt": "Nom de la categorie",
+    "iconPrompt": "Icone (emoji)",
+    "andFilters": "et tous ses",
+    "noFolderPrompt": "Vous n'avez pas encore créé de dossier. Voulez-vous en créer un maintenant ?"
+  },
+  "templates": {
+    "exportSuccess": "Template \"{0}\" exporte ! ({1} filtres)",
+    "importTitle": "Importer",
+    "exportBtn": "Exporter JSON",
+    "importDesc": "Chargez un template JSON",
+    "formatDesc": "Un template contient une ou plusieurs categories avec leurs filtres :",
+    "importConfirm": "Importer \"{0}\" ({1} filtres) ?",
+    "exportPromptAuthor": "Auteur (optionnel) :",
+    "importSuccess": "Import termine ! {0} filtres importes",
+    "formatTitle": "Format du template",
+    "exportTitle": "Exporter",
+    "importBtn": "Importer JSON",
+    "exportPromptDesc": "Description (optionnel) :",
+    "exportPromptName": "Nom du template :",
+    "subtitle": "Exportez votre configuration ou importez des templates",
+    "importError": "Erreur : Format invalide",
+    "title": "Templates de filtres",
+    "exportDesc": "Creez un template JSON avec vos filtres personnalises",
+    "noCustomFilters": "Aucun filtre personnalise a exporter.\\n\\nLes filtres par defaut ne peuvent pas etre exportes.\\nCreez vos propres filtres ou categories pour pouvoir exporter un template."
+  },
+  "shortcut": {
+    "modalTitle": "Enregistrer un raccourci",
+    "waiting": "Appuyez sur la combinaison de touches souhaitee...",
+    "examples": "Exemples : Ctrl+Alt+V, Ctrl+Shift+P, etc.",
+    "cancel": "Annuler"
+  }
+}

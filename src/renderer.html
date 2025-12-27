@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClipboardFilter</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .folder-actions {
+      display: flex;
+      gap: 6px;
+      margin-left: auto;
+    }
+    
+    /* Shortcut modal styles */
+    .shortcut-status {
+      text-align: center;
+      padding: 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    
+    .shortcut-status.waiting {
+      background: #fff3cd;
+      color: #856404;
+      border: 2px dashed #ffc107;
+      animation: pulse-waiting 1.5s infinite;
+    }
+    
+    .shortcut-status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 2px solid #28a745;
+    }
+    
+    @keyframes pulse-waiting {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    body.dark-theme .shortcut-status.waiting {
+      background: #332701;
+      color: #ffc107;
+    }
+    
+    body.dark-theme .shortcut-status.success {
+      background: #0d3320;
+      color: #3fb950;
+    }
+    
+    .shortcut-display {
+      display: inline-block;
+      padding: 8px 16px;
+      background: var(--background);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div class="app-header">
+      <h1 id="app-title"><img src="../assets/icon.png" style="width: 28px; height: 28px; margin-right: 10px;"> ClipboardFilter</h1>
+      <div class="header-subtitle" id="header-subtitle">Configuration</div>
+    </div>
+
+    <div class="tab-navigation">
+      <button class="tab-button active" data-tab="filters" id="tab-filters">Filtres</button>
+      <button class="tab-button" data-tab="test" id="tab-test">Test</button>
+      <button class="tab-button" data-tab="templates" id="tab-templates">Templates</button>
+      <button class="tab-button" data-tab="settings" id="tab-settings">Parametres</button>
+    </div>
+
+    <div class="tab-content-container">
+      <!-- Filters Tab -->
+      <div class="tab-content active" id="content-filters">
+        <div class="filters-container">
+          <div class="filters-toolbar">
+            <button class="btn btn-primary" id="add-filter-btn">
+              <span class="btn-icon">+</span>
+              <span id="add-filter-text">Ajouter un filtre</span>
+            </button>
+            <button class="btn btn-secondary" id="add-folder-btn">
+              <span id="add-folder-text">Nouveau dossier</span>
+            </button>
+          </div>
+          <div class="filters-list" id="filters-list"></div>
+          <div class="no-filters" id="no-filters" style="display: none;">
+            <p id="no-filters-text">Aucun filtre</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Test Tab -->
+      <div class="tab-content" id="content-test">
+        <div class="test-container">
+          <div class="test-section">
+            <label class="form-label" id="test-input-label">Texte original:</label>
+            <textarea class="form-textarea" id="test-input" rows="8" placeholder="Collez du texte ici..."></textarea>
+          </div>
+          <div class="test-action">
+            <button class="btn btn-primary btn-large" id="apply-filters-btn">
+              <span id="apply-filters-text">Appliquer les filtres</span>
+            </button>
+          </div>
+          <div class="test-section">
+            <label class="form-label" id="test-output-label">Texte filtre:</label>
+            <textarea class="form-textarea" id="test-output" rows="8" readonly></textarea>
+          </div>
+          <div class="test-status" id="test-status" style="display: none;"></div>
+        </div>
+      </div>
+
+      <!-- Templates Tab -->
+      <div class="tab-content" id="content-templates">
+        <div class="templates-container">
+          <div class="templates-header">
+            <h2 id="templates-title">Templates de filtres</h2>
+            <p id="templates-subtitle">Exportez vos filtres ou importez des templates</p>
+          </div>
+
+          <div class="templates-actions">
+            <div class="template-action-card">
+              <h3 id="templates-export-title">Exporter</h3>
+              <p id="templates-export-desc">Creez un fichier JSON avec vos filtres</p>
+              <button class="btn btn-primary" id="export-template-btn">
+                <span id="templates-export-btn">Exporter JSON</span>
+              </button>
+            </div>
+
+            <div class="template-action-card">
+              <h3 id="templates-import-title">Importer</h3>
+              <p id="templates-import-desc">Chargez un template JSON</p>
+              <input type="file" id="import-file-input" accept=".json" style="display: none;">
+              <button class="btn btn-primary" id="import-template-btn">
+                <span id="templates-import-btn">Importer JSON</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="templates-info">
+            <h3 id="templates-format-title">Format du template</h3>
+            <p id="templates-format-desc">Un template contient une ou plusieurs categories avec leurs filtres :</p>
+            <pre><code>{
+  "name": "Mon Template",
+  "description": "Description",
+  "author": "Votre nom",
+  "version": "1.0.0",
+  "filters": [
+    {
+      "category": "Custom",
+      "description": "Mon filtre",
+      "pattern": "regex",
+      "replacement": "REDACTED",
+      "useRegex": true,
+      "enabled": true
+    }
+  ]
+}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div class="tab-content" id="content-settings">
+        <div class="settings-container">
+          <div class="settings-section">
+            <h3 id="settings-general-title">General</h3>
+            <div class="form-group">
+              <label class="form-label" id="settings-language-label">Langue:</label>
+              <select class="form-select" id="language-select"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" id="settings-theme-label">Theme:</label>
+              <select class="form-select" id="theme-select">
+                <option value="auto" id="theme-auto">Auto</option>
+                <option value="light" id="theme-light">Clair</option>
+                <option value="dark" id="theme-dark">Sombre</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="notifications-check">
+                <span id="settings-notifications-label">Notifications</span>
+              </label>
+            </div>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="autostart-check">
+                <span id="settings-autostart-label">Demarrage auto</span>
+              </label>
+            </div>
+          </div>
+          <div class="settings-section">
+            <h3 id="settings-data-title">Gestion des donnees</h3>
+            <div class="form-group">
+              <button class="btn btn-secondary" id="reset-all-defaults-btn" style="width: 100%; margin-bottom: 10px;">
+                <span id="reset-all-defaults-text">↻ Reinitialiser tous les filtres par defaut</span>
+              </button>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-danger" id="delete-all-custom-btn" style="width: 100%;">
+                <span id="delete-all-custom-text">🗑 Supprimer toutes les categories/filtres personnalises</span>
+              </button>
+            </div>
+          </div>
+          <div class="settings-section">
+            <h3 id="settings-shortcuts-title">Raccourcis clavier</h3>
+            <div class="shortcuts-info">
+              <div class="shortcut-item" style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <span id="settings-paste-shortcut-label" class="shortcut-label" style="font-weight: 500;">
+                    Coller avec filtre :
+                  </span>
+                  <br>
+                  <span class="shortcut-display" id="shortcut-display">Ctrl+Shift+V</span>
+                </div>
+                <button class="btn btn-primary" id="change-shortcut-btn">
+                  <span id="change-shortcut-text">🎙 Modifier</span>
+                </button>
+              </div>
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-top: 15px; padding: 12px; background: var(--background); border-radius: var(--border-radius);">
+              💡 <strong id="shortcut-hint-label">Astuce :</strong> <span id="shortcut-hint-text">Cliquez sur Modifier puis appuyez sur votre combinaison de touches</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Form Modal -->
+  <div class="modal" id="filter-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="filter-modal-title">Configuration du filtre</h2>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" id="filter-description-label">Description :</label>
+          <input type="text" class="form-input" id="filter-description" 
+            placeholder="ex. Cles API OpenAI">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" id="filter-category-label">Categorie :</label>
+          <select class="form-select" id="filter-category"></select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" id="filter-pattern-label">Pattern a filtrer :</label>
+          <input type="text" class="form-input" id="filter-pattern" 
+            placeholder="ex. sk-[a-zA-Z0-9]+">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" id="filter-replacement-label">Remplacement :</label>
+          <input type="text" class="form-input" id="filter-replacement" 
+            placeholder="ex. XXXX-API-KEY-XXXX">
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="filter-regex">
+            <span id="filter-regex-label">Utiliser une expression reguliere</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="filter-enabled" checked>
+            <span id="filter-enabled-label">Active</span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="filter-cancel">
+          <span id="filter-cancel-text">Annuler</span>
+        </button>
+        <button class="btn btn-primary" id="filter-save">
+          <span id="filter-save-text">Enregistrer</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shortcut Recorder Modal -->
+  <div class="modal" id="shortcut-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="shortcut-modal-title">Enregistrer un raccourci</h2>
+        <button class="modal-close" id="shortcut-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="shortcut-status waiting" id="shortcut-modal-status">
+          Appuyez sur la combinaison de touches souhaitee...
+        </div>
+        <p id="shortcut-modal-examples" style="text-align: center; color: var(--text-secondary); font-size: 14px;">
+          Exemples : Ctrl+Alt+V, Ctrl+Shift+P, etc.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="shortcut-cancel">
+          <span id="shortcut-cancel-text">Annuler</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+{
+  "app": {
+    "name": "ClipboardFilter",
+    "trayTooltip": "ClipboardFilter - En ejecución"
+  },
+  "menu": {
+    "show": "Mostrar configuración",
+    "about": "Acerca de",
+    "quit": "Salir"
+  },
+  "config": {
+    "title": "ClipboardFilter - Configuración",
+    "filtersTab": "Filtros",
+    "testTab": "Prueba",
+    "settingsTab": "Ajustes",
+    "addFilter": "Añadir filtro",
+    "noFilters": "No hay filtros",
+    "deleteConfirm": "¿Eliminar este filtro?",
+    "deleteTitle": "Confirmar",
+    "editFilter": "Editar",
+    "deleteFilter": "Eliminar",
+    "testFilters": "Probar",
+    "enabled": "Activado",
+    "description": "Descripción",
+    "pattern": "Patrón"
+  },
+  "filterForm": {
+    "title": "Configuración del filtro",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "ej. Claves API",
+    "patternLabel": "Patrón a filtrar",
+    "patternPlaceholder": "ej. sk-[a-zA-Z0-9]+",
+    "replacementLabel": "Reemplazo",
+    "replacementPlaceholder": "ej. XXXX",
+    "useRegex": "Expresión regular",
+    "enabled": "Activado",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "patternRequired": "Patrón requerido",
+    "invalidRegex": "Regex inválido",
+    "categoryLabel": "Nombre de la categoría",
+    "noCategoryOption": "Ninguna carpeta"
+  },
+  "test": {
+    "title": "Probar",
+    "inputLabel": "Original",
+    "inputPlaceholder": "Texto...",
+    "outputLabel": "Filtrado",
+    "applyFilters": "Aplicar",
+    "noInput": "Ingrese texto",
+    "filtered": "{count} filtrado(s)",
+    "noFilters": "Ninguno",
+    "noMatches": "Ninguno"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "language": "Idioma",
+    "autoStart": "Inicio automático",
+    "notifications": "Notificaciones",
+    "theme": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "themeAuto": "Auto",
+    "shortcutsTitle": "Atajos",
+    "copyShortcut": "Copiar",
+    "pasteShortcut": "Pegar",
+    "shortcutHelp": "Cambiar",
+    "hintLabel": "Consejo:",
+    "hintText": "Haga clic en Modificar y presione su combinacion",
+    "deleteAllConfirm": "¿Eliminar TODOS los filtros y categorías personalizados?\\n\\nSe eliminarán {0} filtros.\\n\\n¡Esta acción es irreversible!",
+    "resetAllConfirm": "¿Restablecer TODOS los filtros predeterminados?\\n\\nEsto habilitará todos los filtros deshabilitados pero no eliminará sus filtros personalizados.",
+    "resetCategoryConfirm": "Restablecer todos los filtros en categoría",
+    "categoryReset": "Categoría",
+    "reset": "restablecida",
+    "filtersReset": "filtros predeterminados restablecidos",
+    "noCustomFilters": "No hay filtros personalizados para eliminar.",
+    "customFiltersDeleted": "filtros personalizados",
+    "and": "y",
+    "foldersDeleted": "carpetas eliminadas",
+    "dataManagement": "Gestión de datos",
+    "resetAllDefaults": "Restablecer todos los filtros predeterminados",
+    "deleteAllCustom": "Eliminar todas las categorías/filtros personalizados",
+    "changeShortcut": "🎙 Modificar"
+  },
+  "notifications": {
+    "copyFiltered": "Copiado",
+    "pasteFiltered": "Pegado",
+    "itemsFiltered": "{count} enmascarado(s)"
+  },
+  "errors": {
+    "title": "Error",
+    "unknown": "Error",
+    "cannotDeleteDefault": "No se puede eliminar una categoría predeterminada."
+  },
+  "categories": {
+    "Developer": "Desarrollador",
+    "Finance": "Finanzas",
+    "Personal": "Personal",
+    "Health": "Salud",
+    "HR": "RH",
+    "System": "Sistema",
+    "Communication": "Comunicación"
+  },
+  "folders": {
+    "createFolder": "Nueva categoría",
+    "folderName": "Nombre de la categoría",
+    "deleteFolder": "¿Eliminar?",
+    "createPrompt": "Nombre de la categoría",
+    "iconPrompt": "Icono (emoji)",
+    "andFilters": "y todos sus",
+    "noFolderPrompt": "Aún no has creado ninguna carpeta. ¿Quieres crear una ahora?"
+  },
+  "templates": {
+    "exportSuccess": "Plantilla \"{0}\" exportada! ({1} filtros)",
+    "importTitle": "Importar",
+    "exportBtn": "Exportar JSON",
+    "importDesc": "Cargue una plantilla JSON",
+    "formatDesc": "Una plantilla contiene una o mas categorias con sus filtros:",
+    "importConfirm": "Importar \"{0}\" ({1} filtros)?",
+    "exportPromptAuthor": "Autor (opcional):",
+    "importSuccess": "Importacion completa! {0} filtros importados",
+    "formatTitle": "Formato de plantilla",
+    "exportTitle": "Exportar",
+    "importBtn": "Importar JSON",
+    "exportPromptDesc": "Descripcion (opcional):",
+    "exportPromptName": "Nombre de la plantilla:",
+    "subtitle": "Exporte su configuracion o importe plantillas de la comunidad",
+    "importError": "Error: Formato invalido",
+    "title": "Plantillas de filtros",
+    "exportDesc": "Cree una plantilla JSON con sus filtros personalizados",
+    "noCustomFilters": "No hay filtros personalizados para exportar.\\n\\nLos filtros predeterminados no se pueden exportar.\\nCree sus propios filtros o categorias para exportar una plantilla."
+  },
+  "shortcut": {
+    "modalTitle": "Grabar atajo",
+    "waiting": "Presione la combinación de teclas deseada...",
+    "examples": "Ejemplos: Ctrl+Alt+V, Ctrl+Mayús+P, etc.",
+    "cancel": "Cancelar"
+  }
+}

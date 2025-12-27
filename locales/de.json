@@ -1,0 +1,148 @@
+{
+  "app": {
+    "name": "ClipboardFilter",
+    "trayTooltip": "ClipboardFilter"
+  },
+  "menu": {
+    "show": "Anzeigen",
+    "about": "Üœber",
+    "quit": "Beenden"
+  },
+  "about": {
+    "title": "Üœber",
+    "version": "Version 1.0.0",
+    "description": "ClipboardFilter",
+    "shortcuts": "Verknüpfungen",
+    "copyShortcut": "Kopieren",
+    "pasteShortcut": "Einfügen",
+    "instructions": "Konfiguration"
+  },
+  "config": {
+    "title": "Konfiguration",
+    "filtersTab": "Filter",
+    "settingsTab": "Einstellungen",
+    "testTab": "Test",
+    "addFilter": "Filter hinzufügen",
+    "editFilter": "Bearbeiten",
+    "deleteFilter": "Löschen",
+    "testFilters": "Testen",
+    "enabled": "Aktiviert",
+    "description": "Beschreibung",
+    "pattern": "Muster",
+    "noFilters": "Keine Filter",
+    "deleteConfirm": "Löschen?",
+    "deleteTitle": "Bestätigen"
+  },
+  "filterForm": {
+    "title": "Filter-Konfiguration",
+    "descriptionLabel": "Beschreibung",
+    "descriptionPlaceholder": "z.B. API-Schlüssel",
+    "patternLabel": "Zu filterndes Muster",
+    "patternPlaceholder": "z.B. sk-[a-zA-Z0-9]+",
+    "replacementLabel": "Ersetzung",
+    "replacementPlaceholder": "z.B. XXXX",
+    "useRegex": "Regulärer Ausdruck",
+    "enabled": "Aktiviert",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "patternRequired": "Muster erforderlich",
+    "invalidRegex": "Ungültiger Regex",
+    "categoryLabel": "Kategoriename",
+    "noCategoryOption": "Kein Ordner"
+  },
+  "test": {
+    "title": "Test",
+    "inputLabel": "Original",
+    "inputPlaceholder": "Text...",
+    "outputLabel": "Gefiltert",
+    "applyFilters": "Anwenden",
+    "noInput": "Text eingeben",
+    "filtered": "{count} gefiltert",
+    "noFilters": "Keine",
+    "noMatches": "Keine"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "language": "Sprache",
+    "autoStart": "Autostart",
+    "notifications": "Benachrichtigungen",
+    "theme": "Design",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
+    "themeAuto": "Auto",
+    "shortcutsTitle": "Verknüpfungen",
+    "copyShortcut": "Kopieren",
+    "pasteShortcut": "Einfügen",
+    "shortcutHelp": "Ü„ndern",
+    "hintLabel": "Tipp:",
+    "hintText": "Klicken Sie auf Aendern",
+    "deleteAllConfirm": "ALLE benutzerdefinierten Filter und Kategorien löschen?\\n\\n{0} Filter werden gelöscht.\\n\\nDiese Aktion ist unwiderruflich!",
+    "resetAllConfirm": "ALLE Standardfilter zurücksetzen?\\n\\nDies aktiviert alle deaktivierten Filter, löscht aber nicht Ihre benutzerdefinierten Filter.",
+    "resetCategoryConfirm": "Alle Filter in Kategorie zurücksetzen",
+    "categoryReset": "Kategorie",
+    "reset": "zurückgesetzt",
+    "filtersReset": "Standardfilter zurückgesetzt",
+    "noCustomFilters": "Keine benutzerdefinierten Filter zum Löschen.",
+    "customFiltersDeleted": "benutzerdefinierte Filter",
+    "and": "und",
+    "foldersDeleted": "Ordner gelöscht",
+    "dataManagement": "Datenverwaltung",
+    "resetAllDefaults": "Alle Standardfilter zurücksetzen",
+    "deleteAllCustom": "Alle benutzerdefinierten Kategorien/Filter löschen",
+    "changeShortcut": "🎙 Ändern"
+  },
+  "notifications": {
+    "copyFiltered": "Kopiert",
+    "pasteFiltered": "Eingefügt",
+    "itemsFiltered": "{count} maskiert"
+  },
+  "errors": {
+    "title": "Fehler",
+    "unknown": "Fehler",
+    "cannotDeleteDefault": "Standardkategorie kann nicht gelöscht werden."
+  },
+  "categories": {
+    "Developer": "Entwickler",
+    "Finance": "Finanzen",
+    "Personal": "Persönlich",
+    "Health": "Gesundheit",
+    "HR": "HR",
+    "System": "System",
+    "Communication": "Kommunikation"
+  },
+  "folders": {
+    "createFolder": "Neue Kategorie",
+    "folderName": "Kategoriename",
+    "deleteFolder": "Löschen?",
+    "createPrompt": "Kategoriename",
+    "iconPrompt": "Symbol (Emoji)",
+    "andFilters": "und alle seine",
+    "noFolderPrompt": "Sie haben noch keine Ordner erstellt. Möchten Sie jetzt einen erstellen?"
+  },
+  "templates": {
+    "exportSuccess": "Vorlage \"{0}\" exportiert! ({1} Filter)",
+    "importTitle": "Importieren",
+    "exportBtn": "JSON exportieren",
+    "importDesc": "Laden Sie eine JSON-Vorlage",
+    "formatDesc": "Eine Vorlage enthalt eine oder mehrere Kategorien mit ihren Filtern:",
+    "importConfirm": "\"{0}\" importieren ({1} Filter)?",
+    "exportPromptAuthor": "Autor (optional):",
+    "importSuccess": "Import abgeschlossen! {0} Filter importiert",
+    "formatTitle": "Vorlagenformat",
+    "exportTitle": "Exportieren",
+    "importBtn": "JSON importieren",
+    "exportPromptDesc": "Beschreibung (optional):",
+    "exportPromptName": "Vorlagenname:",
+    "subtitle": "Exportieren Sie Ihre Konfiguration oder importieren Sie Community-Vorlagen",
+    "importError": "Fehler: Ungultiges Format",
+    "title": "Filter-Vorlagen",
+    "exportDesc": "Erstellen Sie eine JSON-Vorlage mit Ihren benutzerdefinierten Filtern",
+    "noCustomFilters": "Keine benutzerdefinierten Filter zum Exportieren.\\n\\nStandardfilter konnen nicht exportiert werden.\\nErstellen Sie eigene Filter oder Kategorien, um eine Vorlage zu exportieren."
+  },
+  "shortcut": {
+    "modalTitle": "Tastenkombination aufzeichnen",
+    "waiting": "Drücken Sie die gewünschte Tastenkombination...",
+    "examples": "Beispiele: Strg+Alt+V, Strg+Umschalt+P, usw.",
+    "cancel": "Abbrechen"
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "name": "clipboard-filter",
+  "version": "1.0.0",
+  "description": "Secure clipboard filtering tool with configurable keyword blacklisting",
+  "main": "dist/main.js",
+  "author": {
+    "name": "Loup LIGNON KRASNIQI",
+    "email": "loup@clipboardfilter.app"
+  },
+  "homepage": "https://github.com/50bvd/clipboardfilter",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/50bvd/clipboardfilter.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "rebuild": "node-gyp rebuild",
+    "start": "npm run build && electron .",
+    "build": "npx tsc && npm run copy-files",
+    "copy-files": "node -e \"const fs = require('fs'); fs.copyFileSync('src/renderer.html', 'dist/renderer.html'); fs.copyFileSync('src/renderer.js', 'dist/renderer.js'); fs.copyFileSync('src/styles.css', 'dist/styles.css'); fs.copyFileSync('default-filters.json', 'dist/default-filters.json');\"",
+    "watch": "npx tsc --watch",
+    "dev": "npm run build && electron . --dev",
+    "package:win": "electron-builder --win --x64",
+    "package:linux:deb": "electron-builder --linux deb",
+    "package:linux:rpm": "electron-builder --linux rpm",
+    "package:linux:pacman": "electron-builder --linux pacman",
+    "package:linux:appimage": "electron-builder --linux AppImage",
+    "package:mac": "electron-builder --mac",
+    "package:all": "electron-builder -mwl",
+    "package": "electron-builder"
+  },
+  "build": {
+    "appId": "com.clipboardfilter.app",
+    "productName": "ClipboardFilter",
+    "copyright": "Copyright \u00a9 2025 Loup LIGNON KRASNIQI",
+    "directories": {
+      "output": "release",
+      "buildResources": "assets"
+    },
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "locales/**/*",
+      "default-filters.json",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.png",
+      "publisherName": "Loup LIGNON KRASNIQI",
+      "verifyUpdateCodeSignature": false
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm",
+        "pacman"
+      ],
+      "category": "Utility",
+      "icon": "assets/icon.png",
+      "maintainer": "Loup LIGNON KRASNIQI <loup@clipboardfilter.app>",
+      "vendor": "Loup LIGNON KRASNIQI",
+      "synopsis": "Secure clipboard filtering tool",
+      "desktop": {
+        "Name": "ClipboardFilter",
+        "Comment": "Secure clipboard filtering tool",
+        "Categories": "Utility;Security;"
+      }
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.utilities",
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ClipboardFilter"
+    },
+    "deb": {
+      "depends": [
+        "libgtk-3-0",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils",
+        "libatspi2.0-0",
+        "libuuid1"
+      ],
+      "priority": "optional"
+    },
+    "rpm": {
+      "depends": [
+        "gtk3",
+        "libnotify",
+        "nss",
+        "libXScrnSaver",
+        "libXtst"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0",
+    "node-addon-api": "^7.0.0"
+  }
+}

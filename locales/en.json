@@ -1,0 +1,149 @@
+{
+  "app": {
+    "name": "ClipboardFilter",
+    "trayTooltip": "ClipboardFilter"
+  },
+  "menu": {
+    "show": "Show",
+    "about": "About",
+    "quit": "Quit"
+  },
+  "about": {
+    "title": "About",
+    "version": "Version 1.0.0",
+    "developer": "Developed by",
+    "description": "Secure clipboard filtering tool with automatic sensitive data detection",
+    "shortcuts": "Shortcuts",
+    "copyShortcut": "Copy",
+    "pasteShortcut": "Paste",
+    "instructions": "Configuration"
+  },
+  "config": {
+    "title": "Configuration",
+    "filtersTab": "Filters",
+    "settingsTab": "Settings",
+    "testTab": "Test",
+    "addFilter": "Add Filter",
+    "editFilter": "Edit",
+    "deleteFilter": "Delete",
+    "testFilters": "Test",
+    "enabled": "Enabled",
+    "description": "Description",
+    "pattern": "Pattern",
+    "noFilters": "No filters",
+    "deleteConfirm": "Delete?",
+    "deleteTitle": "Confirm"
+  },
+  "filterForm": {
+    "title": "Filter Configuration",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "e.g., OpenAI API Keys",
+    "patternLabel": "Pattern to filter",
+    "patternPlaceholder": "e.g., sk-[a-zA-Z0-9]+",
+    "replacementLabel": "Replacement",
+    "replacementPlaceholder": "e.g., XXXX",
+    "useRegex": "Use Regular Expression",
+    "enabled": "Enabled",
+    "save": "Save",
+    "cancel": "Cancel",
+    "patternRequired": "Pattern required",
+    "invalidRegex": "Invalid regex",
+    "categoryLabel": "Category Name",
+    "noCategoryOption": "No folder"
+  },
+  "test": {
+    "title": "Test",
+    "inputLabel": "Original",
+    "inputPlaceholder": "Text...",
+    "outputLabel": "Filtered",
+    "applyFilters": "Apply",
+    "noInput": "Enter text",
+    "filtered": "{count} filtered",
+    "noFilters": "None",
+    "noMatches": "None"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "autoStart": "Auto start",
+    "notifications": "Notifications",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeAuto": "Auto",
+    "shortcutsTitle": "Shortcuts",
+    "copyShortcut": "Copy",
+    "pasteShortcut": "Paste",
+    "shortcutHelp": "Change",
+    "hintLabel": "Tip:",
+    "hintText": "Click Change then press your key combination",
+    "deleteAllConfirm": "Delete ALL custom filters and categories?\\n\\n{0} filters will be deleted.\\n\\nThis action is irreversible!",
+    "resetAllConfirm": "Reset ALL default filters?\\n\\nThis will enable all disabled filters but will not delete your custom filters.",
+    "resetCategoryConfirm": "Reset all filters in category",
+    "categoryReset": "Category",
+    "reset": "reset",
+    "filtersReset": "default filters reset",
+    "noCustomFilters": "No custom filters to delete.",
+    "customFiltersDeleted": "custom filters",
+    "and": "and",
+    "foldersDeleted": "folders deleted",
+    "dataManagement": "Data Management",
+    "resetAllDefaults": "Reset all default filters",
+    "deleteAllCustom": "Delete all custom categories/filters",
+    "changeShortcut": "🎙 Change"
+  },
+  "notifications": {
+    "copyFiltered": "Copied",
+    "pasteFiltered": "Pasted",
+    "itemsFiltered": "{count} masked"
+  },
+  "errors": {
+    "title": "Error",
+    "unknown": "Error",
+    "cannotDeleteDefault": "Cannot delete a default category."
+  },
+  "categories": {
+    "Developer": "Developer",
+    "Finance": "Finance",
+    "Personal": "Personal",
+    "Health": "Health",
+    "HR": "HR",
+    "System": "System",
+    "Communication": "Communication"
+  },
+  "folders": {
+    "createFolder": "New Category",
+    "folderName": "Category Name",
+    "deleteFolder": "Delete?",
+    "createPrompt": "Category name",
+    "iconPrompt": "Icon (emoji)",
+    "andFilters": "and all its",
+    "noFolderPrompt": "You haven't created any folders yet. Would you like to create one now?"
+  },
+  "templates": {
+    "exportSuccess": "Template \"{0}\" exported! ({1} filters)",
+    "importTitle": "Import",
+    "exportBtn": "Export JSON",
+    "importDesc": "Load a JSON template",
+    "formatDesc": "A template contains one or more categories with their filters:",
+    "importConfirm": "Import \"{0}\" ({1} filters)?",
+    "exportPromptAuthor": "Author (optional):",
+    "importSuccess": "Import complete! {0} filters imported",
+    "formatTitle": "Template Format",
+    "exportTitle": "Export",
+    "importBtn": "Import JSON",
+    "exportPromptDesc": "Description (optional):",
+    "exportPromptName": "Template name:",
+    "subtitle": "Export your configuration or import community templates",
+    "importError": "Error: Invalid format",
+    "title": "Filter Templates",
+    "exportDesc": "Create a JSON template with your custom filters",
+    "noCustomFilters": "No custom filters to export.\\n\\nDefault filters cannot be exported.\\nCreate your own filters or categories to export a template."
+  },
+  "shortcut": {
+    "modalTitle": "Record Shortcut",
+    "waiting": "Press the desired key combination...",
+    "examples": "Examples: Ctrl+Alt+V, Ctrl+Shift+P, etc.",
+    "cancel": "Cancel"
+  }
+}
