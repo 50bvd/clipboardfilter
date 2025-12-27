@@ -58,6 +58,8 @@ jobs:
             npm run package:mac
           fi
         shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
