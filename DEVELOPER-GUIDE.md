@@ -422,6 +422,7 @@ npm run package
 
 ---
 
-**Maintainers:** @your-github  
+**Maintainers:** @50bvd
 **License:** MIT  
 **Version:** 1.0.0
+
