@@ -8,9 +8,9 @@ on:
   pull_request:
     branches: [ main ]
 
-  permissions:
-    contents: write
-    packages: read
+permissions:
+  contents: write
+  packages: read
 
 jobs:
   build:
