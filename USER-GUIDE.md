@@ -1,214 +1,258 @@
-# ClipboardFilter - Guide Utilisateur
+# ClipboardFilter - User Guide
 
-## 📋 Vue d'ensemble
+## 📋 Overview
 
-ClipboardFilter est une application qui filtre automatiquement le contenu de votre presse-papiers en temps réel. Elle détecte et masque les informations sensibles comme les numéros de carte bancaire, emails, numéros de sécurité sociale, etc.
+ClipboardFilter is an application that automatically filters your clipboard content in real-time. It detects and masks sensitive information such as credit card numbers, emails, social security numbers, and more.
 
 ## 🚀 Installation
 
-1. Téléchargez l'installateur depuis les releases
-2. Exécutez `ClipboardFilter-Setup.exe`
-3. Suivez les instructions d'installation
-4. L'application démarre automatiquement
+### Windows
+1. Download the installer from the releases page
+2. Run `ClipboardFilter-Setup-1.0.0.exe`
+3. Follow the installation wizard
+4. The application starts automatically
 
-## ⚡ Démarrage Rapide
+### macOS
+1. Download `ClipboardFilter-1.0.0-arm64.dmg`
+2. Open the DMG file
+3. Drag ClipboardFilter to Applications
+4. Launch from Applications folder
 
-### Premier lancement
-Au premier lancement, ClipboardFilter :
-- Détecte automatiquement votre langue système
-- Applique le thème de votre système (clair/sombre)
-- Charge 112 filtres par défaut dans 7 catégories
+**Note:** macOS will warn about an unsigned app. Go to System Preferences > Security & Privacy to allow it.
 
-### Utilisation basique
-1. Copiez du texte contenant des informations sensibles
-2. Appuyez sur **Ctrl+Shift+V** pour coller
-3. Le texte est automatiquement filtré !
-
-**Exemple :**
-```
-Avant : Ma carte bancaire 4532-1234-5678-9010
-Après : Ma carte bancaire ****-****-****-****
+### Linux
+**AppImage (Universal):**
+```bash
+chmod +x ClipboardFilter-1.0.0.AppImage
+./ClipboardFilter-1.0.0.AppImage
 ```
 
-## 📑 Onglets
+**Debian/Ubuntu:**
+```bash
+sudo dpkg -i clipboard-filter_1.0.0_amd64.deb
+```
 
-### 🔍 Filtres
-Gérez vos filtres de remplacement.
+**Fedora/RHEL:**
+```bash
+sudo rpm -i clipboard-filter-1.0.0.x86_64.rpm
+```
 
-#### Catégories par défaut :
-- **💻 Developer** (33 filtres) : API keys, tokens, secrets
-- **💰 Finance** (20 filtres) : Cartes bancaires, IBAN, crypto
-- **👤 Personal** (12 filtres) : Emails, téléphones, adresses
-- **🏥 Health** (3 filtres) : Numéros de sécurité sociale
-- **👔 HR** (5 filtres) : Numéros d'employé, badges
-- **⚙️ System** (31 filtres) : IPs, chemins système, UUIDs
-- **💬 Communication** (8 filtres) : URLs Slack, Discord, Teams
+## ⚡ Quick Start
 
-#### Actions :
-- **☑ Checkbox de catégorie** : Active/désactive tous les filtres
-- **▼ Flèche** : Déploie/réduit la catégorie
-- **+ Ajouter un filtre** : Crée un nouveau filtre personnalisé
-- **📁 Nouveau dossier** : Organise vos filtres
+### First Launch
+On first launch, ClipboardFilter will:
+- Automatically detect your system language
+- Apply your system theme (light/dark)
+- Load 112 default filters across 7 categories
+
+### Basic Usage
+1. Copy text containing sensitive information
+2. Press **Ctrl+Shift+V** to paste
+3. The text is automatically filtered!
+
+**Example:**
+```
+Before: My credit card 4532-1234-5678-9010
+After:  My credit card ****-****-****-****
+```
+
+## 📑 Tabs
+
+### 🔍 Filters
+Manage your replacement filters.
+
+#### Default Categories:
+- **💻 Developer** (33 filters): API keys, tokens, secrets
+- **💰 Finance** (20 filters): Credit cards, IBAN, crypto
+- **👤 Personal** (12 filters): Emails, phones, addresses
+- **🏥 Health** (3 filters): Social security numbers
+- **👔 HR** (5 filters): Employee numbers, badges
+- **⚙️ System** (31 filters): IPs, system paths, UUIDs
+- **💬 Communication** (8 filters): Slack, Discord, Teams URLs
+
+#### Actions:
+- **☑ Category checkbox**: Enable/disable all filters in category
+- **▼ Arrow**: Expand/collapse category
+- **+ Add filter**: Create a new custom filter
+- **📁 New folder**: Organize your filters
 
 ### 🧪 Test
-Testez vos filtres avant de les utiliser.
+Test your filters before using them.
 
-1. Collez du texte dans la zone "Entrée"
-2. Cliquez sur "Appliquer les filtres"
-3. Voyez le résultat dans la zone "Sortie"
+1. Paste text in the "Input" area
+2. Click "Apply Filters"
+3. See the result in the "Output" area
 
 ### 📦 Templates
-Importez/exportez des packs de filtres.
+Import/export filter packs.
 
-#### Exporter :
-1. Créez vos filtres personnalisés
-2. Cliquez sur "Exporter JSON"
-3. Nommez votre template
-4. Sauvegardez le fichier .json
+#### Export:
+1. Create your custom filters
+2. Click "Export JSON"
+3. Name your template
+4. Save the .json file
 
-#### Importer :
-1. Cliquez sur "Importer JSON"
-2. Sélectionnez un fichier template
-3. Confirmez l'importation
+#### Import:
+1. Click "Import JSON"
+2. Select a template file
+3. Confirm the import
 
-**Note :** Les filtres par défaut ne sont jamais exportés.
+**Note:** Default filters are never exported.
 
-### ⚙️ Paramètres
+### ⚙️ Settings
 
-#### Général
-- **Langue** : Français, English, Deutsch, Español, Italiano
-- **Thème** : Auto, Clair, Sombre
-- **Notifications** : Afficher les notifications système
-- **Démarrage auto** : Lancer au démarrage de Windows
+#### General
+- **Language**: English, Français, Deutsch, Español, Italiano
+- **Theme**: Auto, Light, Dark
+- **Notifications**: Show system notifications
+- **Auto-start**: Launch at system startup
 
-#### Raccourcis
-- **Coller** : Ctrl+Shift+V (par défaut)
-- Cliquez sur "🎙 Modifier" pour changer
+#### Shortcuts
+- **Paste**: Ctrl+Shift+V (default)
+- Click "🎙 Edit" to change
 
-#### Gestion des données
-- **↻ Réinitialiser tous les filtres par défaut** : Réactive tous les filtres désactivés
-- **🗑 Supprimer toutes les catégories/filtres personnalisés** : Efface vos créations
+#### Data Management
+- **↻ Reset all default filters**: Re-enable all disabled default filters
+- **🗑 Delete all custom categories/filters**: Erase your custom creations
 
-## 🎯 Cas d'usage
+## 🎯 Use Cases
 
-### Pour les développeurs
-- Masquez vos API keys avant de partager du code
-- Filtrez les tokens d'authentification dans les logs
-- Cachez les secrets AWS/GCP/Azure
+### For Developers
+- Hide API keys before sharing code
+- Filter authentication tokens in logs
+- Mask AWS/GCP/Azure secrets
 
-### Pour la finance
-- Protégez les numéros de carte bancaire
-- Masquez les IBAN dans les emails
-- Cachez les adresses de crypto-monnaie
+### For Finance
+- Protect credit card numbers
+- Mask IBAN in emails
+- Hide cryptocurrency addresses
 
-### Pour les RH
-- Filtrez les numéros de sécurité sociale
-- Masquez les identifiants d'employés
-- Protégez les données personnelles
+### For HR
+- Filter social security numbers
+- Mask employee IDs
+- Protect personal data
 
-### Pour le support technique
-- Cachez les adresses IP dans les logs
-- Masquez les chemins système sensibles
-- Filtrez les UUIDs de session
+### For Technical Support
+- Hide IP addresses in logs
+- Mask sensitive system paths
+- Filter session UUIDs
 
-## 🔧 Créer un filtre personnalisé
+## 🔧 Creating a Custom Filter
 
-1. Cliquez sur "+ Ajouter un filtre"
-2. Remplissez :
-   - **Description** : Nom du filtre
-   - **Catégorie** : Classement
-   - **Pattern** : Texte ou regex à détecter
-   - **Remplacement** : Texte de substitution
-   - **☑ Utiliser Regex** : Si pattern est une expression régulière
-   - **☑ Activé** : Actif dès la création
-3. Cliquez sur "Enregistrer"
+1. Click "+ Add filter"
+2. Fill in:
+   - **Description**: Filter name
+   - **Category**: Classification
+   - **Pattern**: Text or regex to detect
+   - **Replacement**: Substitution text
+   - **☑ Use Regex**: If pattern is a regular expression
+   - **☑ Enabled**: Active from creation
+3. Click "Save"
 
-**Exemple de filtre simple :**
-- Description : Mon nom
-- Pattern : Jean Dupont
-- Remplacement : [NOM REDACTÉ]
+**Simple Filter Example:**
+- Description: My name
+- Pattern: John Doe
+- Replacement: [NAME REDACTED]
 
-**Exemple de filtre regex :**
-- Description : Numéro de badge
-- Pattern : `BADGE-\d{6}`
-- Remplacement : BADGE-******
-- ☑ Utiliser Regex
+**Regex Filter Example:**
+- Description: Badge number
+- Pattern: `BADGE-\d{6}`
+- Replacement: BADGE-******
+- ☑ Use Regex
 
-## 📁 Organiser avec des dossiers
+## 📁 Organizing with Folders
 
-1. Cliquez sur "📁 Nouveau dossier"
-2. Nommez le dossier (ex: "Projet X")
-3. Choisissez un emoji (ex: 🚀)
-4. Sur un filtre, cliquez sur 📋 pour le copier dans le dossier
+1. Click "📁 New folder"
+2. Name the folder (e.g., "Project X")
+3. Choose an emoji (e.g., 🚀)
+4. On a filter, click 📋 to copy it to the folder
 
-**Avantages :**
-- Organisez par projet/client
-- Activez/désactivez tout un dossier d'un coup
-- Partagez des collections de filtres
+**Benefits:**
+- Organize by project/client
+- Enable/disable an entire folder at once
+- Share filter collections
 
-## 🌍 Support multilingue
+## 🌍 Multi-language Support
 
-ClipboardFilter détecte automatiquement votre langue système et bascule entre :
+ClipboardFilter automatically detects your system language and switches between:
 - 🇬🇧 English
 - 🇫🇷 Français
 - 🇩🇪 Deutsch
 - 🇪🇸 Español
 - 🇮🇹 Italiano
 
-Changez la langue dans Paramètres > Langue.
+Change language in Settings > Language.
 
-## 🎨 Personnalisation
+## 🎨 Customization
 
-### Thèmes
-- **Auto** : Suit le thème système Windows
-- **Clair** : Interface claire
-- **Sombre** : Interface sombre (recommandé)
+### Themes
+- **Auto**: Follows Windows system theme
+- **Light**: Light interface
+- **Dark**: Dark interface (recommended)
 
-### Raccourcis
-Par défaut : **Ctrl+Shift+V**
+### Shortcuts
+Default: **Ctrl+Shift+V**
 
-Pour changer :
-1. Paramètres > Raccourcis
-2. Cliquez sur "🎙 Modifier"
-3. Appuyez sur votre combinaison de touches
-4. Validez
+To change:
+1. Settings > Shortcuts
+2. Click "🎙 Edit"
+3. Press your key combination
+4. Validate
 
 ## ❓ FAQ
 
-### L'application ne filtre pas mon texte
-- Vérifiez que les filtres sont activés (✓)
-- Testez dans l'onglet Test
-- Vérifiez le raccourci (Paramètres > Raccourcis)
+### The app doesn't filter my text
+- Check that filters are enabled (✓)
+- Test in the Test tab
+- Verify the shortcut (Settings > Shortcuts)
 
-### Comment désactiver temporairement un filtre ?
-- Décochez la case à côté du filtre
-- Ou décochez toute la catégorie
+### How do I temporarily disable a filter?
+- Uncheck the box next to the filter
+- Or uncheck the entire category
 
-### Puis-je partager mes filtres ?
-- Oui ! Onglet Templates > Exporter JSON
-- Envoyez le fichier .json à vos collègues
-- Ils peuvent l'importer via Templates > Importer JSON
+### Can I share my filters?
+- Yes! Templates tab > Export JSON
+- Send the .json file to colleagues
+- They can import it via Templates > Import JSON
 
-### Les filtres ralentissent mon système ?
-- Non, le filtrage est quasi-instantané (<100ms)
-- L'app utilise <100MB de RAM
+### Do filters slow down my system?
+- No, filtering is nearly instantaneous (<100ms)
+- The app uses <100MB of RAM
 
-### Comment désinstaller ?
-- Paramètres Windows > Applications
-- Cherchez "ClipboardFilter"
-- Cliquez sur Désinstaller
+### How do I uninstall?
+**Windows:**
+- Settings > Apps
+- Search "ClipboardFilter"
+- Click Uninstall
+
+**macOS:**
+- Drag ClipboardFilter from Applications to Trash
+
+**Linux:**
+```bash
+# Debian/Ubuntu
+sudo apt remove clipboard-filter
+
+# Fedora/RHEL
+sudo rpm -e clipboard-filter
+```
 
 ## 🆘 Support
 
-- **GitHub Issues** : https://github.com/votre-repo/issues
-- **Email** : support@clipboardfilter.com
-- **Documentation** : https://docs.clipboardfilter.com
+- **GitHub Issues**: https://github.com/50bvd/clipboardfilter/issues
+- **Documentation**: https://github.com/50bvd/clipboardfilter
 
-## 📄 Licence
+## 📝 System Requirements
 
-ClipboardFilter est un logiciel open-source sous licence MIT.
+- **Windows**: Windows 10/11 (64-bit)
+- **macOS**: macOS 10.12+ (Apple Silicon)
+- **Linux**: Ubuntu 20.04+, Fedora 34+, or any modern distro
+
+## 📄 License
+
+ClipboardFilter is open-source software under the MIT License.
 
 ---
 
-**Version :** 1.0.0  
-**Dernière mise à jour :** Décembre 2024
+**Version:** 1.0.0  
+**Last updated:** December 2025
