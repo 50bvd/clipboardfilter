@@ -1,4 +1,4 @@
-# 🔐 ClipboardFilter
+# ![icon](assets/icon.png) ClipboardFilter
 
 [![Build Status](https://github.com/50bvd/clipboardfilter/workflows/Build%20Multi-Platform/badge.svg)](https://github.com/50bvd/clipboardfilter/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -161,5 +161,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **⭐ Star this repo if you find it useful!**
+
 
 
