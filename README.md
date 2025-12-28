@@ -1,4 +1,4 @@
-<img src="assets/icon.png"
+#<img src="assets/icon.png"
      alt="icon"
      style="width: 1em; height: 1em; vertical-align: -0.15em;"> ClipboardFilter
 
@@ -163,6 +163,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **⭐ Star this repo if you find it useful!**
+
 
 
 
