@@ -151,7 +151,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Loup LIGNON KRASNIQI**
 - GitHub: [@50bvd](https://github.com/50bvd)
-- Email: loup@clipboardfilter.app
+- Email: loup.lk-pro@protonmail.ch
 
 ## 🙏 Acknowledgments
 
@@ -161,4 +161,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **⭐ Star this repo if you find it useful!**
+
 
