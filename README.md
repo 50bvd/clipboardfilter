@@ -22,12 +22,15 @@ A secure clipboard filtering application that automatically detects and masks se
 
 Get the latest release for your platform:
 
-- **Windows**: [ClipboardFilter-Setup.exe](https://github.com/50bvd/clipboardfilter/releases/latest)
-- **Linux**: 
-  - [AppImage](https://github.com/50bvd/clipboardfilter/releases/latest) (Universal)
-  - [.deb](https://github.com/50bvd/clipboardfilter/releases/latest) (Debian/Ubuntu)
-  - [.rpm](https://github.com/50bvd/clipboardfilter/releases/latest) (Fedora/RHEL)
-- **macOS**: [ClipboardFilter.dmg](https://github.com/50bvd/clipboardfilter/releases/latest)
+- **Windows**: [ClipboardFilter-Setup.exe](https://github.com/50bvd/clipboardfilter/releases/download/v1.0.0/ClipboardFilter.Setup.1.0.0.exe)
+
+- **Linux/Unix**: 
+  - [AppImage](https://github.com/50bvd/clipboardfilter/releases/download/v1.0.0/ClipboardFilter-1.0.0.AppImage) (Universal)
+  - [.deb](https://github.com/50bvd/clipboardfilter/releases/download/v1.0.0/clipboard-filter_1.0.0_amd64.deb) (Debian/Ubuntu)
+  - [.rpm](https://github.com/50bvd/clipboardfilter/releases/download/v1.0.0/clipboard-filter-1.0.0.x86_64.rpm) (Fedora/RHEL)
+
+- **macOS**: [ClipboardFilter.dmg for new Apple chip (ARM64)](https://github.com/50bvd/clipboardfilter/releases/download/v1.0.0/ClipboardFilter-1.0.0-arm64.dmg)
+  - *__Note :__* For macOS, this application are not compatible with Intel chips and PowerPC architecture.
 
 ## 🚀 Quick Start
 
@@ -161,6 +164,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **⭐ Star this repo if you find it useful!**
+
 
 
 
