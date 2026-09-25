@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const path = require('path');
 const fs = require('fs');
 const { compileRules, applyRules, validatePattern, filterOnce } = require('../dist/filterEngine');
-const { SAMPLE, bigText, legacyFilter } = require('./fixtures');
+const { SAMPLE, FAKE, bigText, legacyFilter } = require('./fixtures');
 
 const defaults = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'default-filters.json'), 'utf-8'))
   .filters.map((f, i) => ({ ...f, id: `d${i}` }));
@@ -31,7 +31,7 @@ test('same output as the 1.0.0 engine on the 1.0.0 default filters', () => {
 test('secrets are actually masked', () => {
   const { filtered, count } = filterOnce(defaults, SAMPLE);
   assert.ok(count > 10);
-  for (const secret of ['sk-proj-abcdefghijklmnop', 'AKIAIOSFODNN7EXAMPLE', 'ghp_abcdefghijklmnop', 'hunter2', 'jane.doe@example.com', '4111111111111111']) {
+  for (const secret of [FAKE.openai, FAKE.awsKeyId, FAKE.github, FAKE.dbPassword, 'jane.doe@example.com', '4111111111111111']) {
     assert.ok(!filtered.includes(secret), `${secret} leaked`);
   }
 });

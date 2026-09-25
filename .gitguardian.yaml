@@ -1,0 +1,6 @@
+# GitGuardian configuration: the test suite contains fake credentials on
+# purpose (they are what the filters must detect and mask).
+version: 2
+secret:
+  ignored_paths:
+    - "test/**"
