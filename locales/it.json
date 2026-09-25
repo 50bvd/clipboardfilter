@@ -6,16 +6,19 @@
   "menu": {
     "show": "Mostra",
     "about": "Informazioni",
-    "quit": "Esci"
+    "quit": "Esci",
+    "filterNow": "Filtra ora gli appunti",
+    "autoFilter": "Filtro automatico",
+    "help": "Aiuto"
   },
   "about": {
     "title": "Informazioni",
-    "version": "Versione 1.0.0",
     "description": "ClipboardFilter",
     "shortcuts": "Scorciatoie",
     "copyShortcut": "Copia",
     "pasteShortcut": "Incolla",
-    "instructions": "Configurazione"
+    "instructions": "Configurazione",
+    "developer": "Sviluppato da"
   },
   "config": {
     "title": "Configurazione",
@@ -31,7 +34,11 @@
     "pattern": "Pattern",
     "noFilters": "Nessun filtro",
     "deleteConfirm": "Eliminare?",
-    "deleteTitle": "Conferma"
+    "deleteTitle": "Conferma",
+    "searchPlaceholder": "Cerca filtri…",
+    "summary": "{enabled}/{total} attivi",
+    "noResults": "Nessun filtro corrisponde alla ricerca",
+    "toggleAll": "Attiva/disattiva tutto"
   },
   "filterForm": {
     "title": "Configurazione filtro",
@@ -47,8 +54,9 @@
     "cancel": "Annulla",
     "patternRequired": "Pattern richiesto",
     "invalidRegex": "Regex non valido",
-    "categoryLabel": "Nome della categoria",
-    "noCategoryOption": "Nessuna cartella"
+    "categoryLabel": "Categoria",
+    "noCategoryOption": "Personalizzato (nessuna categoria)",
+    "caseSensitive": "Distingui maiuscole/minuscole"
   },
   "test": {
     "title": "Test",
@@ -59,7 +67,8 @@
     "noInput": "Inserisci testo",
     "filtered": "{count} filtrato/i",
     "noFilters": "Nessuno",
-    "noMatches": "Nessuno"
+    "noMatches": "Nessun dato sensibile trovato",
+    "live": "Anteprima dal vivo"
   },
   "settings": {
     "title": "Impostazioni",
@@ -89,17 +98,53 @@
     "dataManagement": "Gestione dati",
     "resetAllDefaults": "Ripristina tutti i filtri predefiniti",
     "deleteAllCustom": "Elimina tutte le categorie/filtri personalizzati",
-    "changeShortcut": "🎙 Modifica"
+    "changeShortcut": "🎙 Modifica",
+    "startMinimized": "Avvia ridotto nell'area di notifica",
+    "behaviorTitle": "Comportamento",
+    "pasteMode": "Quando si preme la scorciatoia",
+    "pasteModeSimulate": "Filtra gli appunti e incolla",
+    "pasteModeClipboard": "Filtra solo gli appunti (poi incolla tu)",
+    "autoFilter": "Modalità automatica: filtra tutto ciò che viene copiato",
+    "autoFilterHint": "Un normale Ctrl+V / Cmd+V incollerà sempre il contenuto filtrato.",
+    "clearClipboard": "Svuota gli appunti dopo",
+    "never": "Mai"
   },
   "notifications": {
-    "copyFiltered": "Copiato",
-    "pasteFiltered": "Incollato",
-    "itemsFiltered": "{count} mascherato/i"
+    "copyFiltered": "Appunti filtrati",
+    "pasteFiltered": "Incollato filtrato",
+    "itemsFiltered": "{count} mascherato/i",
+    "stillRunning": "ClipboardFilter è ancora in esecuzione",
+    "stillRunningBody": "Continua a filtrare in background. Avvialo di nuovo per riaprire questa finestra.",
+    "clipboardEmpty": "Gli appunti sono vuoti",
+    "nothingFiltered": "Nessun dato sensibile trovato",
+    "pasteManually": "Premi Ctrl+V per incollare",
+    "pasteManuallyBody": "Il testo filtrato è negli appunti.",
+    "macAccessibility": "Consenti ClipboardFilter in Impostazioni di Sistema › Privacy e sicurezza › Accessibilità. Il testo filtrato è negli appunti: premi Cmd+V.",
+    "installWayland": "Il testo filtrato è negli appunti. Installa ydotool, dotool o wtype per incollare automaticamente.",
+    "installX11": "Il testo filtrato è negli appunti. Installa xdotool per incollare automaticamente.",
+    "filterTimeout": "Filtraggio interrotto",
+    "filterTimeoutBody": "Il filtro «{name}» è troppo lento (espressione regolare catastrofica). Non è stato incollato nulla.",
+    "filterFailed": "Filtraggio non riuscito. Non è stato incollato nulla."
   },
   "errors": {
     "title": "Errore",
-    "unknown": "Errore",
-    "cannotDeleteDefault": "Impossibile eliminare una categoria predefinita."
+    "unknown": "Si è verificato un errore imprevisto.",
+    "cannotDeleteDefault": "Impossibile eliminare una categoria predefinita.",
+    "patternRequired": "È richiesto un pattern.",
+    "patternTooLong": "Il pattern è troppo lungo.",
+    "invalidRegex": "Espressione regolare non valida",
+    "emptyMatch": "Questo pattern corrisponde a un testo vuoto e modificherebbe ogni carattere.",
+    "descriptionRequired": "È richiesta una descrizione.",
+    "nameRequired": "È richiesto un nome.",
+    "tooManyFilters": "Troppi filtri.",
+    "tooManyFolders": "Troppe categorie.",
+    "notFound": "Elemento non trovato.",
+    "invalidInput": "Dati non validi.",
+    "forbidden": "Operazione non consentita.",
+    "shortcutUnavailable": "Impossibile registrare questa scorciatoia (potrebbe essere già usata da un'altra applicazione). È stata mantenuta quella precedente.",
+    "importError": "Errore: file modello non valido.",
+    "noCustomFilters": "Nessun filtro personalizzato da esportare.\\n\\nI filtri predefiniti non possono essere esportati.\\nCrea filtri o categorie personalizzati per esportare un modello.",
+    "filterTimeout": "Un filtro è troppo lento (espressione regolare catastrofica) ed è stato interrotto. Controlla le tue espressioni regolari personalizzate."
   },
   "categories": {
     "Developer": "Sviluppatore",
@@ -117,7 +162,11 @@
     "createPrompt": "Nome della categoria",
     "iconPrompt": "Icona (emoji)",
     "andFilters": "e tutti i suoi",
-    "noFolderPrompt": "Non hai ancora creato cartelle. Vuoi crearne una ora?"
+    "noFolderPrompt": "Non hai ancora creato cartelle. Vuoi crearne una ora?",
+    "copyTo": "Copia in una categoria",
+    "removeFrom": "Rimuovi dalla categoria",
+    "deleteWithFilters": "Questa categoria contiene {count} filtro/i. Verranno eliminati anch'essi. Continuare?",
+    "deleteCategoryConfirm": "Eliminare la categoria «{name}» e i suoi {count} filtro/i?"
   },
   "templates": {
     "exportSuccess": "Modello \"{0}\" esportato! ({1} filtri)",
@@ -137,12 +186,42 @@
     "importError": "Errore: Formato non valido",
     "title": "Modelli di filtri",
     "exportDesc": "Crea un modello JSON con i tuoi filtri personalizzati",
-    "noCustomFilters": "Nessun filtro personalizzato da esportare.\\n\\nI filtri predefiniti non possono essere esportati.\\nCrea i tuoi filtri o categorie per esportare un modello."
+    "noCustomFilters": "Nessun filtro personalizzato da esportare.\\n\\nI filtri predefiniti non possono essere esportati.\\nCrea i tuoi filtri o categorie per esportare un modello.",
+    "tab": "Modelli",
+    "importSkipped": "{0} filtro/i non valido/i ignorato/i"
   },
   "shortcut": {
     "modalTitle": "Registra scorciatoia",
     "waiting": "Premere la combinazione di tasti desiderata...",
     "examples": "Esempi: Ctrl+Alt+V, Ctrl+Maiusc+P, ecc.",
     "cancel": "Annulla"
+  },
+  "system": {
+    "title": "Compatibilità di sistema",
+    "commandLabel": "Comando da associare a una scorciatoia da tastiera nelle impostazioni del desktop",
+    "grantAccessibility": "Concedi il permesso Accessibilità",
+    "active": "attivo",
+    "unavailable": "non disponibile",
+    "session": "Sessione",
+    "shortcut": "Scorciatoia globale",
+    "pasteBackend": "Simulazione incolla",
+    "clipboardBackend": "Accesso agli appunti",
+    "autoMode": "Modalità automatica",
+    "tray": "Area di notifica",
+    "none": "nessuno",
+    "watch": {
+      "off": "disattivato",
+      "poll": "attivo",
+      "wl-watch": "attivo (wl-paste)",
+      "limited": "limitato su questo desktop"
+    },
+    "hintWaylandShortcut": "Wayland: la scorciatoia globale passa dal portale del desktop (KDE Plasma 5.27+, GNOME 48+; GNOME chiede conferma la prima volta). Se non funziona, crea una scorciatoia personalizzata nelle impostazioni del desktop che esegua il comando qui sotto.",
+    "hintWaylandPaste": "Per incollare automaticamente su Wayland, installa ydotool (con il servizio ydotoold), dotool o wtype (wlroots). Altrimenti il testo filtrato viene messo negli appunti: premi Ctrl+V.",
+    "hintWlClipboard": "Installa wl-clipboard (wl-copy / wl-paste) per un accesso affidabile agli appunti in background su Wayland.",
+    "hintWatchLimited": "La modalità automatica richiede un compositor con protocollo data-control (KDE Plasma, Sway, Hyprland…) e wl-clipboard. Su GNOME usa la scorciatoia.",
+    "hintX11Paste": "Installa xdotool per incollare automaticamente (es. sudo apt install xdotool).",
+    "hintShortcutFailed": "Impossibile registrare la scorciatoia (potrebbe essere già in uso). Scegli un'altra combinazione.",
+    "hintTray": "Nessuna icona nell'area di notifica? Su GNOME installa l'estensione «AppIndicator and KStatusNotifierItem Support». Puoi sempre riaprire questa finestra avviando di nuovo ClipboardFilter.",
+    "hintMacAccessibility": "ClipboardFilter necessita del permesso Accessibilità (Impostazioni di Sistema › Privacy e sicurezza › Accessibilità) per incollare automaticamente."
   }
 }

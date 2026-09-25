@@ -3,38 +3,44 @@
 ## 🏗️ Architecture
 
 ### Technology Stack
-- **Framework:** Electron 28+
-- **Language:** TypeScript + JavaScript
+- **Framework:** Electron 44
+- **Language:** TypeScript (main process) + plain JavaScript (sandboxed renderer)
 - **UI:** HTML5 + CSS3 (no framework)
-- **Build:** npm + electron-builder
+- **Build:** npm + electron-builder 26
+- **Runtime dependencies:** none
 
 ### Project Structure
 ```
-cp_filter/
+clipboardfilter/
 ├── src/
-│   ├── main.ts              # Electron main process
-│   ├── filterManager.ts     # Filter logic
-│   ├── localeManager.ts     # i18n management
-│   ├── keyboardSimulator.ts # Global shortcuts
-│   ├── renderer.html        # UI markup
-│   ├── renderer.js          # UI logic
+│   ├── main.ts              # Main process: windows, tray, shortcut, IPC, notifications
+│   ├── preload.ts           # Whitelisted API exposed to the renderer (contextBridge)
+│   ├── filterEngine.ts      # Pure filtering engine (also the worker thread source)
+│   ├── filterRunner.ts      # Runs the engine in a worker with a timeout (ReDoS-safe)
+│   ├── filterManager.ts     # Filters / folders / settings, validation, migrations
+│   ├── store.ts             # In-memory JSON store with atomic, debounced writes
+│   ├── platform.ts          # Session detection, clipboard (wl-clipboard), autostart
+│   ├── keyboardSimulator.ts # Paste keystroke: PowerShell helper / osascript / xdotool, ydotool, dotool, wtype
+│   ├── clipboardWatcher.ts  # Automatic mode (polling or wl-paste --watch)
+│   ├── localeManager.ts     # i18n with English fallback
+│   ├── renderer.html        # UI markup (strict CSP, data-i18n attributes)
+│   ├── renderer.js          # UI logic (no Node access, event delegation)
 │   └── styles.css           # Styling
-├── locales/
-│   ├── en.json              # English translations
-│   ├── fr.json              # French translations
-│   ├── de.json              # German translations
-│   ├── es.json              # Spanish translations
-│   └── it.json              # Italian translations
-├── assets/
-│   ├── icon.png             # App icon
-│   └── icon.ico             # Windows icon
-├── scripts/
-│   ├── run.ps1              # Development script
-│   ├── build.ps1            # Build script
-│   └── package.ps1          # Package script
+├── locales/                 # en, fr, de, es, it
+├── test/                    # node:test unit tests
+├── scripts/                 # build/run helpers, bench.js
 ├── default-filters.json     # Default filter library
-└── package.json             # Dependencies
+└── package.json
 ```
+
+### Security model
+- The renderer runs with `sandbox: true`, `contextIsolation: true`, `nodeIntegration: false` and a strict CSP
+  (`script-src 'self'`, no inline handlers). It only reaches the main process through the channels
+  whitelisted in `preload.ts`; every IPC handler checks the sender and validates its input.
+- Every dynamic value inserted in the DOM is escaped; imported templates are validated in the main process.
+- Filtering runs in a worker thread. If it exceeds its time budget the worker is terminated and nothing is
+  pasted (fail closed). The offending filter is reported in a notification.
+- External tools are run with `execFile` (no shell) and a timeout. The configuration file is written with mode `0600`.
 
 ## 🚀 Getting Started
 
@@ -103,9 +109,8 @@ async function loadSettings(): Promise<Settings> {
 ### JavaScript (renderer.js)
 ```javascript
 // Use async/await for IPC
-async function loadFilters() {
-  filters = await ipcRenderer.invoke('get-filters');
-  renderFilters();
+async function toggleFilter(id, enabled) {
+  applyData(await call('filters:set-enabled', [id], enabled));
 }
 
 // Document complex functions
@@ -210,42 +215,23 @@ async function customConfirm(message) {
 
 ## 🔌 IPC Communication
 
-### Main → Renderer
-```typescript
-// main.ts
-mainWindow.webContents.send('filters-updated', filters);
+The renderer calls `window.api.invoke(channel, ...args)`; channels are declared in `src/preload.ts`
+and handled in `setupIPC()` in `src/main.ts`. Mutating handlers return the fresh `{ filters, folders }`
+so the UI never needs a second round-trip. Errors are returned as codes (e.g. `invalidRegex`) and
+translated with the `errors.*` keys.
 
+```javascript
 // renderer.js
-ipcRenderer.on('filters-updated', (event, filters) => {
-  this.filters = filters;
-  renderFilters();
-});
+const data = await window.api.invoke('filters:set-enabled', ids, true);
 ```
 
-### Renderer → Main
-```typescript
-// main.ts
-ipcMain.handle('get-filters', async () => {
-  return await filterManager.getFilters();
-});
-
-// renderer.js
-const filters = await ipcRenderer.invoke('get-filters');
-```
+Main → renderer: `settings-changed` (e.g. when automatic mode is toggled from the tray).
 
 ## 🧪 Testing
 
-### Manual Testing
-Use `TEST-CHECKLIST.md` for comprehensive testing.
-
-### Unit Testing (TODO)
 ```bash
-npm test
-```
-
-### Integration Testing (TODO)
-```bash
-npm run test:integration
+npm test        # engine equivalence with 1.0.0, replacement templates, ReDoS timeout, storage, validation
+npm run bench   # filtering speed compared with 1.0.0
 ```
 
 ## 📦 Building

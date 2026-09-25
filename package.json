@@ -1,6 +1,6 @@
 {
   "name": "clipboard-filter",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Secure clipboard filtering tool with configurable keyword blacklisting",
   "main": "dist/main.js",
   "author": {
@@ -14,13 +14,14 @@
   },
   "license": "MIT",
   "scripts": {
-    "rebuild": "node-gyp rebuild",
+    "build": "tsc && node scripts/copy-files.js",
     "start": "npm run build && electron .",
-    "build": "npx tsc && npm run copy-files",
-    "copy-files": "node -e \"const fs = require('fs'); fs.copyFileSync('src/renderer.html', 'dist/renderer.html'); fs.copyFileSync('src/renderer.js', 'dist/renderer.js'); fs.copyFileSync('src/styles.css', 'dist/styles.css'); fs.copyFileSync('default-filters.json', 'dist/default-filters.json');\"",
-    "watch": "npx tsc --watch",
     "dev": "npm run build && electron . --dev",
+    "watch": "tsc --watch",
+    "test": "npm run build && node --test test/*.test.js",
+    "bench": "npm run build && node scripts/bench.js",
     "package:win": "electron-builder --win --x64",
+    "package:linux": "electron-builder --linux",
     "package:linux:deb": "electron-builder --linux deb",
     "package:linux:rpm": "electron-builder --linux rpm",
     "package:linux:pacman": "electron-builder --linux pacman",
@@ -32,27 +33,18 @@
   "build": {
     "appId": "com.clipboardfilter.app",
     "productName": "ClipboardFilter",
-    "copyright": "Copyright \u00a9 2025 Loup LIGNON KRASNIQI",
+    "copyright": "Copyright © 2025 Loup LIGNON KRASNIQI",
     "directories": {
       "output": "release",
       "buildResources": "assets"
     },
     "files": [
       "dist/**/*",
+      "!dist/**/*.map",
+      "!dist/**/*.d.ts",
       "assets/**/*",
       "locales/**/*",
-      "default-filters.json",
-      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
-      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
-      "!**/node_modules/*.d.ts",
-      "!**/node_modules/.bin",
-      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
-      "!.editorconfig",
-      "!**/._*",
-      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
-      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
-      "!**/{appveyor.yml,.travis.yml,circle.yml}",
-      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+      "default-filters.json"
     ],
     "win": {
       "target": [
@@ -70,8 +62,10 @@
         }
       ],
       "icon": "assets/icon.png",
-      "publisherName": "Loup LIGNON KRASNIQI",
-      "verifyUpdateCodeSignature": false
+      "verifyUpdateCodeSignature": false,
+      "signtoolOptions": {
+        "publisherName": "Loup LIGNON KRASNIQI"
+      }
     },
     "linux": {
       "target": [
@@ -86,18 +80,39 @@
       "vendor": "Loup LIGNON KRASNIQI",
       "synopsis": "Secure clipboard filtering tool",
       "desktop": {
-        "Name": "ClipboardFilter",
-        "Comment": "Secure clipboard filtering tool",
-        "Categories": "Utility;Security;"
-      }
+        "entry": {
+          "Name": "ClipboardFilter",
+          "Comment": "Secure clipboard filtering tool",
+          "Categories": "Utility;Security;",
+          "Keywords": "clipboard;filter;secret;redact;privacy;"
+        }
+      },
+      "executableName": "clipboardfilter",
+      "syncDesktopName": true,
+      "description": "Filters secrets and personal data (API keys, tokens, IBAN, emails...) out of your clipboard before pasting."
     },
     "mac": {
       "target": [
-        "dmg",
-        "zip"
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ],
       "category": "public.app-category.utilities",
-      "icon": "assets/icon.png"
+      "icon": "assets/icon.png",
+      "extendInfo": {
+        "NSAppleEventsUsageDescription": "ClipboardFilter sends the paste keystroke (Cmd+V) to the active application."
+      }
     },
     "nsis": {
       "oneClick": false,
@@ -108,16 +123,21 @@
     },
     "deb": {
       "depends": [
-        "libgtk-3-0",
+        "libgtk-3-0 | libgtk-3-0t64",
         "libnotify4",
         "libnss3",
         "libxss1",
         "libxtst6",
         "xdg-utils",
-        "libatspi2.0-0",
-        "libuuid1"
+        "libatspi2.0-0 | libatspi2.0-0t64",
+        "libuuid1",
+        "libsecret-1-0"
       ],
-      "priority": "optional"
+      "priority": "optional",
+      "recommends": [
+        "wl-clipboard",
+        "xdotool"
+      ]
     },
     "rpm": {
       "depends": [
@@ -125,18 +145,29 @@
         "libnotify",
         "nss",
         "libXScrnSaver",
-        "libXtst"
+        "libXtst",
+        "xdg-utils"
+      ]
+    },
+    "pacman": {
+      "depends": [
+        "gtk3",
+        "libnotify",
+        "nss",
+        "libxss",
+        "libxtst",
+        "xdg-utils"
       ]
     }
   },
   "devDependencies": {
-    "@types/node": "^20.10.5",
-    "electron": "^28.1.0",
-    "electron-builder": "^24.9.1",
-    "typescript": "^5.3.3"
+    "@types/node": "^22.20.4",
+    "electron": "^44.4.5",
+    "electron-builder": "^26.15.3",
+    "typescript": "^5.9.3"
   },
-  "dependencies": {
-    "electron-store": "^8.1.0",
-    "node-addon-api": "^7.0.0"
+  "desktopName": "com.clipboardfilter.app.desktop",
+  "engines": {
+    "node": ">=20"
   }
 }
