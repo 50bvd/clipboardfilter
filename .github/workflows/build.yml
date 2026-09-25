@@ -55,11 +55,11 @@ jobs:
       - name: Build for ${{ matrix.platform }}
         run: |
           if [ "${{ matrix.platform }}" == "linux" ]; then
-            npm run package:linux
+            npm run package:linux -- --publish never
           elif [ "${{ matrix.platform }}" == "windows" ]; then
-            npm run package:win
+            npm run package:win -- --publish never
           else
-            npm run package:mac
+            npm run package:mac -- --publish never
           fi
         shell: bash
         env:
@@ -96,6 +96,6 @@ jobs:
           files: |
             artifacts/**/*
           draft: false
-          prerelease: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
