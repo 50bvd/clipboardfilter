@@ -13,12 +13,13 @@ ClipboardFilter is an application that automatically filters your clipboard cont
 4. The application starts automatically
 
 ### macOS
-1. Download `ClipboardFilter-1.0.0-arm64.dmg`
+1. Download the DMG for your Mac (`-arm64` for Apple Silicon, `-x64` for Intel)
 2. Open the DMG file
 3. Drag ClipboardFilter to Applications
 4. Launch from Applications folder
+5. The first time you use the paste shortcut, allow ClipboardFilter in **System Settings › Privacy & Security › Accessibility** (needed to send Cmd+V)
 
-**Note:** macOS will warn about an unsigned app. Go to System Preferences > Security & Privacy to allow it.
+**Note:** macOS will warn about an unsigned app. Go to System Settings > Privacy & Security to allow it.
 
 ### Linux
 **AppImage (Universal):**
@@ -34,8 +35,46 @@ sudo dpkg -i clipboard-filter_1.0.0_amd64.deb
 
 **Fedora/RHEL:**
 ```bash
-sudo rpm -i clipboard-filter-1.0.0.x86_64.rpm
+sudo rpm -i clipboard-filter-1.1.0.x86_64.rpm
 ```
+
+**Arch Linux:**
+```bash
+sudo pacman -U clipboard-filter-1.1.0.pacman
+```
+
+#### Optional helpers (recommended)
+
+| Session | Install | Why |
+|---------|---------|-----|
+| X11 (any desktop) | `xdotool` | automatic paste after filtering |
+| Wayland (GNOME, KDE, Sway, Hyprland…) | `wl-clipboard` | reliable clipboard access in the background |
+| Wayland | `ydotool` (+ `ydotoold` service) **or** `dotool` **or** `wtype` (wlroots only) | automatic paste after filtering |
+
+Without a paste helper, the shortcut still works: the filtered text is put in the clipboard and you just press **Ctrl+V**.
+Settings › *System compatibility* shows what was detected on your machine.
+
+#### Wayland (GNOME / KDE Plasma)
+
+- The global shortcut goes through the desktop portal (KDE Plasma 5.27+, GNOME 48+). GNOME asks you to confirm it the first time.
+- If your desktop does not support it (older GNOME, AppImage without installed `.desktop` file…), create a **custom keyboard shortcut** in your desktop settings that runs:
+  ```bash
+  clipboardfilter --paste            # filter the clipboard, then paste
+  clipboardfilter --filter-clipboard # only filter the clipboard
+  ```
+  (for an AppImage use its full path). The running instance handles the command instantly.
+- **Automatic mode** (filter everything that is copied) needs `wl-clipboard` and a compositor supporting the data-control protocol (KDE Plasma, Sway, Hyprland…). It is limited on GNOME.
+- **No tray icon on GNOME?** Install the *AppIndicator and KStatusNotifierItem Support* extension. Without it, the window is shown at startup and launching ClipboardFilter again reopens it.
+
+#### Command line
+
+| Option | Effect |
+|--------|--------|
+| `--paste` | Filter the clipboard and paste into the active window |
+| `--filter-clipboard` | Filter the clipboard in place |
+| `--toggle-auto` | Toggle automatic mode |
+| `--show` | Open the configuration window |
+| `--hidden` | Start in the background (used by auto-start) |
 
 ## ⚡ Quick Start
 
@@ -47,8 +86,10 @@ On first launch, ClipboardFilter will:
 
 ### Basic Usage
 1. Copy text containing sensitive information
-2. Press **Ctrl+Shift+V** to paste
+2. Press **Ctrl+Shift+V** (Cmd+Shift+V on macOS) to paste
 3. The text is automatically filtered!
+
+Or enable **automatic mode** (Settings › Behavior, or the tray menu): everything you copy is filtered right away and a normal Ctrl+V pastes the safe version.
 
 **Example:**
 ```
@@ -105,14 +146,23 @@ Import/export filter packs.
 - **Language**: English, Français, Deutsch, Español, Italiano
 - **Theme**: Auto, Light, Dark
 - **Notifications**: Show system notifications
-- **Auto-start**: Launch at system startup
+- **Auto-start**: Launch at system startup (Windows, macOS and Linux)
+- **Start minimized**: Start in the system tray without opening the window
+
+#### Behavior
+- **When the shortcut is pressed**: filter and paste, or only filter the clipboard
+- **Automatic mode**: filter everything that is copied
+- **Clear the clipboard after**: wipe the clipboard after 10 s … 5 min (only if you did not copy something else meanwhile)
 
 #### Shortcuts
 - **Paste**: Ctrl+Shift+V (default)
-- Click "🎙 Edit" to change
+- Click "🎙 Change" to change; a badge shows whether the shortcut is active
+
+#### System compatibility
+Shows the detected session (Windows, macOS, X11, Wayland), the available paste helper, the clipboard backend and tips for your desktop.
 
 #### Data Management
-- **↻ Reset all default filters**: Re-enable all disabled default filters
+- **↻ Reset all default filters**: Re-enable all default filters and restore deleted ones
 - **🗑 Delete all custom categories/filters**: Erase your custom creations
 
 ## 🎯 Use Cases
@@ -186,7 +236,7 @@ Change language in Settings > Language.
 ## 🎨 Customization
 
 ### Themes
-- **Auto**: Follows Windows system theme
+- **Auto**: Follows the system theme
 - **Light**: Light interface
 - **Dark**: Dark interface (recommended)
 
@@ -216,8 +266,13 @@ To change:
 - They can import it via Templates > Import JSON
 
 ### Do filters slow down my system?
-- No, filtering is nearly instantaneous (<100ms)
-- The app uses <100MB of RAM
+- No: the 112 default filters process a typical clipboard in well under a millisecond
+- Filtering runs in a background thread; a badly written custom regular expression is stopped after 3 seconds and **nothing is pasted** (fail-safe)
+
+### The shortcut does nothing on Linux
+- Open Settings › *System compatibility*
+- On Wayland, bind `clipboardfilter --paste` to a custom shortcut in your desktop settings (see Installation › Linux)
+- Install a paste helper (`xdotool` on X11, `ydotool`/`dotool`/`wtype` on Wayland) or just press Ctrl+V after the shortcut
 
 ### How do I uninstall?
 **Windows:**
@@ -245,8 +300,8 @@ sudo rpm -e clipboard-filter
 ## 📝 System Requirements
 
 - **Windows**: Windows 10/11 (64-bit)
-- **macOS**: macOS 10.12+ (Apple Silicon)
-- **Linux**: Ubuntu 20.04+, Fedora 34+, or any modern distro
+- **macOS**: macOS 12+ (Apple Silicon and Intel)
+- **Linux**: any modern distribution (Ubuntu 22.04+, Debian 12+, Fedora 38+, Arch…), X11 or Wayland (GNOME, KDE Plasma, Xfce, Cinnamon, MATE, Sway, Hyprland…)
 
 ## 📄 License
 
@@ -254,5 +309,5 @@ ClipboardFilter is open-source software under the MIT License.
 
 ---
 
-**Version:** 1.0.0  
-**Last updated:** December 2025
+**Version:** 1.1.0  
+**Last updated:** September 2026

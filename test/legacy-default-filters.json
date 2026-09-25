@@ -1,0 +1,900 @@
+{
+    "filters":  [
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.openai",
+                        "pattern":  "sk-(?:proj-)?[a-zA-Z0-9]{20,}",
+                        "replacement":  "sk-XXXX-REDACTED",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.anthropic",
+                        "pattern":  "sk-ant-[a-zA-Z0-9\\-_]{90,}",
+                        "replacement":  "sk-ant-REDACTED",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.googleApi",
+                        "pattern":  "AIza[0-9A-Za-z\\-_]{35}",
+                        "replacement":  "AIza***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.stripeApi",
+                        "pattern":  "sk_live_[0-9a-zA-Z]{24,}",
+                        "replacement":  "sk_live_***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.sendgridApi",
+                        "pattern":  "SG\\.[a-zA-Z0-9_-]{22}\\.[a-zA-Z0-9_-]{43}",
+                        "replacement":  "SG.***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.github",
+                        "pattern":  "gh[oprsu]_[a-zA-Z0-9]{36,255}",
+                        "replacement":  "gh*_REDACTED",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.gitlab",
+                        "pattern":  "glpat-[a-zA-Z0-9\\-_]{20,}",
+                        "replacement":  "glpat-REDACTED",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.bitbucket",
+                        "pattern":  "(?:BB|bb)[a-zA-Z0-9]{20,}",
+                        "replacement":  "BB***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.awsAccessKey",
+                        "pattern":  "(?:A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}",
+                        "replacement":  "AKIA***REDACTED",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.awsSecretKey",
+                        "pattern":  "aws[_\\-]?secret[_\\-]?access[_\\-]?key[\\s:=]+[A-Za-z0-9/+=]{40}",
+                        "replacement":  "aws_secret_access_key=***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.awsSessionToken",
+                        "pattern":  "aws[_\\-]?session[_\\-]?token[\\s:=]+[A-Za-z0-9/+=]{100,}",
+                        "replacement":  "aws_session_token=***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.azureClientSecret",
+                        "pattern":  "[a-zA-Z0-9~_\\-\\.]{34,40}",
+                        "replacement":  "***AZURE_SECRET_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.azureSas",
+                        "pattern":  "(?:sv|sig|se|spr|sp|sr)=(?:[^\u0026\\s]+\u0026?)+",
+                        "replacement":  "***AZURE_SAS_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.gcpOauth",
+                        "pattern":  "[0-9]+-[0-9A-Za-z_]{32}\\.apps\\.googleusercontent\\.com",
+                        "replacement":  "***GCP_OAUTH_REDACTED***.apps.googleusercontent.com",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.jwt",
+                        "pattern":  "eyJ[a-zA-Z0-9_-]*\\.eyJ[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]*",
+                        "replacement":  "eyJ***JWT_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.bearerToken",
+                        "pattern":  "Bearer [a-zA-Z0-9\\-._~+/]+=*",
+                        "replacement":  "Bearer ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.basicAuth",
+                        "pattern":  "Basic [A-Za-z0-9+/=]{20,}",
+                        "replacement":  "Basic ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.refreshToken",
+                        "pattern":  "refresh[_\\-]?token[\\s:=]+[a-zA-Z0-9\\-._~+/]+=*",
+                        "replacement":  "refresh_token=***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.postgresql",
+                        "pattern":  "postgres(?:ql)?://[^\\s]+",
+                        "replacement":  "postgresql://***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.mongodb",
+                        "pattern":  "mongodb(?:\\+srv)?://[^\\s]+",
+                        "replacement":  "mongodb://***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.mysql",
+                        "pattern":  "mysql://[^\\s]+",
+                        "replacement":  "mysql://***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.redis",
+                        "pattern":  "redis://[^\\s]+",
+                        "replacement":  "redis://***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.rsaPrivateKey",
+                        "pattern":  "-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----[\\s\\S]+?-----END (?:RSA |OPENSSH |EC )?PRIVATE KEY-----",
+                        "replacement":  "-----BEGIN PRIVATE KEY-----\\n***REDACTED***\\n-----END PRIVATE KEY-----",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.sshPassphrase",
+                        "pattern":  "(?:passphrase|PASSPHRASE)[\\s:=]+[^\\s;]{8,}",
+                        "replacement":  "passphrase: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.dockerToken",
+                        "pattern":  "dckr_pat_[a-zA-Z0-9_-]{40,}",
+                        "replacement":  "dckr_pat_***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.npmToken",
+                        "pattern":  "npm_[a-zA-Z0-9]{36}",
+                        "replacement":  "npm_***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.pypiToken",
+                        "pattern":  "pypi-[a-zA-Z0-9_-]{40,}",
+                        "replacement":  "pypi-***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Developer",
+                        "descriptionKey":  "filters.developer.nugetApi",
+                        "pattern":  "oy2[a-z0-9]{43}",
+                        "replacement":  "oy2***NUGET_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.ciscoType7",
+                        "pattern":  "password 7 [0-9A-F]{32,}",
+                        "replacement":  "password 7 ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.ciscoType5",
+                        "pattern":  "password 5 \\$1\\$[a-zA-Z0-9$./]{20,}",
+                        "replacement":  "password 5 ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.ciscoSecret",
+                        "pattern":  "enable secret [0-9] [a-zA-Z0-9$./]{20,}",
+                        "replacement":  "enable secret ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.ciscoSnmp",
+                        "pattern":  "snmp-server community [^\\s]+",
+                        "replacement":  "snmp-server community ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.ciscoTacacs",
+                        "pattern":  "tacacs-server key [^\\s]+",
+                        "replacement":  "tacacs-server key ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.juniperEncrypted",
+                        "pattern":  "\\$9\\$[a-zA-Z0-9./]{20,}",
+                        "replacement":  "$9$***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.juniperSecret",
+                        "pattern":  "secret \"[^\"]+\"",
+                        "replacement":  "secret \"***REDACTED***\"",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.hpWpa",
+                        "pattern":  "wpa-passphrase [^\\s]+",
+                        "replacement":  "wpa-passphrase ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.fortinetEnc",
+                        "pattern":  "ENC [a-zA-Z0-9+/=]{20,}",
+                        "replacement":  "ENC ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.paloPassword",
+                        "pattern":  "-AQ==.*==",
+                        "replacement":  "-AQ==***REDACTED***==",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.dellIdrac",
+                        "pattern":  "(?:root|admin):[a-zA-Z0-9!@#$%^\u0026*]{8,}@idrac",
+                        "replacement":  "***:REDACTED@idrac",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.vmwareVcenter",
+                        "pattern":  "administrator@vsphere\\.local:[^\\s]+",
+                        "replacement":  "administrator@vsphere.local:***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.vmwareEsxi",
+                        "pattern":  "vim\\.host\\.LocalAccountManager\\.password[\\s:=]+[^\\s]+",
+                        "replacement":  "vim.host.LocalAccountManager.password=***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.snmpCommunity",
+                        "pattern":  "(?:community|COMMUNITY)[\\s:=]+[^\\s;]+",
+                        "replacement":  "community: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.snmpV3Auth",
+                        "pattern":  "snmpv3[\\s\\-]?auth[\\s:=]+[^\\s]+",
+                        "replacement":  "snmpv3-auth: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.snmpV3Priv",
+                        "pattern":  "snmpv3[\\s\\-]?priv[\\s:=]+[^\\s]+",
+                        "replacement":  "snmpv3-priv: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.ldapBind",
+                        "pattern":  "(?:bindpw|bind_password)[\\s:=]+[^\\s]+",
+                        "replacement":  "bindpw: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.vpnSecret",
+                        "pattern":  "(?:VPN|IPSec)[\\s_-]?(?:Secret|PSK):?\\s*[^\\s;]+",
+                        "replacement":  "VPN Secret: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.openvpnKey",
+                        "pattern":  "-----BEGIN OpenVPN Static key V1-----[\\s\\S]+?-----END OpenVPN Static key V1-----",
+                        "replacement":  "-----BEGIN OpenVPN Static key V1-----\\n***REDACTED***\\n-----END OpenVPN Static key V1-----",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.wireguard",
+                        "pattern":  "(?:PrivateKey|private_key)[\\s:=]+[A-Za-z0-9+/]{43}=",
+                        "replacement":  "PrivateKey: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.wifiWpaKey",
+                        "pattern":  "(?:wpa_passphrase|psk)[\\s:=]+[^\\s]{8,63}",
+                        "replacement":  "wpa_passphrase: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.wifiPsk",
+                        "pattern":  "PSK:[a-fA-F0-9]{64}",
+                        "replacement":  "PSK:***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.windowsPath",
+                        "pattern":  "[A-Z]:\\\\(?:[^\\\\/:*?\"\u003c\u003e|\\r\\n]+\\\\)*[^\\\\/:*?\"\u003c\u003e|\\r\\n]*",
+                        "replacement":  "C:\\***PATH_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.unixPath",
+                        "pattern":  "/(?:[^/\\s]+/)*[^/\\s]*",
+                        "replacement":  "/***PATH_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.cookieSession",
+                        "pattern":  "(?:SESSION|PHPSESSID|JSESSIONID)[\\s:=]+[a-zA-Z0-9]{20,}",
+                        "replacement":  "SESSION=***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "System",
+                        "descriptionKey":  "filters.system.sessionId",
+                        "pattern":  "session[_\\-]?id[\\s:=]+[a-zA-Z0-9\\-]{20,}",
+                        "replacement":  "session_id=***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.nirFrance",
+                        "pattern":  "[12][0-9]{2}[01][0-9][0-9]{2}[0-9]{3}[0-9]{3}[0-9]{2}",
+                        "replacement":  "*** ** ** *** *** **",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.siretFrance",
+                        "pattern":  "\\b[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{5}\\b",
+                        "replacement":  "*** *** *** *****",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.sirenFrance",
+                        "pattern":  "\\b[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{3}\\b",
+                        "replacement":  "*** *** ***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.ribFrance",
+                        "pattern":  "\\b[0-9]{5}[\\s\\-]?[0-9]{5}[\\s\\-]?[0-9]{11}[\\s\\-]?[0-9]{2}\\b",
+                        "replacement":  "***** ***** *********** **",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.tvaFrance",
+                        "pattern":  "FR[0-9]{2}[\\s]?[0-9]{9}",
+                        "replacement":  "FR** *********",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.ssnUsa",
+                        "pattern":  "\\b[0-9]{3}[\\-\\s]?[0-9]{2}[\\-\\s]?[0-9]{4}\\b",
+                        "replacement":  "***-**-****",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.einUsa",
+                        "pattern":  "\\b[0-9]{2}[\\-]?[0-9]{7}\\b",
+                        "replacement":  "**-*******",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.routingUsa",
+                        "pattern":  "\\b[0-9]{9}\\b",
+                        "replacement":  "*********",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.itinUsa",
+                        "pattern":  "\\b9[0-9]{2}[\\-\\s]?[0-9]{2}[\\-\\s]?[0-9]{4}\\b",
+                        "replacement":  "9**-**-****",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.ninoUk",
+                        "pattern":  "\\b[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6}[A-D]{1}\\b",
+                        "replacement":  "XX######X",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.utrUk",
+                        "pattern":  "\\b[0-9]{10}\\b",
+                        "replacement":  "**********",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.vatUk",
+                        "pattern":  "GB[0-9]{9}",
+                        "replacement":  "GB*********",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.iban",
+                        "pattern":  "[A-Z]{2}[0-9]{2}[A-Z0-9]{10,30}",
+                        "replacement":  "XX##***IBAN_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.swift",
+                        "pattern":  "\\\\b[A-Z]{6}[A-Z0-9]{2}(?:[A-Z0-9]{3})?\\\\b",
+                        "replacement":  "***SWIFT_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.creditCard",
+                        "pattern":  "\\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12})\\b",
+                        "replacement":  "****-****-****-XXXX",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.cvv",
+                        "pattern":  "\\b[0-9]{3,4}\\b",
+                        "replacement":  "***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.bitcoin",
+                        "pattern":  "\\b[13][a-km-zA-HJ-NP-Z1-9]{25,34}\\b",
+                        "replacement":  "***BTC_ADDRESS_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.ethereum",
+                        "pattern":  "0x[a-fA-F0-9]{40}",
+                        "replacement":  "0x***ETH_ADDRESS_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Finance",
+                        "descriptionKey":  "filters.finance.solana",
+                        "pattern":  "[1-9A-HJ-NP-Za-km-z]{32,44}",
+                        "replacement":  "***SOL_ADDRESS_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Personal",
+                        "descriptionKey":  "filters.personal.email",
+                        "pattern":  "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}",
+                        "replacement":  "***@***.***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Personal",
+                        "descriptionKey":  "filters.personal.phone",
+                        "pattern":  "\\+?[0-9]{1,3}[\\s\\-]?\\(?[0-9]{1,4}\\)?[\\s\\-]?[0-9]{1,4}[\\s\\-]?[0-9]{1,4}[\\s\\-]?[0-9]{1,9}",
+                        "replacement":  "+** *** *** ****",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Personal",
+                        "descriptionKey":  "filters.personal.ipv4",
+                        "pattern":  "\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b",
+                        "replacement":  "***.***.***.***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Personal",
+                        "descriptionKey":  "filters.personal.ipv6",
+                        "pattern":  "(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}",
+                        "replacement":  "****:****:****:****:****:****:****:****",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Personal",
+                        "descriptionKey":  "filters.personal.mac",
+                        "pattern":  "\\b(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}\\b",
+                        "replacement":  "**:**:**:**:**:**",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Personal",
+                        "descriptionKey":  "filters.personal.passport",
+                        "pattern":  "(?:Passport|Passeport)[\\\\s#:-]+[A-Z]{1,2}[0-9]{6,9}",
+                        "replacement":  "XX*******",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Personal",
+                        "descriptionKey":  "filters.personal.drivingLicense",
+                        "pattern":  "(?:DL|License|Permis)[\\\\s#:-]+[A-Z0-9]{6,15}",
+                        "replacement":  "***LICENSE_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Personal",
+                        "descriptionKey":  "filters.personal.birthdate",
+                        "pattern":  "\\b(?:0[1-9]|[12][0-9]|3[01])[/\\-](?:0[1-9]|1[012])[/\\-](?:19|20)[0-9]{2}\\b",
+                        "replacement":  "**/**/****",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Personal",
+                        "descriptionKey":  "filters.personal.address",
+                        "pattern":  "[0-9]{1,5}\\s[a-zA-Z\\s]{3,}",
+                        "replacement":  "*** ***ADDRESS_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Personal",
+                        "descriptionKey":  "filters.personal.postalCode",
+                        "pattern":  "\\b[0-9]{5}(?:[\\-][0-9]{4})?\\b",
+                        "replacement":  "*****",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Personal",
+                        "descriptionKey":  "filters.personal.gps",
+                        "pattern":  "[-+]?[0-9]{1,3}\\.[0-9]+[,\\s]+[-+]?[0-9]{1,3}\\.[0-9]+",
+                        "replacement":  "***.******, ***.******",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Health",
+                        "descriptionKey":  "filters.health.mrn",
+                        "pattern":  "MRN[:\\s]?[0-9A-Z]{6,15}",
+                        "replacement":  "MRN: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Health",
+                        "descriptionKey":  "filters.health.patientId",
+                        "pattern":  "(?:Patient|patient)[\\s\\-]?(?:ID|id)[:\\s]?[0-9A-Z]{6,15}",
+                        "replacement":  "Patient ID: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Health",
+                        "descriptionKey":  "filters.health.rppsFrance",
+                        "pattern":  "\\b[0-9]{11}\\b",
+                        "replacement":  "***********",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "HR",
+                        "descriptionKey":  "filters.hr.employeeId",
+                        "pattern":  "(?:EMP|emp|Employee)[\\s\\-]?(?:ID|id)[:\\s]?[0-9A-Z]{4,10}",
+                        "replacement":  "Employee ID: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "HR",
+                        "descriptionKey":  "filters.hr.salary",
+                        "pattern":  "(?:salary|Salary)[:\\s]+[0-9]{3,}(?:[.,][0-9]{2})?[\\s]?(?:â‚¬|\\$|Â£)",
+                        "replacement":  "Salary: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "HR",
+                        "descriptionKey":  "filters.hr.matricule",
+                        "pattern":  "(?:Matricule|matricule)[:\\s]+[0-9A-Z]{6,15}",
+                        "replacement":  "Matricule: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "HR",
+                        "descriptionKey":  "filters.hr.contract",
+                        "pattern":  "(?:Contract|contract)[\\s\\-]?(?:Number|number|#)[:\\s]?[0-9A-Z]{6,15}",
+                        "replacement":  "Contract #: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "HR",
+                        "descriptionKey":  "filters.hr.payslip",
+                        "pattern":  "(?:Payslip|payslip|Bulletin)[\\s\\-]?(?:Number|number|#)[:\\s]?[0-9A-Z]{6,15}",
+                        "replacement":  "Payslip #: ***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  false
+                    },
+                    {
+                        "category":  "Communication",
+                        "descriptionKey":  "filters.communication.slackWebhook",
+                        "pattern":  "https://hooks\\.slack\\.com/services/[A-Z0-9/]+",
+                        "replacement":  "https://hooks.slack.com/services/***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Communication",
+                        "descriptionKey":  "filters.communication.discordWebhook",
+                        "pattern":  "https://discord(?:app)?\\.com/api/webhooks/[0-9]+/[A-Za-z0-9_-]+",
+                        "replacement":  "https://discord.com/api/webhooks/***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Communication",
+                        "descriptionKey":  "filters.communication.teamsWebhook",
+                        "pattern":  "https://[a-z0-9]+\\.webhook\\.office\\.com/webhookb2/[a-zA-Z0-9@/-]+",
+                        "replacement":  "https://***.webhook.office.com/webhookb2/***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Communication",
+                        "descriptionKey":  "filters.communication.slackBot",
+                        "pattern":  "xoxb-[0-9]{10,13}-[0-9]{10,13}-[a-zA-Z0-9]{24}",
+                        "replacement":  "xoxb-***REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "category":  "Communication",
+                        "descriptionKey":  "filters.communication.telegramBot",
+                        "pattern":  "[0-9]{8,10}:[a-zA-Z0-9_-]{35}",
+                        "replacement":  "***:TELEGRAM_BOT_REDACTED***",
+                        "useRegex":  true,
+                        "enabled":  true
+                    },
+                    {
+                        "pattern":  "xox[pboa]-[0-9]{10,13}-[0-9]{10,13}-[0-9]{10,13}-[a-zA-Z0-9]{32}",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.developer.slackApiToken",
+                        "replacement":  "xox*-***REDACTED***",
+                        "category":  "Developer",
+                        "enabled":  true
+                    },
+                    {
+                        "pattern":  "glpat-[a-zA-Z0-9_-]{20}",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.developer.gitlabToken",
+                        "replacement":  "glpat-***REDACTED***",
+                        "category":  "Developer",
+                        "enabled":  true
+                    },
+                    {
+                        "pattern":  "https://[a-f0-9]{32}@[a-z0-9]+\\.ingest\\.sentry\\.io/[0-9]+",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.developer.sentryDsn",
+                        "replacement":  "https://***REDACTED***@***.ingest.sentry.io/***",
+                        "category":  "Developer",
+                        "enabled":  true
+                    },
+                    {
+                        "pattern":  "\\$2[ayb]\\$[0-9]{2}\\$[A-Za-z0-9./]{53}",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.system.bcryptHash",
+                        "replacement":  "$2*$**$***BCRYPT_HASH_REDACTED***",
+                        "category":  "System",
+                        "enabled":  false
+                    },
+                    {
+                        "pattern":  "\\b[a-f0-9]{32}\\b",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.system.md5Hash",
+                        "replacement":  "***MD5_HASH***",
+                        "category":  "System",
+                        "enabled":  false
+                    },
+                    {
+                        "pattern":  "\\b[a-f0-9]{64}\\b",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.system.sha256Hash",
+                        "replacement":  "***SHA256_HASH***",
+                        "category":  "System",
+                        "enabled":  false
+                    },
+                    {
+                        "pattern":  "(?:License|Permis)[\\s\\-]?(?:No|Number|#)?[\\s:]?[A-Z0-9]{6,15}",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.personal.driverLicense",
+                        "replacement":  "License: ***REDACTED***",
+                        "category":  "Personal",
+                        "enabled":  false
+                    },
+                    {
+                        "pattern":  "[5KL][1-9A-HJ-NP-Za-km-z]{50,51}",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.finance.bitcoinPrivateKey",
+                        "replacement":  "***BITCOIN_PRIVATE_KEY***",
+                        "category":  "Finance",
+                        "enabled":  true
+                    },
+                    {
+                        "pattern":  "(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.system.macAddress",
+                        "replacement":  "**:**:**:**:**:**",
+                        "category":  "System",
+                        "enabled":  false
+                    },
+                    {
+                        "pattern":  "(?:S/N|Serial|SN)[\\s:]?[A-Z0-9]{8,20}",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.system.serialNumber",
+                        "replacement":  "S/N: ***REDACTED***",
+                        "category":  "System",
+                        "enabled":  false
+                    },
+                    {
+                        "pattern":  "mongodb(?:\\+srv)?://[a-zA-Z0-9:@./_-]+",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.developer.mongodbUri",
+                        "replacement":  "mongodb://***REDACTED***",
+                        "category":  "Developer",
+                        "enabled":  true
+                    },
+                    {
+                        "pattern":  "redis://[a-zA-Z0-9:@./_-]+",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.developer.redisUri",
+                        "replacement":  "redis://***REDACTED***",
+                        "category":  "Developer",
+                        "enabled":  true
+                    },
+                    {
+                        "pattern":  "https://hooks\\.zapier\\.com/hooks/catch/[0-9]+/[a-zA-Z0-9]+",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.communication.zapier",
+                        "replacement":  "https://hooks.zapier.com/hooks/catch/***REDACTED***",
+                        "category":  "Communication",
+                        "enabled":  true
+                    },
+                    {
+                        "pattern":  "AC[a-f0-9]{32}",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.communication.twilioSid",
+                        "replacement":  "AC***TWILIO_SID***",
+                        "category":  "Communication",
+                        "enabled":  true
+                    },
+                    {
+                        "pattern":  "SK[a-f0-9]{32}",
+                        "useRegex":  true,
+                        "descriptionKey":  "filters.communication.twilioToken",
+                        "replacement":  "SK***TWILIO_TOKEN***",
+                        "category":  "Communication",
+                        "enabled":  true
+                    }
+                ]
+}

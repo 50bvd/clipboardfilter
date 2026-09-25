@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -43,23 +43,23 @@ jobs:
       - name: Build TypeScript
         run: npm run build
 
-      - name: Install FPM (Linux only)
+      - name: Run tests
+        run: npm test
+
+      - name: Install packaging tools (Linux only)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y ruby ruby-dev
-          sudo gem install fpm
+          sudo apt-get install -y rpm libarchive-tools
 
       - name: Build for ${{ matrix.platform }}
         run: |
           if [ "${{ matrix.platform }}" == "linux" ]; then
-            npm run package:linux:appimage
-            npm run package:linux:deb
-            npm run package:linux:rpm
+            npm run package:linux -- --publish never
           elif [ "${{ matrix.platform }}" == "windows" ]; then
-            npm run package:win
+            npm run package:win -- --publish never
           else
-            npm run package:mac
+            npm run package:mac -- --publish never
           fi
         shell: bash
         env:
@@ -74,6 +74,7 @@ jobs:
             release/*.deb
             release/*.rpm
             release/*.AppImage
+            release/*.pacman
             release/*.dmg
             release/*.zip
           retention-days: 90
@@ -95,6 +96,6 @@ jobs:
           files: |
             artifacts/**/*
           draft: false
-          prerelease: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

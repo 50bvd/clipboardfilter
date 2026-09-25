@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/50bvd/clipboardfilter/workflows/Build%20Multi-Platform/badge.svg)](https://github.com/50bvd/clipboardfilter/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/50bvd/clipboardfilter/releases)
+[![Version](https://img.shields.io/badge/version-1.1.0-green.svg)](https://github.com/50bvd/clipboardfilter/releases)
 
 A secure clipboard filtering application that automatically detects and masks sensitive information in real-time.
 
@@ -13,10 +13,15 @@ A secure clipboard filtering application that automatically detects and masks se
 - 🔒 **112 pre-configured filters** across 7 categories
 - 🌍 **Multi-language support** (EN, FR, DE, ES, IT)
 - ⚡ **Real-time filtering** with global hotkey (Ctrl+Shift+V)
+- 🤖 **Automatic mode**: filters everything you copy, so a normal Ctrl+V is always safe
+- 🧹 **Auto-clear** of the clipboard after a configurable delay
+- 🐧 **Works on Windows, macOS and Linux** — X11 and Wayland (GNOME, KDE Plasma, Sway, Hyprland…)
+- 🛡️ **Fail-safe filtering**: runs in a background thread, slow regexes are stopped and nothing is pasted
+- 🧪 **Live preview** with per-filter match counts, 🔎 filter search
 - 📦 **Template system** for import/export
 - 🎨 **Auto theme detection** (Light/Dark)
 - 🗂️ **Custom folders** for organization
-- ⚙️ **Regex support** for advanced patterns
+- ⚙️ **Regex support** for advanced patterns (optionally case-sensitive)
 
 ## 📥 Download
 
@@ -30,7 +35,7 @@ Get the latest release for your platform:
   - [.rpm](https://github.com/50bvd/clipboardfilter/releases/download/v1.0.0/clipboard-filter-1.0.0.x86_64.rpm) (Fedora/RHEL)
 
 - **macOS**: [ClipboardFilter.dmg for new Apple chip (ARM64)](https://github.com/50bvd/clipboardfilter/releases/download/v1.0.0/ClipboardFilter-1.0.0-arm64.dmg)
-  - *__Note :__* For macOS, this application are not compatible with Intel chips and PowerPC architecture.
+  - *__Note :__* starting with 1.1.0, Intel (x64) builds are published as well.
 
 ## 🚀 Quick Start
 
@@ -51,7 +56,15 @@ sudo dpkg -i clipboard-filter_*.deb
 
 # Fedora/RHEL
 sudo rpm -i clipboard-filter-*.rpm
+
+# Arch Linux
+sudo pacman -U clipboard-filter-*.pacman
 ```
+
+**Recommended helpers:** `xdotool` (X11) or `wl-clipboard` + `ydotool`/`dotool`/`wtype` (Wayland) for automatic pasting.
+Without them, the shortcut filters the clipboard and you press Ctrl+V yourself.
+On Wayland, if the global shortcut is not supported by your desktop, bind `clipboardfilter --paste` to a custom keyboard shortcut.
+See the [User Guide](USER-GUIDE.md#linux) for details; Settings › *System compatibility* shows what was detected.
 
 ### macOS
 1. Download `ClipboardFilter.dmg`
@@ -108,7 +121,7 @@ Templates > Import JSON > Select file
 ## 🛠️ Development
 
 ### Prerequisites
-- Node.js 18+
+- Node.js 20+ (22 recommended)
 - npm 9+
 
 ### Setup
@@ -122,13 +135,15 @@ npm install
 ```bash
 npm run build      # Compile TypeScript
 npm start          # Run in development
+npm test           # Unit tests (filter engine, storage, ReDoS protection)
+npm run bench      # Compare the filtering speed with 1.0.0
 ```
 
 ### Package
 ```bash
 npm run package:win          # Windows
-npm run package:linux:deb    # Linux (Debian)
-npm run package:mac          # macOS
+npm run package:linux        # Linux (AppImage, deb, rpm, pacman)
+npm run package:mac          # macOS (x64 + arm64)
 ```
 
 ## 📚 Documentation
