@@ -5,6 +5,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.1.0-beta.2] - 2026-09-26
+
 ### Added
 - Update notifications: the app checks GitHub releases (stable, or stable + beta) and offers to download a newer version. Can be disabled in Settings › Updates.
 - GNOME (Wayland): the paste shortcut is registered as a GNOME custom shortcut, so it works on every GNOME version (Fedora, Ubuntu…), without the portal.
@@ -43,6 +45,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 - First public release (Windows).
 
-[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.1.0-beta.1...develop
+[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.1.0-beta.2...develop
+[1.1.0-beta.2]: https://github.com/50bvd/clipboardfilter/compare/v1.1.0-beta.1...v1.1.0-beta.2
 [1.1.0-beta.1]: https://github.com/50bvd/clipboardfilter/compare/v1.0.0...v1.1.0-beta.1
 [1.0.0]: https://github.com/50bvd/clipboardfilter/releases/tag/v1.0.0
