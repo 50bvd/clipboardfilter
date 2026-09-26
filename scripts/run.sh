@@ -3,7 +3,7 @@
 
 echo ""
 echo "========================================"
-echo "    ClipboardFilter v1.0.0"
+echo "    ClipboardFilter v1.1.0"
 echo "========================================"
 echo ""
 echo "[STARTING] Launching ClipboardFilter..."

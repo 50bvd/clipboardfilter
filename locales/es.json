@@ -6,7 +6,10 @@
   "menu": {
     "show": "Mostrar configuración",
     "about": "Acerca de",
-    "quit": "Salir"
+    "quit": "Salir",
+    "filterNow": "Filtrar el portapapeles ahora",
+    "autoFilter": "Filtrado automático",
+    "help": "Ayuda"
   },
   "config": {
     "title": "ClipboardFilter - Configuración",
@@ -22,7 +25,11 @@
     "testFilters": "Probar",
     "enabled": "Activado",
     "description": "Descripción",
-    "pattern": "Patrón"
+    "pattern": "Patrón",
+    "searchPlaceholder": "Buscar filtros…",
+    "summary": "{enabled}/{total} activos",
+    "noResults": "Ningún filtro coincide con la búsqueda",
+    "toggleAll": "Activar/desactivar todo"
   },
   "filterForm": {
     "title": "Configuración del filtro",
@@ -38,8 +45,9 @@
     "cancel": "Cancelar",
     "patternRequired": "Patrón requerido",
     "invalidRegex": "Regex inválido",
-    "categoryLabel": "Nombre de la categoría",
-    "noCategoryOption": "Ninguna carpeta"
+    "categoryLabel": "Categoría",
+    "noCategoryOption": "Personalizado (sin categoría)",
+    "caseSensitive": "Distinguir mayúsculas y minúsculas"
   },
   "test": {
     "title": "Probar",
@@ -50,7 +58,8 @@
     "noInput": "Ingrese texto",
     "filtered": "{count} filtrado(s)",
     "noFilters": "Ninguno",
-    "noMatches": "Ninguno"
+    "noMatches": "No se encontraron datos sensibles",
+    "live": "Vista previa en directo"
   },
   "settings": {
     "title": "Ajustes",
@@ -80,17 +89,53 @@
     "dataManagement": "Gestión de datos",
     "resetAllDefaults": "Restablecer todos los filtros predeterminados",
     "deleteAllCustom": "Eliminar todas las categorías/filtros personalizados",
-    "changeShortcut": "🎙 Modificar"
+    "changeShortcut": "🎙 Modificar",
+    "startMinimized": "Iniciar minimizado en la bandeja del sistema",
+    "behaviorTitle": "Comportamiento",
+    "pasteMode": "Al pulsar el atajo",
+    "pasteModeSimulate": "Filtrar el portapapeles y pegar",
+    "pasteModeClipboard": "Solo filtrar el portapapeles (luego pegue usted)",
+    "autoFilter": "Modo automático: filtrar todo lo que se copia",
+    "autoFilterHint": "Un Ctrl+V / Cmd+V normal pegará siempre el contenido filtrado.",
+    "clearClipboard": "Vaciar el portapapeles después de",
+    "never": "Nunca"
   },
   "notifications": {
-    "copyFiltered": "Copiado",
-    "pasteFiltered": "Pegado",
-    "itemsFiltered": "{count} enmascarado(s)"
+    "copyFiltered": "Portapapeles filtrado",
+    "pasteFiltered": "Pegado filtrado",
+    "itemsFiltered": "{count} enmascarado(s)",
+    "stillRunning": "ClipboardFilter sigue en ejecución",
+    "stillRunningBody": "Sigue filtrando en segundo plano. Vuelva a iniciarlo para abrir esta ventana.",
+    "clipboardEmpty": "El portapapeles está vacío",
+    "nothingFiltered": "No se encontraron datos sensibles",
+    "pasteManually": "Pulse Ctrl+V para pegar",
+    "pasteManuallyBody": "El texto filtrado está en el portapapeles.",
+    "macAccessibility": "Permita ClipboardFilter en Ajustes del Sistema › Privacidad y seguridad › Accesibilidad. El texto filtrado está en el portapapeles: pulse Cmd+V.",
+    "installWayland": "El texto filtrado está en el portapapeles. Instale ydotool, dotool o wtype para pegar automáticamente.",
+    "installX11": "El texto filtrado está en el portapapeles. Instale xdotool para pegar automáticamente.",
+    "filterTimeout": "Filtrado interrumpido",
+    "filterTimeoutBody": "El filtro «{name}» es demasiado lento (expresión regular catastrófica). No se ha pegado nada.",
+    "filterFailed": "El filtrado ha fallado. No se ha pegado nada."
   },
   "errors": {
     "title": "Error",
-    "unknown": "Error",
-    "cannotDeleteDefault": "No se puede eliminar una categoría predeterminada."
+    "unknown": "Se ha producido un error inesperado.",
+    "cannotDeleteDefault": "No se puede eliminar una categoría predeterminada.",
+    "patternRequired": "Se requiere un patrón.",
+    "patternTooLong": "El patrón es demasiado largo.",
+    "invalidRegex": "Expresión regular no válida",
+    "emptyMatch": "Este patrón coincide con texto vacío y modificaría cada carácter.",
+    "descriptionRequired": "Se requiere una descripción.",
+    "nameRequired": "Se requiere un nombre.",
+    "tooManyFilters": "Demasiados filtros.",
+    "tooManyFolders": "Demasiadas categorías.",
+    "notFound": "Elemento no encontrado.",
+    "invalidInput": "Datos no válidos.",
+    "forbidden": "Operación no permitida.",
+    "shortcutUnavailable": "No se pudo registrar este atajo (puede que otra aplicación ya lo use). Se ha conservado el anterior.",
+    "importError": "Error: archivo de plantilla no válido.",
+    "noCustomFilters": "No hay filtros personalizados para exportar.\\n\\nLos filtros predeterminados no se pueden exportar.\\nCree sus propios filtros o categorías para exportar una plantilla.",
+    "filterTimeout": "Un filtro es demasiado lento (expresión regular catastrófica) y se ha interrumpido. Revise sus expresiones regulares personalizadas."
   },
   "categories": {
     "Developer": "Desarrollador",
@@ -108,7 +153,11 @@
     "createPrompt": "Nombre de la categoría",
     "iconPrompt": "Icono (emoji)",
     "andFilters": "y todos sus",
-    "noFolderPrompt": "Aún no has creado ninguna carpeta. ¿Quieres crear una ahora?"
+    "noFolderPrompt": "Aún no has creado ninguna carpeta. ¿Quieres crear una ahora?",
+    "copyTo": "Copiar a una categoría",
+    "removeFrom": "Quitar de la categoría",
+    "deleteWithFilters": "Esta categoría contiene {count} filtro(s). También se eliminarán. ¿Continuar?",
+    "deleteCategoryConfirm": "¿Eliminar la categoría «{name}» y sus {count} filtro(s)?"
   },
   "templates": {
     "exportSuccess": "Plantilla \"{0}\" exportada! ({1} filtros)",
@@ -128,12 +177,47 @@
     "importError": "Error: Formato invalido",
     "title": "Plantillas de filtros",
     "exportDesc": "Cree una plantilla JSON con sus filtros personalizados",
-    "noCustomFilters": "No hay filtros personalizados para exportar.\\n\\nLos filtros predeterminados no se pueden exportar.\\nCree sus propios filtros o categorias para exportar una plantilla."
+    "noCustomFilters": "No hay filtros personalizados para exportar.\\n\\nLos filtros predeterminados no se pueden exportar.\\nCree sus propios filtros o categorias para exportar una plantilla.",
+    "tab": "Plantillas",
+    "importSkipped": "{0} filtro(s) no válido(s) omitido(s)"
   },
   "shortcut": {
     "modalTitle": "Grabar atajo",
     "waiting": "Presione la combinación de teclas deseada...",
     "examples": "Ejemplos: Ctrl+Alt+V, Ctrl+Mayús+P, etc.",
     "cancel": "Cancelar"
+  },
+  "system": {
+    "title": "Compatibilidad del sistema",
+    "commandLabel": "Comando para asignar a un atajo de teclado en la configuración de su escritorio",
+    "grantAccessibility": "Conceder permiso de Accesibilidad",
+    "active": "activo",
+    "unavailable": "no disponible",
+    "session": "Sesión",
+    "shortcut": "Atajo global",
+    "pasteBackend": "Simulación de pegado",
+    "clipboardBackend": "Acceso al portapapeles",
+    "autoMode": "Modo automático",
+    "tray": "Bandeja del sistema",
+    "none": "ninguno",
+    "watch": {
+      "off": "desactivado",
+      "poll": "activo",
+      "wl-watch": "activo (wl-paste)",
+      "limited": "limitado en este escritorio"
+    },
+    "hintWaylandShortcut": "Wayland: el atajo global pasa por el portal del escritorio (KDE Plasma 5.27+, GNOME 48+; GNOME pide confirmación la primera vez). Si no funciona, cree un atajo de teclado personalizado en la configuración del escritorio que ejecute el comando siguiente.",
+    "hintWaylandPaste": "Para pegar automáticamente en Wayland, instale ydotool (con el servicio ydotoold), dotool o wtype (wlroots). Si no, el texto filtrado queda en el portapapeles: pulse Ctrl+V.",
+    "hintWlClipboard": "Instale wl-clipboard (wl-copy / wl-paste) para un acceso fiable al portapapeles en segundo plano en Wayland.",
+    "hintWatchLimited": "El modo automático necesita un compositor con el protocolo data-control (KDE Plasma, Sway, Hyprland…) y wl-clipboard. En GNOME, use el atajo.",
+    "hintX11Paste": "Instale xdotool para pegar automáticamente (p. ej. sudo apt install xdotool).",
+    "hintShortcutFailed": "No se pudo registrar el atajo (puede que ya esté en uso). Elija otra combinación.",
+    "hintTray": "¿Sin icono en la bandeja? En GNOME, instale la extensión «AppIndicator and KStatusNotifierItem Support». Siempre puede reabrir esta ventana iniciando ClipboardFilter de nuevo.",
+    "hintMacAccessibility": "ClipboardFilter necesita el permiso de Accesibilidad (Ajustes del Sistema › Privacidad y seguridad › Accesibilidad) para pegar automáticamente."
+  },
+  "about": {
+    "title": "Acerca de",
+    "developer": "Desarrollado por",
+    "description": "Herramienta segura de filtrado del portapapeles con detección automática de datos sensibles"
   }
 }

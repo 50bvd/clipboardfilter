@@ -11,21 +11,14 @@ if (Test-Path "dist") {
     Remove-Item "dist" -Recurse -Force
 }
 
-# Build TypeScript
+# Build TypeScript and copy the renderer files
 Write-Host "Building TypeScript..." -ForegroundColor Yellow
-npx tsc
+npm run build
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Build failed!" -ForegroundColor Red
     exit 1
 }
-
-# Copy files
-Write-Host "Copying files..." -ForegroundColor Yellow
-Copy-Item "src/renderer.html" "dist/"
-Copy-Item "src/renderer.js" "dist/"
-Copy-Item "src/styles.css" "dist/"
-Copy-Item "default-filters.json" "dist/"
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Green

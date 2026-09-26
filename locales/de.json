@@ -6,16 +6,19 @@
   "menu": {
     "show": "Anzeigen",
     "about": "Üœber",
-    "quit": "Beenden"
+    "quit": "Beenden",
+    "filterNow": "Zwischenablage jetzt filtern",
+    "autoFilter": "Automatisches Filtern",
+    "help": "Hilfe"
   },
   "about": {
     "title": "Üœber",
-    "version": "Version 1.0.0",
     "description": "ClipboardFilter",
     "shortcuts": "Verknüpfungen",
     "copyShortcut": "Kopieren",
     "pasteShortcut": "Einfügen",
-    "instructions": "Konfiguration"
+    "instructions": "Konfiguration",
+    "developer": "Entwickelt von"
   },
   "config": {
     "title": "Konfiguration",
@@ -31,7 +34,11 @@
     "pattern": "Muster",
     "noFilters": "Keine Filter",
     "deleteConfirm": "Löschen?",
-    "deleteTitle": "Bestätigen"
+    "deleteTitle": "Bestätigen",
+    "searchPlaceholder": "Filter suchen…",
+    "summary": "{enabled}/{total} aktiv",
+    "noResults": "Kein Filter entspricht der Suche",
+    "toggleAll": "Alle aktivieren/deaktivieren"
   },
   "filterForm": {
     "title": "Filter-Konfiguration",
@@ -47,8 +54,9 @@
     "cancel": "Abbrechen",
     "patternRequired": "Muster erforderlich",
     "invalidRegex": "Ungültiger Regex",
-    "categoryLabel": "Kategoriename",
-    "noCategoryOption": "Kein Ordner"
+    "categoryLabel": "Kategorie",
+    "noCategoryOption": "Benutzerdefiniert (keine Kategorie)",
+    "caseSensitive": "Groß-/Kleinschreibung beachten"
   },
   "test": {
     "title": "Test",
@@ -59,7 +67,8 @@
     "noInput": "Text eingeben",
     "filtered": "{count} gefiltert",
     "noFilters": "Keine",
-    "noMatches": "Keine"
+    "noMatches": "Keine sensiblen Daten gefunden",
+    "live": "Live-Vorschau"
   },
   "settings": {
     "title": "Einstellungen",
@@ -89,17 +98,53 @@
     "dataManagement": "Datenverwaltung",
     "resetAllDefaults": "Alle Standardfilter zurücksetzen",
     "deleteAllCustom": "Alle benutzerdefinierten Kategorien/Filter löschen",
-    "changeShortcut": "🎙 Ändern"
+    "changeShortcut": "🎙 Ändern",
+    "startMinimized": "Minimiert im Infobereich starten",
+    "behaviorTitle": "Verhalten",
+    "pasteMode": "Beim Drücken des Tastenkürzels",
+    "pasteModeSimulate": "Zwischenablage filtern und einfügen",
+    "pasteModeClipboard": "Nur die Zwischenablage filtern (dann selbst einfügen)",
+    "autoFilter": "Automatikmodus: alles Kopierte filtern",
+    "autoFilterHint": "Ein normales Strg+V / Cmd+V fügt dann immer gefilterten Inhalt ein.",
+    "clearClipboard": "Zwischenablage leeren nach",
+    "never": "Nie"
   },
   "notifications": {
-    "copyFiltered": "Kopiert",
-    "pasteFiltered": "Eingefügt",
-    "itemsFiltered": "{count} maskiert"
+    "copyFiltered": "Zwischenablage gefiltert",
+    "pasteFiltered": "Gefiltert eingefügt",
+    "itemsFiltered": "{count} maskiert",
+    "stillRunning": "ClipboardFilter läuft weiter",
+    "stillRunningBody": "Es filtert im Hintergrund weiter. Starten Sie es erneut, um dieses Fenster zu öffnen.",
+    "clipboardEmpty": "Die Zwischenablage ist leer",
+    "nothingFiltered": "Keine sensiblen Daten gefunden",
+    "pasteManually": "Drücken Sie Strg+V zum Einfügen",
+    "pasteManuallyBody": "Der gefilterte Text ist in der Zwischenablage.",
+    "macAccessibility": "Erlauben Sie ClipboardFilter unter Systemeinstellungen › Datenschutz & Sicherheit › Bedienungshilfen. Der gefilterte Text ist in der Zwischenablage: Cmd+V drücken.",
+    "installWayland": "Der gefilterte Text ist in der Zwischenablage. Installieren Sie ydotool, dotool oder wtype, um automatisch einzufügen.",
+    "installX11": "Der gefilterte Text ist in der Zwischenablage. Installieren Sie xdotool, um automatisch einzufügen.",
+    "filterTimeout": "Filterung abgebrochen",
+    "filterTimeoutBody": "Der Filter „{name}“ ist zu langsam (katastrophaler regulärer Ausdruck). Es wurde nichts eingefügt.",
+    "filterFailed": "Filterung fehlgeschlagen. Es wurde nichts eingefügt."
   },
   "errors": {
     "title": "Fehler",
-    "unknown": "Fehler",
-    "cannotDeleteDefault": "Standardkategorie kann nicht gelöscht werden."
+    "unknown": "Ein unerwarteter Fehler ist aufgetreten.",
+    "cannotDeleteDefault": "Standardkategorie kann nicht gelöscht werden.",
+    "patternRequired": "Ein Muster ist erforderlich.",
+    "patternTooLong": "Das Muster ist zu lang.",
+    "invalidRegex": "Ungültiger regulärer Ausdruck",
+    "emptyMatch": "Dieses Muster passt auf leeren Text und würde jedes Zeichen verändern.",
+    "descriptionRequired": "Eine Beschreibung ist erforderlich.",
+    "nameRequired": "Ein Name ist erforderlich.",
+    "tooManyFilters": "Zu viele Filter.",
+    "tooManyFolders": "Zu viele Kategorien.",
+    "notFound": "Element nicht gefunden.",
+    "invalidInput": "Ungültige Daten.",
+    "forbidden": "Vorgang nicht erlaubt.",
+    "shortcutUnavailable": "Dieses Tastenkürzel konnte nicht registriert werden (evtl. bereits von einer anderen Anwendung belegt). Das vorherige wurde beibehalten.",
+    "importError": "Fehler: ungültige Vorlagendatei.",
+    "noCustomFilters": "Keine benutzerdefinierten Filter zum Exportieren.\\n\\nStandardfilter können nicht exportiert werden.\\nErstellen Sie eigene Filter oder Kategorien, um eine Vorlage zu exportieren.",
+    "filterTimeout": "Ein Filter ist zu langsam (katastrophaler regulärer Ausdruck) und wurde abgebrochen. Prüfen Sie Ihre eigenen regulären Ausdrücke."
   },
   "categories": {
     "Developer": "Entwickler",
@@ -117,7 +162,11 @@
     "createPrompt": "Kategoriename",
     "iconPrompt": "Symbol (Emoji)",
     "andFilters": "und alle seine",
-    "noFolderPrompt": "Sie haben noch keine Ordner erstellt. Möchten Sie jetzt einen erstellen?"
+    "noFolderPrompt": "Sie haben noch keine Ordner erstellt. Möchten Sie jetzt einen erstellen?",
+    "copyTo": "In eine Kategorie kopieren",
+    "removeFrom": "Aus der Kategorie entfernen",
+    "deleteWithFilters": "Diese Kategorie enthält {count} Filter. Sie werden ebenfalls gelöscht. Fortfahren?",
+    "deleteCategoryConfirm": "Die Kategorie „{name}“ und ihre {count} Filter löschen?"
   },
   "templates": {
     "exportSuccess": "Vorlage \"{0}\" exportiert! ({1} Filter)",
@@ -137,12 +186,42 @@
     "importError": "Fehler: Ungultiges Format",
     "title": "Filter-Vorlagen",
     "exportDesc": "Erstellen Sie eine JSON-Vorlage mit Ihren benutzerdefinierten Filtern",
-    "noCustomFilters": "Keine benutzerdefinierten Filter zum Exportieren.\\n\\nStandardfilter konnen nicht exportiert werden.\\nErstellen Sie eigene Filter oder Kategorien, um eine Vorlage zu exportieren."
+    "noCustomFilters": "Keine benutzerdefinierten Filter zum Exportieren.\\n\\nStandardfilter konnen nicht exportiert werden.\\nErstellen Sie eigene Filter oder Kategorien, um eine Vorlage zu exportieren.",
+    "tab": "Vorlagen",
+    "importSkipped": "{0} ungültige(r) Filter übersprungen"
   },
   "shortcut": {
     "modalTitle": "Tastenkombination aufzeichnen",
     "waiting": "Drücken Sie die gewünschte Tastenkombination...",
     "examples": "Beispiele: Strg+Alt+V, Strg+Umschalt+P, usw.",
     "cancel": "Abbrechen"
+  },
+  "system": {
+    "title": "Systemkompatibilität",
+    "commandLabel": "Befehl, der in den Desktop-Einstellungen einem Tastenkürzel zugewiesen werden kann",
+    "grantAccessibility": "Bedienungshilfen-Berechtigung erteilen",
+    "active": "aktiv",
+    "unavailable": "nicht verfügbar",
+    "session": "Sitzung",
+    "shortcut": "Globales Tastenkürzel",
+    "pasteBackend": "Einfüge-Simulation",
+    "clipboardBackend": "Zugriff auf die Zwischenablage",
+    "autoMode": "Automatikmodus",
+    "tray": "Infobereich",
+    "none": "keine",
+    "watch": {
+      "off": "aus",
+      "poll": "aktiv",
+      "wl-watch": "aktiv (wl-paste)",
+      "limited": "eingeschränkt auf diesem Desktop"
+    },
+    "hintWaylandShortcut": "Wayland: Das globale Tastenkürzel läuft über das Desktop-Portal (KDE Plasma 5.27+, GNOME 48+; GNOME fragt beim ersten Mal nach). Falls es nicht funktioniert, legen Sie in den Desktop-Einstellungen ein eigenes Tastenkürzel an, das den folgenden Befehl ausführt.",
+    "hintWaylandPaste": "Für automatisches Einfügen unter Wayland ydotool (mit dem Dienst ydotoold), dotool oder wtype (wlroots) installieren. Andernfalls liegt der gefilterte Text in der Zwischenablage: einfach Strg+V drücken.",
+    "hintWlClipboard": "Installieren Sie wl-clipboard (wl-copy / wl-paste) für zuverlässigen Zugriff auf die Zwischenablage im Hintergrund unter Wayland.",
+    "hintWatchLimited": "Der Automatikmodus benötigt einen Compositor mit data-control-Protokoll (KDE Plasma, Sway, Hyprland…) und wl-clipboard. Unter GNOME stattdessen das Tastenkürzel verwenden.",
+    "hintX11Paste": "Installieren Sie xdotool für automatisches Einfügen (z. B. sudo apt install xdotool).",
+    "hintShortcutFailed": "Das Tastenkürzel konnte nicht registriert werden (evtl. bereits belegt). Wählen Sie eine andere Kombination.",
+    "hintTray": "Kein Symbol im Infobereich? Unter GNOME die Erweiterung „AppIndicator and KStatusNotifierItem Support“ installieren. Dieses Fenster lässt sich jederzeit durch erneutes Starten von ClipboardFilter öffnen.",
+    "hintMacAccessibility": "ClipboardFilter benötigt die Bedienungshilfen-Berechtigung (Systemeinstellungen › Datenschutz & Sicherheit › Bedienungshilfen), um automatisch einzufügen."
   }
 }
