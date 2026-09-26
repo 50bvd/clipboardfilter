@@ -9,7 +9,8 @@
     "quit": "Beenden",
     "filterNow": "Zwischenablage jetzt filtern",
     "autoFilter": "Automatisches Filtern",
-    "help": "Hilfe"
+    "help": "Hilfe",
+    "updateAvailable": "⬆ Aktualisierung verfügbar: {version}"
   },
   "about": {
     "title": "Üœber",
@@ -124,7 +125,9 @@
     "installX11": "Der gefilterte Text ist in der Zwischenablage. Installieren Sie xdotool, um automatisch einzufügen.",
     "filterTimeout": "Filterung abgebrochen",
     "filterTimeoutBody": "Der Filter „{name}“ ist zu langsam (katastrophaler regulärer Ausdruck). Es wurde nichts eingefügt.",
-    "filterFailed": "Filterung fehlgeschlagen. Es wurde nichts eingefügt."
+    "filterFailed": "Filterung fehlgeschlagen. Es wurde nichts eingefügt.",
+    "updateTitle": "ClipboardFilter-Aktualisierung verfügbar",
+    "updateBody": "Version {version} ist verfügbar. Zum Herunterladen klicken."
   },
   "errors": {
     "title": "Fehler",
@@ -222,6 +225,24 @@
     "hintX11Paste": "Installieren Sie xdotool für automatisches Einfügen (z. B. sudo apt install xdotool).",
     "hintShortcutFailed": "Das Tastenkürzel konnte nicht registriert werden (evtl. bereits belegt). Wählen Sie eine andere Kombination.",
     "hintTray": "Kein Symbol im Infobereich? Unter GNOME die Erweiterung „AppIndicator and KStatusNotifierItem Support“ installieren. Dieses Fenster lässt sich jederzeit durch erneutes Starten von ClipboardFilter öffnen.",
-    "hintMacAccessibility": "ClipboardFilter benötigt die Bedienungshilfen-Berechtigung (Systemeinstellungen › Datenschutz & Sicherheit › Bedienungshilfen), um automatisch einzufügen."
+    "hintMacAccessibility": "ClipboardFilter benötigt die Bedienungshilfen-Berechtigung (Systemeinstellungen › Datenschutz & Sicherheit › Bedienungshilfen), um automatisch einzufügen.",
+    "viaGnome": "GNOME-Tastenkürzel",
+    "hintGnomeShortcut": "Das Tastenkürzel wurde unter GNOME-Einstellungen › Tastatur › Eigene Tastenkürzel („ClipboardFilter“) hinzugefügt. Es funktioniert mit jeder GNOME-Version und kann dort geändert werden."
+  },
+  "updates": {
+    "title": "Aktualisierungen",
+    "autoCheck": "Automatisch nach Aktualisierungen suchen",
+    "privacy": "Fragt nur GitHub, welche Versionen existieren. Es wird nichts automatisch heruntergeladen oder installiert.",
+    "channel": "Zu verfolgende Versionen",
+    "channelAuto": "Automatisch (Betas, wenn Sie eine Beta verwenden)",
+    "channelStable": "Nur stabile Versionen",
+    "channelBeta": "Stabile und Beta-Versionen",
+    "checkNow": "Jetzt prüfen",
+    "download": "Herunterladen",
+    "checking": "Wird geprüft…",
+    "available": "Version {version} ist verfügbar",
+    "upToDate": "Sie haben die neueste Version ({version})",
+    "error": "Aktualisierungen konnten nicht geprüft werden (keine Verbindung?)",
+    "current": "Version {version}"
   }
 }

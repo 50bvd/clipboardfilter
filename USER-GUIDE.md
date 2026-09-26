@@ -56,7 +56,8 @@ Settings › *System compatibility* shows what was detected on your machine.
 
 #### Wayland (GNOME / KDE Plasma)
 
-- The global shortcut goes through the desktop portal (KDE Plasma 5.27+, GNOME 48+). GNOME asks you to confirm it the first time.
+- **GNOME** (Fedora, Ubuntu, Debian…): ClipboardFilter adds its shortcut to *Settings › Keyboard › Custom Shortcuts* ("ClipboardFilter"). It works on every GNOME version; you can change it there too.
+- **KDE Plasma** and other desktops: the global shortcut goes through the desktop portal (KDE Plasma 5.27+).
 - If your desktop does not support it (older GNOME, AppImage without installed `.desktop` file…), create a **custom keyboard shortcut** in your desktop settings that runs:
   ```bash
   clipboardfilter --paste            # filter the clipboard, then paste
@@ -157,6 +158,10 @@ Import/export filter packs.
 #### Shortcuts
 - **Paste**: Ctrl+Shift+V (default)
 - Click "🎙 Change" to change; a badge shows whether the shortcut is active
+
+#### Updates
+- **Check for updates automatically**: once at startup and then twice a day, ClipboardFilter asks GitHub whether a newer version exists and shows a notification. Nothing is downloaded or installed automatically.
+- **Versions to follow**: stable versions only, or stable and beta versions ("Automatic" follows betas when you are using a beta).
 
 #### System compatibility
 Shows the detected session (Windows, macOS, X11, Wayland), the available paste helper, the clipboard backend and tips for your desktop.

@@ -16,7 +16,8 @@ const state = {
   collapsed: new Set(),
   search: '',
   editingFilterId: null,
-  recordingShortcut: false
+  recordingShortcut: false,
+  updateInfo: null
 };
 
 const categoryEmojis = {
@@ -260,6 +261,7 @@ function applyTranslations() {
     if (value !== undefined) node.title = value;
   });
   updateCategorySelector();
+  if (state.updateInfo) renderUpdateStatus(state.updateInfo);
 }
 
 // ============ THEME ============
@@ -698,6 +700,8 @@ function renderSettings() {
     clearSelect.appendChild(option);
   }
   clearSelect.value = String(s.clearClipboardSeconds || 0);
+  $('checkupdates-check').checked = s.checkUpdates !== false;
+  $('updatechannel-select').value = s.updateChannel || 'auto';
   $('shortcut-display').textContent = formatShortcut(s.shortcutPaste || '');
 }
 
@@ -732,7 +736,9 @@ function readSettingsForm() {
     startMinimized: $('startminimized-check').checked,
     pasteMode: $('pastemode-select').value,
     autoFilter: $('autofilter-check').checked,
-    clearClipboardSeconds: Number($('clearclipboard-select').value)
+    clearClipboardSeconds: Number($('clearclipboard-select').value),
+    checkUpdates: $('checkupdates-check').checked,
+    updateChannel: $('updatechannel-select').value
   };
 }
 
@@ -759,7 +765,7 @@ async function refreshDiagnostics() {
   const backends = d.pasteBackends.filter(b => b.available).map(b => b.name + (b.reliable ? '' : ' (XWayland)'));
   const rows = [
     [t('system.session', {}, 'Session'), `${sessionLabel}${d.desktop ? ` — ${d.desktop}` : ''}${d.isAppImage ? ' (AppImage)' : ''}`],
-    [t('system.shortcut', {}, 'Global shortcut'), `${formatShortcut(d.shortcut.accelerator)} — ${d.shortcut.registered ? '✔' : '✖'}`],
+    [t('system.shortcut', {}, 'Global shortcut'), `${formatShortcut(d.shortcut.accelerator)} — ${d.shortcut.registered ? '✔' : '✖'}${d.shortcut.method === 'gnome' ? ` (${t('system.viaGnome', {}, 'GNOME shortcut')})` : ''}`],
     [t('system.pasteBackend', {}, 'Paste simulation'), backends.length ? backends.join(', ') : `✖ ${t('system.none', {}, 'none')}`],
     [t('system.clipboardBackend', {}, 'Clipboard access'), d.clipboardBackend],
     [t('system.autoMode', {}, 'Automatic mode'), t(`system.watch.${d.watchMode}`, {}, d.watchMode)],
@@ -770,8 +776,9 @@ async function refreshDiagnostics() {
 
   const hints = [];
   if (d.platform === 'linux') {
+    if (d.shortcut.method === 'gnome') hints.push(t('system.hintGnomeShortcut'));
     if (d.session === 'wayland') {
-      hints.push(t('system.hintWaylandShortcut'));
+      if (d.shortcut.method !== 'gnome') hints.push(t('system.hintWaylandShortcut'));
       if (!backends.some(b => !b.includes('XWayland'))) hints.push(t('system.hintWaylandPaste'));
       if (d.clipboardBackend !== 'wl-clipboard') hints.push(t('system.hintWlClipboard'));
       if (d.watchMode === 'limited') hints.push(t('system.hintWatchLimited'));
@@ -792,6 +799,45 @@ async function refreshDiagnostics() {
   $('diag-command-group').hidden = d.platform !== 'linux';
   $('diag-command').value = d.pasteCommand;
   $('diag-accessibility-btn').hidden = !(d.platform === 'darwin' && !d.accessibility);
+}
+
+// ============ UPDATES ============
+function renderUpdateStatus(info) {
+  if (!info) return;
+  if (info.status !== 'checking' || !state.updateInfo) state.updateInfo = info;
+  const status = $('update-status');
+  const download = $('download-update-btn');
+  const checkBtn = $('check-updates-btn');
+  status.className = 'update-status';
+  download.hidden = info.status !== 'available';
+  checkBtn.disabled = info.status === 'checking';
+  switch (info.status) {
+    case 'checking':
+      status.textContent = t('updates.checking', {}, 'Checking…');
+      break;
+    case 'available':
+      status.textContent = t('updates.available', { version: info.latest }, `Version ${info.latest} is available`);
+      status.classList.add('available');
+      break;
+    case 'up-to-date':
+      status.textContent = t('updates.upToDate', { version: info.current }, `Up to date (${info.current})`);
+      break;
+    case 'error':
+      status.textContent = t('updates.error', {}, 'Could not check for updates');
+      status.classList.add('error');
+      break;
+    default:
+      status.textContent = t('updates.current', { version: info.current }, `Version ${info.current}`);
+  }
+}
+
+async function checkUpdatesNow() {
+  renderUpdateStatus({ status: 'checking' });
+  try {
+    renderUpdateStatus(await bridge.invoke('updates:check'));
+  } catch {
+    renderUpdateStatus({ status: 'error' });
+  }
 }
 
 // ============ SHORTCUT RECORDER ============
@@ -976,7 +1022,8 @@ function setupEventListeners() {
   $('test-input').addEventListener('input', liveTest);
 
   for (const id of ['language-select', 'theme-select', 'notifications-check', 'autostart-check',
-    'startminimized-check', 'pastemode-select', 'autofilter-check', 'clearclipboard-select']) {
+    'startminimized-check', 'pastemode-select', 'autofilter-check', 'clearclipboard-select',
+    'checkupdates-check', 'updatechannel-select']) {
     $(id).addEventListener('change', () => updateSettings(readSettingsForm()));
   }
   $('change-shortcut-btn').addEventListener('click', openShortcutRecorder);
@@ -985,6 +1032,10 @@ function setupEventListeners() {
     await bridge.invoke('app:request-accessibility').catch(() => undefined);
     setTimeout(refreshDiagnostics, 1500);
   });
+
+  $('check-updates-btn').addEventListener('click', checkUpdatesNow);
+  $('download-update-btn').addEventListener('click', () => bridge.invoke('updates:open').catch(() => undefined));
+  bridge.onUpdateStatus(renderUpdateStatus);
 
   $('reset-all-defaults-btn').addEventListener('click', resetAllDefaults);
   $('delete-all-custom-btn').addEventListener('click', deleteAllCustom);
@@ -1027,6 +1078,7 @@ async function init() {
   renderFilters();
   setupEventListeners();
   refreshDiagnostics();
+  bridge.invoke('updates:status').then(renderUpdateStatus).catch(() => undefined);
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

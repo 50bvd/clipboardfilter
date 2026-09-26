@@ -13,12 +13,17 @@ import {
 } from './platform';
 import { simulatePaste, warmUpPaste, disposePaste, listPasteBackends, hasMacAccessibility } from './keyboardSimulator';
 import { ClipboardWatcher } from './clipboardWatcher';
+import { shouldUseGnomeShortcut, setGnomeShortcut, gnomeShortcutSupported, removeGnomeShortcut } from './gnomeShortcut';
+import { isGnomeLikeDesktop } from './gnomeKeys';
+import { UpdateInfo, checkForUpdates, defaultUpdateChannel, isTrustedReleaseUrl, RELEASES_PAGE } from './updateChecker';
 
 const APP_ID = 'com.clipboardfilter.app';
 const HELP_URL = 'https://github.com/50bvd/clipboardfilter#readme';
 const ICON_PATH = path.join(__dirname, '..', 'assets', 'icon.png');
 const IS_DEV = !app.isPackaged || process.argv.includes('--dev');
 const MAX_IMPORT_SIZE = 5 * 1024 * 1024;
+const UPDATE_FIRST_CHECK_MS = 15 * 1000;
+const UPDATE_INTERVAL_MS = 12 * 60 * 60 * 1000;
 
 type CliCommand = 'paste' | 'filter' | 'show' | 'toggle-auto' | null;
 
@@ -48,6 +53,11 @@ class ClipboardFilterApp {
   private isQuitting = false;
   private currentShortcut = '';
   private shortcutRegistered = false;
+  private shortcutMethod: 'electron' | 'gnome' | null = null;
+  private shortcutsSuspended = false;
+  private updateInfo: UpdateInfo = { status: 'idle', current: app.getVersion() };
+  private updateTimer: NodeJS.Timeout | null = null;
+  private notifiedUpdate: string | null = null;
   private pasteBusy = false;
   private clearTimer: NodeJS.Timeout | null = null;
   private lastPasteBackend: string | null = null;
@@ -105,7 +115,8 @@ class ClipboardFilterApp {
 
     this.setupTray();
     this.setupIPC();
-    this.registerShortcut(true);
+    this.registerShortcut(true).catch(e => console.error('[ClipboardFilter] Shortcut error:', e));
+    this.scheduleUpdateChecks();
     if (settings.autoStart) setAutoStart(true); // refresh the path (AppImage may have moved)
     if (settings.autoFilter) this.watcher.start();
     if (settings.pasteMode === 'simulate') warmUpPaste();
@@ -261,53 +272,142 @@ class ClipboardFilterApp {
   private updateTrayMenu(): void {
     if (!this.tray) return;
     const settings = this.filterManager.getSettings();
-    const template: MenuItemConstructorOptions[] = [
+    const template: MenuItemConstructorOptions[] = [];
+    if (this.updateInfo.status === 'available') {
+      template.push(
+        { label: localeManager.t('menu.updateAvailable', { version: this.updateInfo.latest || '' }), click: () => this.openUpdatePage() },
+        { type: 'separator' }
+      );
+    }
+    template.push(
       { label: localeManager.t('menu.show'), click: () => this.createWindow() },
       { label: localeManager.t('menu.filterNow'), click: () => this.handleFilteredPaste(false) },
       {
         label: localeManager.t('menu.autoFilter'),
         type: 'checkbox',
         checked: settings.autoFilter,
-        click: (item) => this.applySettings({ autoFilter: item.checked })
+        click: (item) => { this.applySettings({ autoFilter: item.checked }).catch(() => undefined); }
       },
       { type: 'separator' },
       { label: localeManager.t('menu.about'), click: () => this.showAbout() },
       { label: localeManager.t('menu.help'), click: () => shell.openExternal(HELP_URL).catch(() => undefined) },
       { type: 'separator' },
       { label: localeManager.t('menu.quit'), click: () => { this.isQuitting = true; app.quit(); } }
-    ];
+    );
     this.tray.setContextMenu(Menu.buildFromTemplate(template));
     this.tray.setToolTip(localeManager.t('app.trayTooltip'));
   }
 
   // ==================== SHORTCUT ====================
 
-  private registerShortcut(force = false): boolean {
+  private pasteCommandLine(): string {
+    return getLaunchCommand(['--paste']).map(shellQuote).join(' ');
+  }
+
+  /**
+   * Registers the paste shortcut:
+   *  - GNOME on Wayland: as a GNOME custom shortcut running "clipboardfilter --paste"
+   *    (apps cannot grab keys there, and the portal needs GNOME 48+ and an installed app);
+   *  - elsewhere: Electron global shortcut (X11 grab, Windows, macOS, portal on KDE),
+   *    falling back to a GNOME custom shortcut on GNOME-based desktops.
+   */
+  private async registerShortcut(force = false): Promise<boolean> {
     const shortcut = this.filterManager.getSettings().shortcutPaste || 'CommandOrControl+Shift+V';
     if (!force && shortcut === this.currentShortcut && this.shortcutRegistered) return true;
 
-    if (this.currentShortcut) {
+    if (this.currentShortcut && this.shortcutMethod === 'electron') {
       try { globalShortcut.unregister(this.currentShortcut); } catch { /* ignore */ }
     }
-    let ok = false;
-    try {
-      ok = globalShortcut.register(shortcut, () => this.handleFilteredPaste(true));
-    } catch (error) {
-      console.error('[ClipboardFilter] Invalid shortcut:', shortcut, error);
+
+    let method: 'electron' | 'gnome' | null = null;
+    if (await shouldUseGnomeShortcut() && await setGnomeShortcut(shortcut, this.pasteCommandLine())) {
+      method = 'gnome';
     }
-    this.currentShortcut = ok ? shortcut : '';
-    this.shortcutRegistered = ok;
-    if (!ok) console.error('[ClipboardFilter] Failed to register shortcut:', shortcut);
-    return ok;
+    if (!method) {
+      let ok = false;
+      try {
+        ok = globalShortcut.register(shortcut, () => this.handleFilteredPaste(true));
+      } catch (error) {
+        console.error('[ClipboardFilter] Invalid shortcut:', shortcut, error);
+      }
+      if (ok) {
+        method = 'electron';
+      } else if (process.platform === 'linux' && isGnomeLikeDesktop(getSessionInfo().desktop)
+        && await gnomeShortcutSupported() && await setGnomeShortcut(shortcut, this.pasteCommandLine())) {
+        method = 'gnome';
+      }
+    }
+
+    // Do not leave a stale GNOME shortcut behind when another method is used
+    if (method !== 'gnome' && this.shortcutMethod === 'gnome') await removeGnomeShortcut();
+
+    this.shortcutMethod = method;
+    this.shortcutRegistered = method !== null;
+    this.currentShortcut = method ? shortcut : '';
+    if (method) console.log(`[ClipboardFilter] Shortcut ${shortcut} registered (${method})`);
+    else console.error('[ClipboardFilter] Failed to register shortcut:', shortcut);
+    return this.shortcutRegistered;
+  }
+
+  // ==================== UPDATES ====================
+
+  private scheduleUpdateChecks(delay = UPDATE_FIRST_CHECK_MS): void {
+    if (this.updateTimer) clearTimeout(this.updateTimer);
+    this.updateTimer = null;
+    if (!this.filterManager.getSettings().checkUpdates) return;
+    this.updateTimer = setTimeout(async () => {
+      await this.runUpdateCheck(false);
+      this.scheduleUpdateChecks(UPDATE_INTERVAL_MS);
+    }, delay);
+    this.updateTimer.unref?.();
+  }
+
+  private async runUpdateCheck(manual: boolean): Promise<UpdateInfo> {
+    const settings = this.filterManager.getSettings();
+    const channel = settings.updateChannel === 'auto' ? defaultUpdateChannel() : settings.updateChannel;
+    this.updateInfo = { ...this.updateInfo, status: 'checking' };
+    this.mainWindow?.webContents.send('update-status', this.updateInfo);
+    try {
+      this.updateInfo = await checkForUpdates(channel === 'beta');
+    } catch (error) {
+      console.error('[ClipboardFilter] Update check failed:', error);
+      this.updateInfo = { status: 'error', current: app.getVersion(), checkedAt: Date.now() };
+    }
+
+    const info = this.updateInfo;
+    if (info.status === 'available' && !manual && info.latest !== this.notifiedUpdate) {
+      this.notifiedUpdate = info.latest || null;
+      if (Notification.isSupported()) {
+        try {
+          const n = new Notification({
+            title: localeManager.t('notifications.updateTitle'),
+            body: localeManager.t('notifications.updateBody', { version: info.latest || '' }),
+            icon: ICON_PATH
+          });
+          n.on('click', () => this.openUpdatePage());
+          n.show();
+        } catch { /* ignore */ }
+      }
+    }
+    this.updateTrayMenu();
+    this.mainWindow?.webContents.send('update-status', info);
+    return info;
+  }
+
+  private openUpdatePage(): void {
+    const url = isTrustedReleaseUrl(this.updateInfo.url) ? this.updateInfo.url : RELEASES_PAGE;
+    shell.openExternal(url).catch(() => undefined);
   }
 
   // ==================== FILTERING ====================
 
   private runCommand(command: CliCommand): void {
+    // Ignore the GNOME shortcut while a new shortcut is being recorded
+    if ((command === 'paste' || command === 'filter') && this.shortcutsSuspended) return;
     switch (command) {
       case 'paste': this.handleFilteredPaste(true); break;
       case 'filter': this.handleFilteredPaste(false); break;
-      case 'toggle-auto': this.applySettings({ autoFilter: !this.filterManager.getSettings().autoFilter }); break;
+      case 'toggle-auto': this.applySettings({ autoFilter: !this.filterManager.getSettings().autoFilter }).catch(() => undefined); break;
       case 'show': this.createWindow(); break;
     }
   }
@@ -432,16 +532,16 @@ class ClipboardFilterApp {
 
   // ==================== SETTINGS ====================
 
-  private applySettings(input: any): { settings: any; error?: string } {
+  private async applySettings(input: any): Promise<{ settings: any; error?: string }> {
     const before = this.filterManager.getSettings();
     const after = this.filterManager.updateSettings(input);
     let error: string | undefined;
 
     if (after.shortcutPaste !== before.shortcutPaste) {
-      if (!this.registerShortcut()) {
+      if (!(await this.registerShortcut())) {
         // Keep the previous working shortcut
         this.filterManager.updateSettings({ shortcutPaste: before.shortcutPaste });
-        this.registerShortcut(true);
+        await this.registerShortcut(true);
         error = 'shortcutUnavailable';
       }
     }
@@ -454,6 +554,9 @@ class ClipboardFilterApp {
       else this.watcher.stop();
     }
     if (after.pasteMode === 'simulate' && before.pasteMode !== 'simulate') warmUpPaste();
+    if (after.checkUpdates !== before.checkUpdates || after.updateChannel !== before.updateChannel) {
+      this.scheduleUpdateChecks(after.checkUpdates && after.updateChannel !== before.updateChannel ? 1000 : UPDATE_FIRST_CHECK_MS);
+    }
     if (after.clearClipboardSeconds === 0 && this.clearTimer) {
       clearTimeout(this.clearTimer);
       this.clearTimer = null;
@@ -471,14 +574,14 @@ class ClipboardFilterApp {
       ...info,
       version: app.getVersion(),
       electron: process.versions.electron,
-      shortcut: { accelerator: this.filterManager.getSettings().shortcutPaste, registered: this.shortcutRegistered },
+      shortcut: { accelerator: this.filterManager.getSettings().shortcutPaste, registered: this.shortcutRegistered, method: this.shortcutMethod },
       pasteBackends: listPasteBackends(),
       lastPasteBackend: this.lastPasteBackend,
       clipboardBackend: clipboardBackendName(),
       watchMode: this.watcher.getMode(),
       trayAvailable: !!this.tray,
       accessibility: hasMacAccessibility(false),
-      pasteCommand: getLaunchCommand(['--paste']).map(shellQuote).join(' '),
+      pasteCommand: this.pasteCommandLine(),
       configPath: path.join(app.getPath('userData'), 'config.json')
     };
   }
@@ -519,6 +622,11 @@ class ClipboardFilterApp {
     this.handle('app:open-help', () => shell.openExternal(HELP_URL));
     this.handle('app:request-accessibility', () => hasMacAccessibility(true));
 
+    // Updates
+    this.handle('updates:status', () => this.updateInfo);
+    this.handle('updates:check', () => this.runUpdateCheck(true));
+    this.handle('updates:open', () => { this.openUpdatePage(); return true; });
+
     // Filters
     this.handle('filters:add', (filter) => { fm().addFilter(filter); return data(); });
     this.handle('filters:update', (id, updates) => { fm().updateFilter(str(id), updates); return data(); });
@@ -537,11 +645,12 @@ class ClipboardFilterApp {
     this.handle('folders:delete', (id) => { fm().deleteCustomFolder(str(id)); return data(); });
 
     // Settings
-    this.handle('settings:update', (settings) => {
-      const result = this.applySettings(settings);
+    this.handle('settings:update', async (settings) => {
+      const result = await this.applySettings(settings);
       return { ...result, translations: localeManager.getAll() };
     });
     this.handle('shortcut:suspend', (suspended) => {
+      this.shortcutsSuspended = !!suspended;
       globalShortcut.setSuspended(!!suspended);
       return true;
     });

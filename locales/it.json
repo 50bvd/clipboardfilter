@@ -9,7 +9,8 @@
     "quit": "Esci",
     "filterNow": "Filtra ora gli appunti",
     "autoFilter": "Filtro automatico",
-    "help": "Aiuto"
+    "help": "Aiuto",
+    "updateAvailable": "⬆ Aggiornamento disponibile: {version}"
   },
   "about": {
     "title": "Informazioni",
@@ -124,7 +125,9 @@
     "installX11": "Il testo filtrato è negli appunti. Installa xdotool per incollare automaticamente.",
     "filterTimeout": "Filtraggio interrotto",
     "filterTimeoutBody": "Il filtro «{name}» è troppo lento (espressione regolare catastrofica). Non è stato incollato nulla.",
-    "filterFailed": "Filtraggio non riuscito. Non è stato incollato nulla."
+    "filterFailed": "Filtraggio non riuscito. Non è stato incollato nulla.",
+    "updateTitle": "Aggiornamento di ClipboardFilter disponibile",
+    "updateBody": "La versione {version} è disponibile. Fai clic per scaricarla."
   },
   "errors": {
     "title": "Errore",
@@ -222,6 +225,24 @@
     "hintX11Paste": "Installa xdotool per incollare automaticamente (es. sudo apt install xdotool).",
     "hintShortcutFailed": "Impossibile registrare la scorciatoia (potrebbe essere già in uso). Scegli un'altra combinazione.",
     "hintTray": "Nessuna icona nell'area di notifica? Su GNOME installa l'estensione «AppIndicator and KStatusNotifierItem Support». Puoi sempre riaprire questa finestra avviando di nuovo ClipboardFilter.",
-    "hintMacAccessibility": "ClipboardFilter necessita del permesso Accessibilità (Impostazioni di Sistema › Privacy e sicurezza › Accessibilità) per incollare automaticamente."
+    "hintMacAccessibility": "ClipboardFilter necessita del permesso Accessibilità (Impostazioni di Sistema › Privacy e sicurezza › Accessibilità) per incollare automaticamente.",
+    "viaGnome": "scorciatoia GNOME",
+    "hintGnomeShortcut": "La scorciatoia è stata aggiunta in Impostazioni GNOME › Tastiera › Scorciatoie personalizzate («ClipboardFilter»). Funziona con ogni versione di GNOME e puoi modificarla lì."
+  },
+  "updates": {
+    "title": "Aggiornamenti",
+    "autoCheck": "Controlla automaticamente gli aggiornamenti",
+    "privacy": "Chiede solo a GitHub quali versioni esistono. Nulla viene scaricato o installato automaticamente.",
+    "channel": "Versioni da seguire",
+    "channelAuto": "Automatico (beta se usi una beta)",
+    "channelStable": "Solo versioni stabili",
+    "channelBeta": "Versioni stabili e beta",
+    "checkNow": "Controlla ora",
+    "download": "Scarica",
+    "checking": "Controllo in corso…",
+    "available": "La versione {version} è disponibile",
+    "upToDate": "Hai l’ultima versione ({version})",
+    "error": "Impossibile controllare gli aggiornamenti (nessuna connessione?)",
+    "current": "Versione {version}"
   }
 }

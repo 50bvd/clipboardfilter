@@ -9,7 +9,8 @@
     "quit": "Salir",
     "filterNow": "Filtrar el portapapeles ahora",
     "autoFilter": "Filtrado automático",
-    "help": "Ayuda"
+    "help": "Ayuda",
+    "updateAvailable": "⬆ Actualización disponible: {version}"
   },
   "config": {
     "title": "ClipboardFilter - Configuración",
@@ -115,7 +116,9 @@
     "installX11": "El texto filtrado está en el portapapeles. Instale xdotool para pegar automáticamente.",
     "filterTimeout": "Filtrado interrumpido",
     "filterTimeoutBody": "El filtro «{name}» es demasiado lento (expresión regular catastrófica). No se ha pegado nada.",
-    "filterFailed": "El filtrado ha fallado. No se ha pegado nada."
+    "filterFailed": "El filtrado ha fallado. No se ha pegado nada.",
+    "updateTitle": "Actualización de ClipboardFilter disponible",
+    "updateBody": "La versión {version} está disponible. Haga clic para descargarla."
   },
   "errors": {
     "title": "Error",
@@ -213,11 +216,29 @@
     "hintX11Paste": "Instale xdotool para pegar automáticamente (p. ej. sudo apt install xdotool).",
     "hintShortcutFailed": "No se pudo registrar el atajo (puede que ya esté en uso). Elija otra combinación.",
     "hintTray": "¿Sin icono en la bandeja? En GNOME, instale la extensión «AppIndicator and KStatusNotifierItem Support». Siempre puede reabrir esta ventana iniciando ClipboardFilter de nuevo.",
-    "hintMacAccessibility": "ClipboardFilter necesita el permiso de Accesibilidad (Ajustes del Sistema › Privacidad y seguridad › Accesibilidad) para pegar automáticamente."
+    "hintMacAccessibility": "ClipboardFilter necesita el permiso de Accesibilidad (Ajustes del Sistema › Privacidad y seguridad › Accesibilidad) para pegar automáticamente.",
+    "viaGnome": "atajo de GNOME",
+    "hintGnomeShortcut": "El atajo se añadió en Configuración de GNOME › Teclado › Atajos personalizados («ClipboardFilter»). Funciona en todas las versiones de GNOME y puede cambiarlo allí."
   },
   "about": {
     "title": "Acerca de",
     "developer": "Desarrollado por",
     "description": "Herramienta segura de filtrado del portapapeles con detección automática de datos sensibles"
+  },
+  "updates": {
+    "title": "Actualizaciones",
+    "autoCheck": "Buscar actualizaciones automáticamente",
+    "privacy": "Solo pregunta a GitHub qué versiones existen. No se descarga ni instala nada automáticamente.",
+    "channel": "Versiones a seguir",
+    "channelAuto": "Automático (betas si usa una beta)",
+    "channelStable": "Solo versiones estables",
+    "channelBeta": "Versiones estables y beta",
+    "checkNow": "Buscar ahora",
+    "download": "Descargar",
+    "checking": "Comprobando…",
+    "available": "La versión {version} está disponible",
+    "upToDate": "Tiene la última versión ({version})",
+    "error": "No se pudieron buscar actualizaciones (¿sin conexión?)",
+    "current": "Versión {version}"
   }
 }
