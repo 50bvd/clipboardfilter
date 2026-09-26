@@ -1,0 +1,45 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: ClipboardFilter version
+      placeholder: 1.1.0-beta.1
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux (X11)
+        - Linux (Wayland)
+    validations:
+      required: true
+  - type: input
+    id: desktop
+    attributes:
+      label: Linux desktop / distribution
+      placeholder: e.g. Ubuntu 24.04 GNOME, Fedora 41 KDE Plasma
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: System compatibility panel
+      description: Paste the content (or a screenshot) of Settings › System compatibility.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Output when started from a terminal, if relevant. Remove any sensitive data.
+      render: text

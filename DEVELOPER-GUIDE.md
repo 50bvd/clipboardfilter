@@ -358,31 +358,11 @@ console.log('[MAIN] Window created');
 
 ## 🚢 Release Process
 
-1. **Update version:**
-```json
-// package.json
-{
-  "version": "1.0.1"
-}
-```
+See [CONTRIBUTING.md](CONTRIBUTING.md#releases-maintainer). In short:
 
-2. **Update CHANGELOG.md**
-
-3. **Build:**
-```bash
-npm run build
-npm run package
-```
-
-4. **Test installer:**
-```bash
-.\release\ClipboardFilter-Setup-1.0.1.exe
-```
-
-5. **Create GitHub release:**
-- Tag: `v1.0.1`
-- Upload installer
-- Write release notes
+- Every pull request targets `develop` and must pass **CI** (type-check and tests on Windows, macOS and Linux).
+- Each push to `develop` builds the installers (pre-production, available as workflow artifacts).
+- Tag `vX.Y.Z-beta.N` to publish a pre-release, `vX.Y.Z` on `main` to publish a release. The **Build & Release** workflow builds and attaches the installers.
 
 ## 📚 Resources
 

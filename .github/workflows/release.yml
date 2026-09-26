@@ -1,0 +1,91 @@
+name: Build & Release
+
+# - push to develop   -> pre-production builds, downloadable from the run (Artifacts)
+# - tag vX.Y.Z-beta.N -> GitHub pre-release with the installers
+# - tag vX.Y.Z        -> GitHub release with the installers
+on:
+  push:
+    branches: [develop]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build (${{ matrix.platform }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+          - os: windows-latest
+            platform: windows
+          - os: macos-latest
+            platform: mac
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and test
+        run: npm test
+
+      - name: Install packaging tools (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm libarchive-tools
+
+      - name: Package
+        shell: bash
+        run: |
+          case "${{ matrix.platform }}" in
+            linux)   npm run package:linux -- --publish never ;;
+            windows) npm run package:win -- --publish never ;;
+            mac)     npm run package:mac -- --publish never ;;
+          esac
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClipboardFilter-${{ matrix.platform }}
+          path: |
+            release/*.exe
+            release/*.deb
+            release/*.rpm
+            release/*.pacman
+            release/*.AppImage
+            release/*.dmg
+            release/*.zip
+          retention-days: ${{ startsWith(github.ref, 'refs/tags/') && 90 || 14 }}
+
+  release:
+    name: Publish GitHub release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          generate_release_notes: true
