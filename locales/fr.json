@@ -147,7 +147,8 @@
     "shortcutUnavailable": "Ce raccourci n'a pas pu être enregistré (il est peut-être déjà utilisé par une autre application). L'ancien raccourci a été conservé.",
     "noCustomFilters": "Aucun filtre personnalisé à exporter.\\n\\nLes filtres par défaut ne peuvent pas être exportés.\\nCréez vos propres filtres ou catégories pour exporter un template.",
     "importError": "Erreur : fichier de template invalide.",
-    "filterTimeout": "Un filtre est trop lent (expression régulière catastrophique) et a été interrompu. Vérifiez vos expressions régulières personnalisées."
+    "filterTimeout": "Un filtre est trop lent (expression régulière catastrophique) et a été interrompu. Vérifiez vos expressions régulières personnalisées.",
+    "textTooLong": "Le texte est trop long (10 Mo maximum)."
   },
   "categories": {
     "Developer": "Développeur",

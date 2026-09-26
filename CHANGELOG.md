@@ -5,6 +5,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+### Security
+- The interface is served from an internal `app://` protocol limited to the app's own files, instead of `file://`.
+- Electron fuses: the executable can no longer be used as a Node.js interpreter (`ELECTRON_RUN_AS_NODE`, `NODE_OPTIONS`, `--inspect`), only loads the app from its archive, and checks the archive's integrity (Windows, macOS).
+- External links: only the project's GitHub pages can be opened from the app.
+- System tools (PowerShell, osascript) are started from their absolute path; relative `PATH` entries are ignored.
+- CI: GitHub Actions pinned to commit SHAs, no credentials left on the runner, CodeQL analysis, dependency review on pull requests.
+
 ## [1.1.0-beta.2] - 2026-09-26
 
 ### Added

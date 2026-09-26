@@ -147,7 +147,8 @@
     "shortcutUnavailable": "Impossibile registrare questa scorciatoia (potrebbe essere già usata da un'altra applicazione). È stata mantenuta quella precedente.",
     "importError": "Errore: file modello non valido.",
     "noCustomFilters": "Nessun filtro personalizzato da esportare.\\n\\nI filtri predefiniti non possono essere esportati.\\nCrea filtri o categorie personalizzati per esportare un modello.",
-    "filterTimeout": "Un filtro è troppo lento (espressione regolare catastrofica) ed è stato interrotto. Controlla le tue espressioni regolari personalizzate."
+    "filterTimeout": "Un filtro è troppo lento (espressione regolare catastrofica) ed è stato interrotto. Controlla le tue espressioni regolari personalizzate.",
+    "textTooLong": "Il testo è troppo lungo (massimo 10 MB)."
   },
   "categories": {
     "Developer": "Sviluppatore",

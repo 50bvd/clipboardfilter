@@ -147,7 +147,8 @@
     "shortcutUnavailable": "This shortcut could not be registered (it may already be used by another application). The previous shortcut was kept.",
     "noCustomFilters": "No custom filters to export.\\n\\nDefault filters cannot be exported.\\nCreate your own filters or categories to export a template.",
     "importError": "Error: invalid template file.",
-    "filterTimeout": "A filter is too slow (catastrophic regular expression) and was interrupted. Check your custom regular expressions."
+    "filterTimeout": "A filter is too slow (catastrophic regular expression) and was interrupted. Check your custom regular expressions.",
+    "textTooLong": "The text is too long (10 MB maximum)."
   },
   "categories": {
     "Developer": "Developer",
