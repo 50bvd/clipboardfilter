@@ -138,7 +138,8 @@
     "shortcutUnavailable": "No se pudo registrar este atajo (puede que otra aplicación ya lo use). Se ha conservado el anterior.",
     "importError": "Error: archivo de plantilla no válido.",
     "noCustomFilters": "No hay filtros personalizados para exportar.\\n\\nLos filtros predeterminados no se pueden exportar.\\nCree sus propios filtros o categorías para exportar una plantilla.",
-    "filterTimeout": "Un filtro es demasiado lento (expresión regular catastrófica) y se ha interrumpido. Revise sus expresiones regulares personalizadas."
+    "filterTimeout": "Un filtro es demasiado lento (expresión regular catastrófica) y se ha interrumpido. Revise sus expresiones regulares personalizadas.",
+    "textTooLong": "El texto es demasiado largo (máximo 10 MB)."
   },
   "categories": {
     "Developer": "Desarrollador",

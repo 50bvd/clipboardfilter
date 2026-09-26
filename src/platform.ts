@@ -55,7 +55,8 @@ export function findCommand(name: string): string | null {
   let found: string | null = null;
   const exts = process.platform === 'win32' ? (process.env.PATHEXT || '.EXE;.CMD;.BAT').split(';') : [''];
   for (const dir of (process.env.PATH || '').split(path.delimiter)) {
-    if (!dir) continue;
+    // Relative entries ("." etc.) would resolve against the working directory
+    if (!dir || !path.isAbsolute(dir)) continue;
     for (const ext of exts) {
       const candidate = path.join(dir, name + ext);
       try {
@@ -67,6 +68,12 @@ export function findCommand(name: string): string | null {
   }
   commandCache.set(name, found);
   return found;
+}
+
+/** Absolute path of a Windows system executable (never resolved from the working directory). */
+export function windowsSystemCommand(relative: string): string {
+  const root = process.env.SystemRoot || process.env.windir || 'C:\\Windows';
+  return path.win32.join(root, relative);
 }
 
 export interface RunResult {

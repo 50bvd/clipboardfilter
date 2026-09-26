@@ -14,7 +14,10 @@ import { app, systemPreferences } from 'electron';
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
-import { findCommand, getSessionInfo, run } from './platform';
+import { findCommand, getSessionInfo, run, windowsSystemCommand } from './platform';
+
+const POWERSHELL = 'System32\\WindowsPowerShell\\v1.0\\powershell.exe';
+const OSASCRIPT = '/usr/bin/osascript';
 
 export interface PasteOutcome {
   ok: boolean;
@@ -86,7 +89,7 @@ class WindowsPasteHelper {
         fs.mkdirSync(dir, { recursive: true });
         const scriptPath = path.join(dir, 'paste-helper.ps1');
         fs.writeFileSync(scriptPath, WINDOWS_HELPER, 'utf-8');
-        const proc = spawn('powershell.exe', [
+        const proc = spawn(windowsSystemCommand(POWERSHELL), [
           '-NoProfile', '-NoLogo', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', scriptPath
         ], { windowsHide: true });
         this.proc = proc;
@@ -148,7 +151,7 @@ class WindowsPasteHelper {
 const windowsHelper = new WindowsPasteHelper();
 
 async function windowsSendKeysFallback(): Promise<boolean> {
-  const r = await run('powershell.exe', [
+  const r = await run(windowsSystemCommand(POWERSHELL), [
     '-NoProfile', '-NonInteractive', '-Command',
     "$w = New-Object -ComObject wscript.shell; $w.SendKeys('^v')"
   ], { timeoutMs: 5000 });
@@ -228,7 +231,7 @@ export async function simulatePaste(): Promise<PasteOutcome> {
     if (process.platform === 'darwin') {
       if (!hasMacAccessibility(true)) return { ok: false, backend: null, reliable: false };
       await sleep(80);
-      const r = await run('osascript', ['-e', 'tell application "System Events" to keystroke "v" using command down'], { timeoutMs: 4000 });
+      const r = await run(OSASCRIPT, ['-e', 'tell application "System Events" to keystroke "v" using command down'], { timeoutMs: 4000 });
       return { ok: r.code === 0, backend: 'osascript', reliable: r.code === 0 };
     }
 

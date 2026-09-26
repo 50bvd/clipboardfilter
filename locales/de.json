@@ -147,7 +147,8 @@
     "shortcutUnavailable": "Dieses Tastenkürzel konnte nicht registriert werden (evtl. bereits von einer anderen Anwendung belegt). Das vorherige wurde beibehalten.",
     "importError": "Fehler: ungültige Vorlagendatei.",
     "noCustomFilters": "Keine benutzerdefinierten Filter zum Exportieren.\\n\\nStandardfilter können nicht exportiert werden.\\nErstellen Sie eigene Filter oder Kategorien, um eine Vorlage zu exportieren.",
-    "filterTimeout": "Ein Filter ist zu langsam (katastrophaler regulärer Ausdruck) und wurde abgebrochen. Prüfen Sie Ihre eigenen regulären Ausdrücke."
+    "filterTimeout": "Ein Filter ist zu langsam (katastrophaler regulärer Ausdruck) und wurde abgebrochen. Prüfen Sie Ihre eigenen regulären Ausdrücke.",
+    "textTooLong": "Der Text ist zu lang (maximal 10 MB)."
   },
   "categories": {
     "Developer": "Entwickler",

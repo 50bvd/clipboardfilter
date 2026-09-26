@@ -40,7 +40,10 @@ clipboardfilter/
 - Every dynamic value inserted in the DOM is escaped; imported templates are validated in the main process.
 - Filtering runs in a worker thread. If it exceeds its time budget the worker is terminated and nothing is
   pasted (fail closed). The offending filter is reported in a notification.
-- External tools are run with `execFile` (no shell) and a timeout. The configuration file is written with mode `0600`.
+- External tools are run with `execFile` (no shell), a timeout and an absolute path. The configuration file is written with mode `0600`.
+- The interface is loaded from `app://bundle/…` (`src/appProtocol.ts`), which only serves `dist/` and `assets/`. `file://` gets no extra privileges.
+- Electron fuses (`build.electronFuses` in `package.json`) disable `RunAsNode`, `NODE_OPTIONS` and `--inspect`, and enforce loading the app from its integrity-checked asar archive. Note: end-to-end tests that drive the packaged app with Playwright need a build with `-c.electronFuses.enableNodeCliInspectArguments=true`.
+- CI actions are pinned to commit SHAs (Dependabot keeps them up to date), checkouts do not persist credentials, CodeQL and dependency review run on every pull request.
 
 ## 🚀 Getting Started
 

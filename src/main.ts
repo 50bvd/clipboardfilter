@@ -13,12 +13,15 @@ import {
 } from './platform';
 import { simulatePaste, warmUpPaste, disposePaste, listPasteBackends, hasMacAccessibility } from './keyboardSimulator';
 import { ClipboardWatcher } from './clipboardWatcher';
+import { APP_ORIGIN, handleAppScheme, registerAppScheme } from './appProtocol';
 import { shouldUseGnomeShortcut, setGnomeShortcut, gnomeShortcutSupported, removeGnomeShortcut } from './gnomeShortcut';
 import { isGnomeLikeDesktop } from './gnomeKeys';
 import { UpdateInfo, checkForUpdates, defaultUpdateChannel, isTrustedReleaseUrl, RELEASES_PAGE } from './updateChecker';
 
 const APP_ID = 'com.clipboardfilter.app';
-const HELP_URL = 'https://github.com/50bvd/clipboardfilter#readme';
+const PROJECT_URL = 'https://github.com/50bvd/clipboardfilter';
+const HELP_URL = `${PROJECT_URL}#readme`;
+const MAX_TEST_TEXT = 10 * 1024 * 1024;
 const ICON_PATH = path.join(__dirname, '..', 'assets', 'icon.png');
 const IS_DEV = !app.isPackaged || process.argv.includes('--dev');
 const MAX_IMPORT_SIZE = 5 * 1024 * 1024;
@@ -98,6 +101,7 @@ class ClipboardFilterApp {
 
     await app.whenReady();
     this.hardenSession();
+    handleAppScheme();
 
     const availableLocales = localeManager.getAvailableLocales();
     const configPath = path.join(app.getPath('userData'), 'config.json');
@@ -135,7 +139,8 @@ class ClipboardFilterApp {
   private hardenWebContents(): void {
     app.on('web-contents-created', (_e, contents) => {
       contents.setWindowOpenHandler(({ url }) => {
-        if (url.startsWith('https://')) shell.openExternal(url).catch(() => undefined);
+        // Only the project's own pages may be opened in the browser
+        if (url.startsWith(`${PROJECT_URL}/`) || url === PROJECT_URL) shell.openExternal(url).catch(() => undefined);
         return { action: 'deny' };
       });
       contents.on('will-navigate', (event, url) => {
@@ -152,7 +157,7 @@ class ClipboardFilterApp {
 
   private isTrustedSender(event: IpcMainInvokeEvent): boolean {
     return !!this.mainWindow && event.sender === this.mainWindow.webContents
-      && (event.senderFrame?.url || '').startsWith('file://');
+      && (event.senderFrame?.url || '').startsWith(`${APP_ORIGIN}/`);
   }
 
   // ==================== WINDOWS ====================
@@ -186,7 +191,7 @@ class ClipboardFilterApp {
       }
     });
 
-    this.mainWindow.loadFile(path.join(__dirname, 'renderer.html'));
+    this.mainWindow.loadURL(`${APP_ORIGIN}/dist/renderer.html`);
     this.mainWindow.once('ready-to-show', () => this.mainWindow?.show());
     this.mainWindow.on('closed', () => { this.mainWindow = null; });
     this.mainWindow.on('close', (event) => {
@@ -636,6 +641,7 @@ class ClipboardFilterApp {
     this.handle('filters:move-to-folder', (id, folderId) => { fm().moveFilterToFolder(str(id), folderId ? str(folderId) : undefined); return data(); });
     this.handle('filters:test', async (text) => {
       if (typeof text !== 'string') return { filtered: '', count: 0, details: [] };
+      if (text.length > MAX_TEST_TEXT) return { __error: 'textTooLong' };
       return this.runner.filter(text, true);
     });
 
@@ -709,6 +715,7 @@ if (!app.requestSingleInstanceLock()) {
   if (process.platform === 'linux') {
     try { app.setDesktopName(`${APP_ID}.desktop`); } catch { /* older Electron */ }
   }
+  registerAppScheme();
   const clipboardFilterApp = new ClipboardFilterApp();
   clipboardFilterApp.initialize().catch(error => {
     console.error('Failed to initialize app:', error);
