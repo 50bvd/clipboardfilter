@@ -14,6 +14,7 @@
   },
   "license": "MIT",
   "scripts": {
+    "typecheck": "tsc --noEmit",
     "build": "tsc && node scripts/copy-files.js",
     "start": "npm run build && electron .",
     "dev": "npm run build && electron . --dev",
