@@ -45,6 +45,8 @@ export interface AppSettings {
   autoFilter: boolean;
   clearClipboardSeconds: number;
   startMinimized: boolean;
+  checkUpdates: boolean;
+  updateChannel: 'auto' | 'stable' | 'beta';
 }
 
 interface StoreSchema {
@@ -109,7 +111,10 @@ export function defaultSettings(): AppSettings {
     clearClipboardSeconds: 0,
     // Many Linux desktops (e.g. GNOME) have no system tray by default,
     // so the window is shown at startup there.
-    startMinimized: process.platform !== 'linux'
+    startMinimized: process.platform !== 'linux',
+    checkUpdates: true,
+    // "auto": follow pre-releases when running a pre-release, stable otherwise
+    updateChannel: 'auto'
   };
 }
 
@@ -261,6 +266,8 @@ export class FilterManager {
       s.clearClipboardSeconds = Math.max(0, Math.min(3600, Math.round(input.clearClipboardSeconds)));
     }
     if (typeof input.startMinimized === 'boolean') s.startMinimized = input.startMinimized;
+    if (typeof input.checkUpdates === 'boolean') s.checkUpdates = input.checkUpdates;
+    if (['auto', 'stable', 'beta'].includes(input.updateChannel)) s.updateChannel = input.updateChannel;
     return s;
   }
 

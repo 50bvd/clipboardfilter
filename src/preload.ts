@@ -13,7 +13,8 @@ const CHANNELS = new Set([
   'folders:add', 'folders:update', 'folders:delete',
   'settings:update', 'shortcut:suspend',
   'data:reset-defaults', 'data:delete-custom',
-  'templates:export', 'templates:import'
+  'templates:export', 'templates:import',
+  'updates:status', 'updates:check', 'updates:open'
 ]);
 
 async function invoke(channel: string, ...args: unknown[]): Promise<any> {
@@ -29,5 +30,8 @@ contextBridge.exposeInMainWorld('api', {
   invoke,
   onSettingsChanged: (callback: (settings: unknown) => void) => {
     ipcRenderer.on('settings-changed', (_event, settings) => callback(settings));
+  },
+  onUpdateStatus: (callback: (info: unknown) => void) => {
+    ipcRenderer.on('update-status', (_event, info) => callback(info));
   }
 });

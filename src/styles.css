@@ -865,3 +865,10 @@ body.dark-theme .shortcut-status.success { background: #0d3320; color: #3fb950; 
 }
 .emoji-btn.selected { border-color: var(--primary-color); }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Updates */
+.update-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.update-status { font-size: 14px; color: var(--text-secondary); }
+.update-status.available { color: var(--success-color); font-weight: 600; }
+.update-status.error { color: var(--danger-color); }
+.update-actions { display: flex; gap: 8px; }

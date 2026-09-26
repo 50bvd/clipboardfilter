@@ -64,7 +64,7 @@ UI strings live in `locales/<lang>.json`. Missing keys fall back to English. To 
 2. **Beta**: tag `develop`, e.g. `v1.2.0-beta.1`. This produces a GitHub pre-release.
 3. **Stable**: open a pull request `develop` → `main` titled `Release 1.2.0`, merge it, then tag `main` with `v1.2.0`. This produces a GitHub release.
 
-Tags can be created from the GitHub web UI (Releases › Draft a new release).
+Without git: **Actions › Build & Release › Run workflow**, choose the branch (`develop` for a beta, `main` for a stable version) and type the tag (e.g. `v1.2.0-beta.1`). The tag must match the `version` in `package.json`. The workflow builds the installers, creates the tag and publishes the release.
 
 ## Code of conduct
 
