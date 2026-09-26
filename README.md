@@ -25,17 +25,17 @@ A secure clipboard filtering application that automatically detects and masks se
 
 ## 📥 Download
 
-Get the latest release for your platform:
+Get the latest version on the [releases page](https://github.com/50bvd/clipboardfilter/releases/latest), or directly:
 
-- **Windows**: [ClipboardFilter-Setup.exe](https://github.com/50bvd/clipboardfilter/releases/download/v1.0.0/ClipboardFilter.Setup.1.0.0.exe)
+- **Windows**: [installer](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/ClipboardFilter.Setup.1.1.0.exe>) · [portable](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/ClipboardFilter.1.1.0.exe>)
+- **macOS**: [Apple Silicon (arm64)](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/ClipboardFilter-1.1.0-arm64.dmg>) · [Intel (x64)](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/ClipboardFilter-1.1.0.dmg>)
+- **Linux**:
+  - [AppImage](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/ClipboardFilter-1.1.0.AppImage>) (any distribution)
+  - [.deb](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/clipboard-filter_1.1.0_amd64.deb>) (Debian, Ubuntu, Mint…)
+  - [.rpm](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/clipboard-filter-1.1.0.x86_64.rpm>) (Fedora, RHEL, openSUSE…)
+  - [.pacman](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/clipboard-filter-1.1.0.pacman>) (Arch, Manjaro…)
 
-- **Linux/Unix**: 
-  - [AppImage](https://github.com/50bvd/clipboardfilter/releases/download/v1.0.0/ClipboardFilter-1.0.0.AppImage) (Universal)
-  - [.deb](https://github.com/50bvd/clipboardfilter/releases/download/v1.0.0/clipboard-filter_1.0.0_amd64.deb) (Debian/Ubuntu)
-  - [.rpm](https://github.com/50bvd/clipboardfilter/releases/download/v1.0.0/clipboard-filter-1.0.0.x86_64.rpm) (Fedora/RHEL)
-
-- **macOS**: [ClipboardFilter.dmg for new Apple chip (ARM64)](https://github.com/50bvd/clipboardfilter/releases/download/v1.0.0/ClipboardFilter-1.0.0-arm64.dmg)
-  - *__Note :__* starting with 1.1.0, Intel (x64) builds are published as well.
+The app tells you when a new version is available (Settings › Updates).
 
 ## 🚀 Quick Start
 

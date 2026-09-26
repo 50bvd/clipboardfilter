@@ -5,12 +5,38 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-09-26
+
+First stable release with full Linux support. Changes since 1.0.0:
+
+### Added
+- **Linux support** on X11 and Wayland (GNOME, KDE Plasma, Sway, Hyprland…). On GNOME the paste shortcut is added to GNOME's custom shortcuts, so it works on every version (Fedora, Ubuntu…).
+- **Automatic mode**: filters everything you copy, so a normal Ctrl+V / Cmd+V is always safe.
+- **Update notifications** (stable or beta versions), clipboard auto-clear, "filter only" mode, start minimized.
+- Filter search, live test preview with per-filter counts, case-sensitive filters, System compatibility panel.
+- Readable, translated names for the 112 default filters.
+- Command-line options `--paste`, `--filter-clipboard`, `--toggle-auto`, `--show`, `--hidden`.
+- Arch Linux package and macOS Intel builds.
+
+### Changed
+- Electron 44. The filtering engine is 1.5–4.6× faster and runs in a background thread.
+- The SWIFT/BIC filter now works (restricted to ISO country codes, case-sensitive).
+- "Reset default filters" also restores deleted default filters.
+
+### Fixed
+- Broken default patterns (SWIFT, passport, driving licence, salary, Azure SAS).
+- Editing a filter could move it out of its category or make it disappear.
+- French translation encoding; Cmd+Q on macOS; auto-start did nothing.
+
 ### Security
+- Sandboxed interface served from an internal `app://` protocol (a crafted template could previously run code on the computer).
+- A catastrophic regular expression can no longer freeze the app; nothing is pasted in that case.
 - The interface is served from an internal `app://` protocol limited to the app's own files, instead of `file://`.
 - Electron fuses: the executable can no longer be used as a Node.js interpreter (`ELECTRON_RUN_AS_NODE`, `NODE_OPTIONS`, `--inspect`), only loads the app from its archive, and checks the archive's integrity (Windows, macOS).
 - External links: only the project's GitHub pages can be opened from the app.
 - System tools (PowerShell, osascript) are started from their absolute path; relative `PATH` entries are ignored.
 - CI: GitHub Actions pinned to commit SHAs, no credentials left on the runner, CodeQL analysis, dependency review on pull requests.
+- Updated build dependencies with known vulnerabilities (`fast-uri`, `js-yaml`, `@xmldom/xmldom`).
 
 ## [1.1.0-beta.2] - 2026-09-26
 
@@ -52,7 +78,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 - First public release (Windows).
 
-[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.1.0-beta.2...develop
+[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.1.0...develop
+[1.1.0]: https://github.com/50bvd/clipboardfilter/compare/v1.0.0...v1.1.0
 [1.1.0-beta.2]: https://github.com/50bvd/clipboardfilter/compare/v1.1.0-beta.1...v1.1.0-beta.2
 [1.1.0-beta.1]: https://github.com/50bvd/clipboardfilter/compare/v1.0.0...v1.1.0-beta.1
 [1.0.0]: https://github.com/50bvd/clipboardfilter/releases/tag/v1.0.0
