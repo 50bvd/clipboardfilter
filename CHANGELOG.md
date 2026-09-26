@@ -6,8 +6,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ## [Unreleased]
 
 ### Added
+- Update notifications: the app checks GitHub releases (stable, or stable + beta) and offers to download a newer version. Can be disabled in Settings › Updates.
+- GNOME (Wayland): the paste shortcut is registered as a GNOME custom shortcut, so it works on every GNOME version (Fedora, Ubuntu…), without the portal.
 - Contribution guide, security policy, issue and pull request templates.
 - `develop` pre-production branch with automatic test builds, Dependabot updates.
+
+### Security
+- Update `fast-uri` (build tooling dependency, high severity advisory).
 
 ## [1.1.0-beta.1] - 2026-09-26
 

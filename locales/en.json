@@ -9,7 +9,8 @@
     "quit": "Quit",
     "filterNow": "Filter clipboard now",
     "autoFilter": "Automatic filtering",
-    "help": "Help"
+    "help": "Help",
+    "updateAvailable": "⬆ Update available: {version}"
   },
   "about": {
     "title": "About",
@@ -124,7 +125,9 @@
     "installX11": "The filtered text is in the clipboard. Install xdotool to paste automatically.",
     "filterTimeout": "Filtering aborted",
     "filterTimeoutBody": "The filter \"{name}\" is too slow (catastrophic regular expression). Nothing was pasted.",
-    "filterFailed": "Filtering failed. Nothing was pasted."
+    "filterFailed": "Filtering failed. Nothing was pasted.",
+    "updateTitle": "ClipboardFilter update available",
+    "updateBody": "Version {version} is available. Click to download it."
   },
   "errors": {
     "title": "Error",
@@ -222,7 +225,9 @@
     "hintX11Paste": "Install xdotool to paste automatically (e.g. sudo apt install xdotool).",
     "hintShortcutFailed": "The shortcut could not be registered (it may already be used by another application). Choose another combination.",
     "hintTray": "No tray icon? On GNOME, install the \"AppIndicator and KStatusNotifierItem Support\" extension. You can always reopen this window by launching ClipboardFilter again.",
-    "hintMacAccessibility": "ClipboardFilter needs the Accessibility permission (System Settings › Privacy & Security › Accessibility) to paste automatically."
+    "hintMacAccessibility": "ClipboardFilter needs the Accessibility permission (System Settings › Privacy & Security › Accessibility) to paste automatically.",
+    "viaGnome": "GNOME shortcut",
+    "hintGnomeShortcut": "The shortcut was added to GNOME Settings › Keyboard › Custom Shortcuts (\"ClipboardFilter\"). It works on every GNOME version; you can also change it there."
   },
   "filters": {
     "developer": {
@@ -351,5 +356,21 @@
       "twilioSid": "Twilio account SID",
       "twilioToken": "Twilio API key"
     }
+  },
+  "updates": {
+    "title": "Updates",
+    "autoCheck": "Check for updates automatically",
+    "privacy": "Only asks GitHub which versions exist. Nothing is downloaded or installed automatically.",
+    "channel": "Versions to follow",
+    "channelAuto": "Automatic (betas if you use a beta)",
+    "channelStable": "Stable versions only",
+    "channelBeta": "Stable and beta versions",
+    "checkNow": "Check now",
+    "download": "Download",
+    "checking": "Checking…",
+    "available": "Version {version} is available",
+    "upToDate": "You have the latest version ({version})",
+    "error": "Could not check for updates (no connection?)",
+    "current": "Version {version}"
   }
 }

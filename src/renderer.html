@@ -185,6 +185,32 @@
           </div>
 
           <div class="settings-section">
+            <h3 data-i18n="updates.title">Updates</h3>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="checkupdates-check">
+                <span data-i18n="updates.autoCheck">Check for updates automatically</span>
+              </label>
+              <p class="form-hint" data-i18n="updates.privacy">Only asks GitHub which versions exist. Nothing is downloaded automatically.</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="updatechannel-select" data-i18n="updates.channel">Versions to follow</label>
+              <select class="form-select" id="updatechannel-select">
+                <option value="auto" data-i18n="updates.channelAuto">Automatic (betas if you use a beta)</option>
+                <option value="stable" data-i18n="updates.channelStable">Stable versions only</option>
+                <option value="beta" data-i18n="updates.channelBeta">Stable and beta versions</option>
+              </select>
+            </div>
+            <div class="update-row">
+              <span class="update-status" id="update-status"></span>
+              <div class="update-actions">
+                <button class="btn btn-secondary" id="check-updates-btn"><span data-i18n="updates.checkNow">Check now</span></button>
+                <button class="btn btn-primary" id="download-update-btn" hidden><span data-i18n="updates.download">Download</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
             <h3 data-i18n="settings.shortcutsTitle">Shortcuts</h3>
             <div class="shortcuts-info">
               <div class="shortcut-item shortcut-row">

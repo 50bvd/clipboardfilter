@@ -9,7 +9,8 @@
     "quit": "Quitter",
     "filterNow": "Filtrer le presse-papiers maintenant",
     "autoFilter": "Filtrage automatique",
-    "help": "Aide"
+    "help": "Aide",
+    "updateAvailable": "⬆ Mise à jour disponible : {version}"
   },
   "about": {
     "title": "À propos",
@@ -124,7 +125,9 @@
     "installX11": "Le texte filtré est dans le presse-papiers. Installez xdotool pour coller automatiquement.",
     "filterTimeout": "Filtrage interrompu",
     "filterTimeoutBody": "Le filtre « {name} » est trop lent (expression régulière catastrophique). Rien n'a été collé.",
-    "filterFailed": "Le filtrage a échoué. Rien n'a été collé."
+    "filterFailed": "Le filtrage a échoué. Rien n'a été collé.",
+    "updateTitle": "Mise à jour de ClipboardFilter disponible",
+    "updateBody": "La version {version} est disponible. Cliquez pour la télécharger."
   },
   "errors": {
     "title": "Erreur",
@@ -222,7 +225,9 @@
     "hintX11Paste": "Installez xdotool pour coller automatiquement (ex. sudo apt install xdotool).",
     "hintShortcutFailed": "Le raccourci n'a pas pu être enregistré (il est peut-être déjà utilisé par une autre application). Choisissez une autre combinaison.",
     "hintTray": "Pas d'icône dans la barre ? Sous GNOME, installez l'extension « AppIndicator and KStatusNotifierItem Support ». Vous pouvez toujours rouvrir cette fenêtre en relançant ClipboardFilter.",
-    "hintMacAccessibility": "ClipboardFilter a besoin de l'autorisation Accessibilité (Réglages Système › Confidentialité et sécurité › Accessibilité) pour coller automatiquement."
+    "hintMacAccessibility": "ClipboardFilter a besoin de l'autorisation Accessibilité (Réglages Système › Confidentialité et sécurité › Accessibilité) pour coller automatiquement.",
+    "viaGnome": "raccourci GNOME",
+    "hintGnomeShortcut": "Le raccourci a été ajouté dans Paramètres GNOME › Clavier › Raccourcis personnalisés (« ClipboardFilter »). Il fonctionne sur toutes les versions de GNOME ; vous pouvez aussi le modifier là-bas."
   },
   "filters": {
     "developer": {
@@ -351,5 +356,21 @@
       "twilioSid": "SID de compte Twilio",
       "twilioToken": "Clé API Twilio"
     }
+  },
+  "updates": {
+    "title": "Mises à jour",
+    "autoCheck": "Vérifier automatiquement les mises à jour",
+    "privacy": "Demande seulement à GitHub quelles versions existent. Rien n’est téléchargé ni installé automatiquement.",
+    "channel": "Versions à suivre",
+    "channelAuto": "Automatique (bêtas si vous utilisez une bêta)",
+    "channelStable": "Versions stables uniquement",
+    "channelBeta": "Versions stables et bêtas",
+    "checkNow": "Vérifier maintenant",
+    "download": "Télécharger",
+    "checking": "Vérification…",
+    "available": "La version {version} est disponible",
+    "upToDate": "Vous avez la dernière version ({version})",
+    "error": "Impossible de vérifier les mises à jour (pas de connexion ?)",
+    "current": "Version {version}"
   }
 }
