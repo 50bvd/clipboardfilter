@@ -1,8 +1,8 @@
 # <img src="assets/icon.png" alt="icon" style="width: 1em; height: 1em; vertical-align: -0.15em;"> ClipboardFilter
 
-[![Build Status](https://github.com/50bvd/clipboardfilter/workflows/Build%20Multi-Platform/badge.svg)](https://github.com/50bvd/clipboardfilter/actions)
+[![CI](https://github.com/50bvd/clipboardfilter/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/50bvd/clipboardfilter/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/50bvd/clipboardfilter?include_prereleases&sort=semver)](https://github.com/50bvd/clipboardfilter/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.1.0-green.svg)](https://github.com/50bvd/clipboardfilter/releases)
 
 A secure clipboard filtering application that automatically detects and masks sensitive information in real-time.
 
@@ -153,13 +153,13 @@ npm run package:mac          # macOS (x64 + arm64)
 
 ## 🤝 Contributing
 
-Contributions welcome! Please:
+Contributions are welcome: bug reports, new filters, translations and code.
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push to branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+- Read the [contribution guide](CONTRIBUTING.md). Pull requests target the **`develop`** branch; `main` only holds released versions.
+- Test builds of `develop` are available in [Actions › Build & Release](https://github.com/50bvd/clipboardfilter/actions/workflows/release.yml) (Artifacts).
+- Beta versions are published as [pre-releases](https://github.com/50bvd/clipboardfilter/releases).
+- Security issue? See the [security policy](SECURITY.md). Please do not open a public issue.
+- See the [changelog](CHANGELOG.md) for what changed in each version.
 
 ## 📄 License
 

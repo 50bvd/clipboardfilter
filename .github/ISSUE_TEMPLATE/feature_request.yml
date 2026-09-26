@@ -1,0 +1,19 @@
+name: Feature request
+description: Suggest an idea or a new default filter
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would it solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+  - type: textarea
+    id: filter
+    attributes:
+      label: New filter (if applicable)
+      description: Pattern, replacement and a few examples that must / must not match. Never paste real secrets.
