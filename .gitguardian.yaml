@@ -1,6 +1,8 @@
-# GitGuardian configuration: the test suite contains fake credentials on
-# purpose (they are what the filters must detect and mask).
+# GitGuardian configuration.
+# - test/ contains fake credentials on purpose (what the filters must mask)
+# - default-filters.json contains detection patterns (e.g. mysql://...), not secrets
 version: 2
 secret:
   ignored_paths:
     - "test/**"
+    - "default-filters.json"
