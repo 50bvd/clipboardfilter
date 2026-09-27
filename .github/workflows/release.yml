@@ -9,7 +9,10 @@ name: Build & Release
 # Windows release installers are signed through SignPath (free code signing
 # for open source, certificate by SignPath Foundation) when the
 # SIGNPATH_API_TOKEN secret and the SIGNPATH_ORGANIZATION_ID variable are set.
-# Without them, the unsigned installers are published as before.
+# Until then, Windows executables are signed with a self-signed certificate
+# in the maintainer's name (WINDOWS_SELF_SIGNED_PFX / _PASSWORD secrets, or a
+# certificate generated for the run). It shows the publisher and proves the
+# files were not modified, but Windows does not trust it (SmartScreen still warns).
 on:
   push:
     branches: [develop]
@@ -83,6 +86,37 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rpm libarchive-tools
 
+      - name: Self-signed code signing certificate (Windows)
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        env:
+          PFX_BASE64: ${{ secrets.WINDOWS_SELF_SIGNED_PFX }}
+          PFX_PASSWORD: ${{ secrets.WINDOWS_SELF_SIGNED_PFX_PASSWORD }}
+          USE_SIGNPATH: ${{ secrets.SIGNPATH_API_TOKEN != '' && vars.SIGNPATH_ORGANIZATION_ID != '' }}
+        run: |
+          if ($env:USE_SIGNPATH -eq 'true') { Write-Host 'SignPath is configured: no self-signing'; exit 0 }
+          $pfx = Join-Path $env:RUNNER_TEMP 'codesign.pfx'
+          if ($env:PFX_BASE64) {
+            [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:PFX_BASE64))
+            $password = $env:PFX_PASSWORD
+          } else {
+            Write-Host '::notice::No WINDOWS_SELF_SIGNED_PFX secret: using a certificate generated for this run'
+            $password = [guid]::NewGuid().ToString('N')
+            Write-Host "::add-mask::$password"
+            $cert = New-SelfSignedCertificate -Type CodeSigningCert `
+              -Subject 'CN=Loup LIGNON KRASNIQI, O=ClipboardFilter, C=FR' `
+              -KeyAlgorithm RSA -KeyLength 3072 -HashAlgorithm SHA256 `
+              -NotAfter (Get-Date).AddYears(3) -CertStoreLocation Cert:\CurrentUser\My
+            Export-PfxCertificate -Cert $cert -FilePath $pfx `
+              -Password (ConvertTo-SecureString $password -AsPlainText -Force) | Out-Null
+          }
+          # Public part of the certificate, published with the release
+          $c = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfx, $password)
+          [IO.File]::WriteAllBytes((Join-Path $env:RUNNER_TEMP 'ClipboardFilter-codesign.cer'), $c.Export('Cert'))
+          Write-Host "Signing with $($c.Subject) ($($c.Thumbprint))"
+          "CSC_LINK=$pfx" >> $env:GITHUB_ENV
+          "CSC_KEY_PASSWORD=$password" >> $env:GITHUB_ENV
+
       - name: Package
         shell: bash
         run: |
@@ -119,12 +153,21 @@ jobs:
           wait-for-completion: true
           output-artifact-directory: release
 
+      - name: Add the self-signed certificate to the release files (Windows)
+        if: matrix.platform == 'windows'
+        shell: bash
+        run: |
+          if [[ -f "$RUNNER_TEMP/ClipboardFilter-codesign.cer" ]]; then
+            cp "$RUNNER_TEMP/ClipboardFilter-codesign.cer" release/
+          fi
+
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           # Windows installers go through the signing job first
           name: ClipboardFilter-${{ matrix.platform }}${{ matrix.platform == 'windows' && '-unsigned' || '' }}
           path: |
             release/*.exe
+            release/*.cer
             release/*.deb
             release/*.rpm
             release/*.pacman
@@ -186,12 +229,12 @@ jobs:
 
       - name: Keep the unsigned installers
         if: steps.cfg.outputs.sign != 'true'
-        run: mkdir -p signed && cp unsigned/*.exe signed/
+        run: mkdir -p signed && cp unsigned/* signed/
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ClipboardFilter-windows
-          path: signed/*.exe
+          path: signed/*
           if-no-files-found: error
           retention-days: ${{ startsWith(github.ref, 'refs/tags/') && 90 || 14 }}
 
