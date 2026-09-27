@@ -5,6 +5,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+### Added
+- Windows installers of releases are signed (free code signing by SignPath.io, certificate by SignPath Foundation).
+
 ## [1.1.0] - 2026-09-26
 
 First stable release with full Linux support. Changes since 1.0.0:

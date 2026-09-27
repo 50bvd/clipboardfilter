@@ -5,6 +5,11 @@ name: Build & Release
 # - tag vX.Y.Z        -> GitHub release with the installers
 # - "Run workflow" (Actions tab) with a tag -> same as pushing that tag,
 #   from the selected branch (no git command needed)
+#
+# Windows release installers are signed through SignPath (free code signing
+# for open source, certificate by SignPath Foundation) when the
+# SIGNPATH_API_TOKEN secret and the SIGNPATH_ORGANIZATION_ID variable are set.
+# Without them, the unsigned installers are published as before.
 on:
   push:
     branches: [develop]
@@ -84,7 +89,8 @@ jobs:
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: ClipboardFilter-${{ matrix.platform }}
+          # Windows installers go through the signing job first
+          name: ClipboardFilter-${{ matrix.platform }}${{ matrix.platform == 'windows' && '-unsigned' || '' }}
           path: |
             release/*.exe
             release/*.deb
@@ -95,9 +101,71 @@ jobs:
             release/*.zip
           retention-days: ${{ startsWith(github.ref, 'refs/tags/') && 90 || 14 }}
 
+  sign-windows:
+    name: Sign (windows)
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read # lets SignPath download the artifact to sign
+    steps:
+      - name: Decide whether to sign
+        id: cfg
+        env:
+          HAS_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN != '' && vars.SIGNPATH_ORGANIZATION_ID != '' }}
+          IS_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') || inputs.tag != '' }}
+        run: |
+          if [[ "$HAS_TOKEN" == "true" && "$IS_RELEASE" == "true" ]]; then
+            echo "sign=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "sign=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Windows installers are not signed (not a release, or SignPath is not configured)"
+          fi
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ClipboardFilter-windows-unsigned
+          path: unsigned
+
+      - name: Upload the installers to sign
+        if: steps.cfg.outputs.sign == 'true'
+        id: to-sign
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ClipboardFilter-windows-to-sign
+          path: unsigned/*.exe
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Sign with SignPath
+        if: steps.cfg.outputs.sign == 'true'
+        uses: signpath/github-action-submit-signing-request@f6d04783b4569d051e0c80105fe66e82819d0092 # v3.0
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG || 'clipboardfilter' }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG || 'release-signing' }}
+          artifact-configuration-slug: ${{ vars.SIGNPATH_ARTIFACT_CONFIGURATION_SLUG || 'initial' }}
+          github-artifact-id: ${{ steps.to-sign.outputs.artifact-id }}
+          wait-for-completion: true
+          # Release signing is approved manually in SignPath
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: signed
+
+      - name: Keep the unsigned installers
+        if: steps.cfg.outputs.sign != 'true'
+        run: mkdir -p signed && cp unsigned/*.exe signed/
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ClipboardFilter-windows
+          path: signed/*.exe
+          if-no-files-found: error
+          retention-days: ${{ startsWith(github.ref, 'refs/tags/') && 90 || 14 }}
+
   release:
     name: Publish GitHub release
-    needs: build
+    needs: [build, sign-windows]
     if: startsWith(github.ref, 'refs/tags/v') || inputs.tag != ''
     runs-on: ubuntu-latest
     permissions:
@@ -106,6 +174,9 @@ jobs:
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           path: artifacts
+
+      - name: Keep only the final installers
+        run: rm -rf artifacts/*-unsigned artifacts/*-to-sign
 
       - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
