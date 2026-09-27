@@ -37,6 +37,20 @@ Get the latest version on the [releases page](https://github.com/50bvd/clipboard
 
 The app tells you when a new version is available (Settings › Updates).
 
+### Verify your download
+
+Every release file is built by GitHub Actions from this repository and comes with a signed [build provenance attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations) and a `SHA256SUMS.txt` file:
+
+```bash
+# Proves the file was built by this repository's release workflow
+gh attestation verify ClipboardFilter-1.1.0.AppImage --repo 50bvd/clipboardfilter
+
+# Checks the file was not corrupted or modified
+sha256sum -c SHA256SUMS.txt --ignore-missing
+```
+
+On Windows (PowerShell): `Get-FileHash .\ClipboardFilter.Setup.1.1.0.exe` and compare with `SHA256SUMS.txt`.
+
 ## 🚀 Quick Start
 
 ### Windows
