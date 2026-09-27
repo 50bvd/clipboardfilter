@@ -7,6 +7,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Added
 - Windows installers of releases are signed (free code signing by SignPath.io, certificate by SignPath Foundation).
+- Windows executables are signed with a self-signed certificate in the maintainer's name until SignPath signing is active (publisher and file metadata visible in the file properties).
 - Every release file comes with a signed build provenance attestation (Sigstore) and a `SHA256SUMS.txt` file.
 
 ## [1.1.0] - 2026-09-26

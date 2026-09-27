@@ -3,3 +3,6 @@ dist/
 release/
 *.log
 .DS_Store
+# Code signing material (never commit)
+*.pfx
+*.pfx.base64.txt

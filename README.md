@@ -181,6 +181,8 @@ Free code signing provided by [SignPath.io](https://about.signpath.io/), certifi
 
 Windows releases are built by GitHub Actions from this repository and signed through SignPath. Only builds of tagged releases are signed, after manual approval.
 
+Until the SignPath signing is active, Windows executables are signed with a self-signed certificate in the maintainer's name (Loup LIGNON KRASNIQI). It proves the files were not modified since they were built, but Windows does not know this certificate, so SmartScreen may still warn. Its public part is published with each release as `ClipboardFilter-codesign.cer`.
+
 **Team roles**
 
 - Committers and reviewers: [@50bvd](https://github.com/50bvd)
