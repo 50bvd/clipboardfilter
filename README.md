@@ -27,15 +27,29 @@ A secure clipboard filtering application that automatically detects and masks se
 
 Get the latest version on the [releases page](https://github.com/50bvd/clipboardfilter/releases/latest), or directly:
 
-- **Windows**: [installer](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/ClipboardFilter.Setup.1.1.0.exe>) · [portable](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/ClipboardFilter.1.1.0.exe>)
-- **macOS**: [Apple Silicon (arm64)](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/ClipboardFilter-1.1.0-arm64.dmg>) · [Intel (x64)](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/ClipboardFilter-1.1.0.dmg>)
+- **Windows**: [installer](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.1/ClipboardFilter.Setup.1.1.1.exe>) · [portable](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.1/ClipboardFilter.1.1.1.exe>)
+- **macOS**: [Apple Silicon (arm64)](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.1/ClipboardFilter-1.1.1-arm64.dmg>) · [Intel (x64)](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.1/ClipboardFilter-1.1.1.dmg>)
 - **Linux**:
-  - [AppImage](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/ClipboardFilter-1.1.0.AppImage>) (any distribution)
-  - [.deb](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/clipboard-filter_1.1.0_amd64.deb>) (Debian, Ubuntu, Mint…)
-  - [.rpm](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/clipboard-filter-1.1.0.x86_64.rpm>) (Fedora, RHEL, openSUSE…)
-  - [.pacman](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.0/clipboard-filter-1.1.0.pacman>) (Arch, Manjaro…)
+  - [AppImage](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.1/ClipboardFilter-1.1.1.AppImage>) (any distribution)
+  - [.deb](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.1/clipboard-filter_1.1.1_amd64.deb>) (Debian, Ubuntu, Mint…)
+  - [.rpm](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.1/clipboard-filter-1.1.1.x86_64.rpm>) (Fedora, RHEL, openSUSE…)
+  - [.pacman](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.1/clipboard-filter-1.1.1.pacman>) (Arch, Manjaro…)
 
 The app tells you when a new version is available (Settings › Updates).
+
+### Verify your download
+
+Every release file is built by GitHub Actions from this repository and comes with a signed [build provenance attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations) and a `SHA256SUMS.txt` file:
+
+```bash
+# Proves the file was built by this repository's release workflow
+gh attestation verify ClipboardFilter-1.1.1.AppImage --repo 50bvd/clipboardfilter
+
+# Checks the file was not corrupted or modified
+sha256sum -c SHA256SUMS.txt --ignore-missing
+```
+
+On Windows (PowerShell): `Get-FileHash .\ClipboardFilter.Setup.1.1.1.exe` and compare with `SHA256SUMS.txt`.
 
 ## 🚀 Quick Start
 
@@ -160,6 +174,23 @@ Contributions are welcome: bug reports, new filters, translations and code.
 - Beta versions are published as [pre-releases](https://github.com/50bvd/clipboardfilter/releases).
 - Security issue? See the [security policy](SECURITY.md). Please do not open a public issue.
 - See the [changelog](CHANGELOG.md) for what changed in each version.
+
+## 🔏 Code signing policy
+
+Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/).
+
+Windows releases are built by GitHub Actions from this repository and signed through SignPath. Only builds of tagged releases are signed, after manual approval.
+
+Until the SignPath signing is active, Windows executables are signed with a self-signed certificate in the maintainer's name (Loup LIGNON KRASNIQI). It proves the files were not modified since they were built, but Windows does not know this certificate, so SmartScreen may still warn. Its public part is published with each release as `ClipboardFilter-codesign.cer`.
+
+**Team roles**
+
+- Committers and reviewers: [@50bvd](https://github.com/50bvd)
+- Approvers: [@50bvd](https://github.com/50bvd)
+
+**Privacy policy**
+
+This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it, with one exception: the update check (Settings › Updates, enabled by default and can be turned off) asks the GitHub releases API which versions exist. No clipboard content, filter or personal data is ever sent.
 
 ## 📄 License
 

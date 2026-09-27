@@ -1,7 +1,7 @@
 {
   "name": "clipboard-filter",
-  "version": "1.1.0",
-  "description": "Secure clipboard filtering tool with configurable keyword blacklisting",
+  "version": "1.1.1",
+  "description": "Filters secrets and personal data out of your clipboard before you paste them",
   "main": "dist/main.js",
   "author": {
     "name": "Loup LIGNON KRASNIQI",
@@ -34,7 +34,7 @@
   "build": {
     "appId": "com.clipboardfilter.app",
     "productName": "ClipboardFilter",
-    "copyright": "Copyright © 2025 Loup LIGNON KRASNIQI",
+    "copyright": "Copyright © 2025-2026 Loup LIGNON KRASNIQI",
     "directories": {
       "output": "release",
       "buildResources": "assets"

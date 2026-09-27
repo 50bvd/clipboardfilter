@@ -5,6 +5,14 @@ name: Build & Release
 # - tag vX.Y.Z        -> GitHub release with the installers
 # - "Run workflow" (Actions tab) with a tag -> same as pushing that tag,
 #   from the selected branch (no git command needed)
+#
+# Windows release installers are signed through SignPath (free code signing
+# for open source, certificate by SignPath Foundation) when the
+# SIGNPATH_API_TOKEN secret and the SIGNPATH_ORGANIZATION_ID variable are set.
+# Until then, Windows executables are signed with a self-signed certificate
+# in the maintainer's name (WINDOWS_SELF_SIGNED_PFX / _PASSWORD secrets, or a
+# certificate generated for the run). It shows the publisher and proves the
+# files were not modified, but Windows does not trust it (SmartScreen still warns).
 on:
   push:
     branches: [develop]
@@ -73,6 +81,38 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rpm libarchive-tools
 
+      - name: Self-signed code signing certificate (Windows)
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        env:
+          PFX_BASE64: ${{ secrets.WINDOWS_SELF_SIGNED_PFX }}
+          PFX_PASSWORD: ${{ secrets.WINDOWS_SELF_SIGNED_PFX_PASSWORD }}
+          # SignPath signs releases only: other builds keep the self-signed signature
+          USE_SIGNPATH: ${{ secrets.SIGNPATH_API_TOKEN != '' && vars.SIGNPATH_ORGANIZATION_ID != '' && (startsWith(github.ref, 'refs/tags/v') || inputs.tag != '') }}
+        run: |
+          if ($env:USE_SIGNPATH -eq 'true') { Write-Host 'SignPath is configured: no self-signing'; exit 0 }
+          $pfx = Join-Path $env:RUNNER_TEMP 'codesign.pfx'
+          if ($env:PFX_BASE64) {
+            [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:PFX_BASE64))
+            $password = $env:PFX_PASSWORD
+          } else {
+            Write-Host '::notice::No WINDOWS_SELF_SIGNED_PFX secret: using a certificate generated for this run'
+            $password = [guid]::NewGuid().ToString('N')
+            Write-Host "::add-mask::$password"
+            $cert = New-SelfSignedCertificate -Type CodeSigningCert `
+              -Subject 'CN=Loup LIGNON KRASNIQI, O=ClipboardFilter, C=FR' `
+              -KeyAlgorithm RSA -KeyLength 3072 -HashAlgorithm SHA256 `
+              -NotAfter (Get-Date).AddYears(3) -CertStoreLocation Cert:\CurrentUser\My
+            Export-PfxCertificate -Cert $cert -FilePath $pfx `
+              -Password (ConvertTo-SecureString $password -AsPlainText -Force) | Out-Null
+          }
+          # Public part of the certificate, published with the release
+          $c = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfx, $password)
+          [IO.File]::WriteAllBytes((Join-Path $env:RUNNER_TEMP 'ClipboardFilter-codesign.cer'), $c.Export('Cert'))
+          Write-Host "Signing with $($c.Subject) ($($c.Thumbprint))"
+          "CSC_LINK=$pfx" >> $env:GITHUB_ENV
+          "CSC_KEY_PASSWORD=$password" >> $env:GITHUB_ENV
+
       - name: Package
         shell: bash
         run: |
@@ -82,11 +122,21 @@ jobs:
             mac)     npm run package:mac -- --publish never ;;
           esac
 
+      - name: Add the self-signed certificate to the release files (Windows)
+        if: matrix.platform == 'windows'
+        shell: bash
+        run: |
+          if [[ -f "$RUNNER_TEMP/ClipboardFilter-codesign.cer" ]]; then
+            cp "$RUNNER_TEMP/ClipboardFilter-codesign.cer" release/
+          fi
+
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: ClipboardFilter-${{ matrix.platform }}
+          # Windows installers go through the signing job first
+          name: ClipboardFilter-${{ matrix.platform }}${{ matrix.platform == 'windows' && '-unsigned' || '' }}
           path: |
             release/*.exe
+            release/*.cer
             release/*.deb
             release/*.rpm
             release/*.pacman
@@ -95,17 +145,99 @@ jobs:
             release/*.zip
           retention-days: ${{ startsWith(github.ref, 'refs/tags/') && 90 || 14 }}
 
+  sign-windows:
+    name: Sign (windows)
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read # lets SignPath download the artifact to sign
+    steps:
+      - name: Decide whether to sign
+        id: cfg
+        env:
+          HAS_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN != '' && vars.SIGNPATH_ORGANIZATION_ID != '' }}
+          IS_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') || inputs.tag != '' }}
+        run: |
+          if [[ "$HAS_TOKEN" == "true" && "$IS_RELEASE" == "true" ]]; then
+            echo "sign=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "sign=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No SignPath signing (not a release, or SignPath is not configured): Windows files keep the self-signed signature"
+          fi
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ClipboardFilter-windows-unsigned
+          path: unsigned
+
+      - name: Upload the installers to sign
+        if: steps.cfg.outputs.sign == 'true'
+        id: to-sign
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ClipboardFilter-windows-to-sign
+          path: unsigned/*.exe
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Sign with SignPath
+        if: steps.cfg.outputs.sign == 'true'
+        uses: signpath/github-action-submit-signing-request@f6d04783b4569d051e0c80105fe66e82819d0092 # v3.0
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG || 'clipboardfilter' }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG || 'release-signing' }}
+          artifact-configuration-slug: ${{ vars.SIGNPATH_ARTIFACT_CONFIGURATION_SLUG || 'initial' }}
+          github-artifact-id: ${{ steps.to-sign.outputs.artifact-id }}
+          wait-for-completion: true
+          # Release signing is approved manually in SignPath
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: signed
+
+      - name: Keep the unsigned installers
+        if: steps.cfg.outputs.sign != 'true'
+        run: mkdir -p signed && cp unsigned/* signed/
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ClipboardFilter-windows
+          path: signed/*
+          if-no-files-found: error
+          retention-days: ${{ startsWith(github.ref, 'refs/tags/') && 90 || 14 }}
+
   release:
     name: Publish GitHub release
-    needs: build
+    needs: [build, sign-windows]
     if: startsWith(github.ref, 'refs/tags/v') || inputs.tag != ''
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write     # Sigstore signing of the provenance attestations
+      attestations: write
     steps:
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           path: artifacts
+
+      - name: Keep only the final installers
+        run: rm -rf artifacts/*-unsigned artifacts/*-to-sign
+
+      - name: Compute SHA-256 checksums
+        run: |
+          find artifacts -type f -exec sha256sum {} + \
+            | sed -E 's#  artifacts/[^/]+/#  #' | sort -k2 > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+          mv SHA256SUMS.txt artifacts/
+
+      # Signed statement (Sigstore) that each file was built by this repository's
+      # workflow from this exact commit. Verify with:
+      #   gh attestation verify <file> --repo 50bvd/clipboardfilter
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: 'artifacts/**/*'
 
       - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:

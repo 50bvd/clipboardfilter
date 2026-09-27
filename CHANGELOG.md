@@ -5,6 +5,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-09-27
+
+### Added
+- Ready for SignPath code signing (free for open source, certificate by SignPath Foundation), enabled as soon as the project is approved.
+- Windows executables are signed with a self-signed certificate in the maintainer's name until SignPath signing is active (publisher and file metadata visible in the file properties).
+- Every release file comes with a signed build provenance attestation (Sigstore) and a `SHA256SUMS.txt` file.
+
+### Fixed
+- Release build: removed a leftover duplicate signing step that would have broken Windows builds once SignPath is enabled.
+
 ## [1.1.0] - 2026-09-26
 
 First stable release with full Linux support. Changes since 1.0.0:
@@ -78,7 +88,8 @@ First stable release with full Linux support. Changes since 1.0.0:
 
 - First public release (Windows).
 
-[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.1.0...develop
+[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.1.1...develop
+[1.1.1]: https://github.com/50bvd/clipboardfilter/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/50bvd/clipboardfilter/compare/v1.0.0...v1.1.0
 [1.1.0-beta.2]: https://github.com/50bvd/clipboardfilter/compare/v1.1.0-beta.1...v1.1.0-beta.2
 [1.1.0-beta.1]: https://github.com/50bvd/clipboardfilter/compare/v1.0.0...v1.1.0-beta.1
