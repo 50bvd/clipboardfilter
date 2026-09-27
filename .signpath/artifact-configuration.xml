@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SignPath artifact configuration for ClipboardFilter.
+  Paste this into the SignPath project (Artifact configurations › "initial").
+  The artifact is a zip produced by the "Build & Release" workflow, containing
+  the Windows installer (ClipboardFilter.Setup.<version>.exe) and the portable
+  executable (ClipboardFilter.<version>.exe) at its root.
+-->
+<artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <zip-file>
+    <pe-file-set>
+      <include path="ClipboardFilter*.exe" min-matches="2" max-matches="2" />
+      <for-each>
+        <authenticode-sign />
+      </for-each>
+    </pe-file-set>
+  </zip-file>
+</artifact-configuration>

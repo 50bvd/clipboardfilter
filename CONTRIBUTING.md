@@ -65,6 +65,8 @@ UI strings live in `locales/<lang>.json`. Missing keys fall back to English. To 
 3. **Stable**: create a `release/1.2.0` branch from `develop`, open a pull request `release/1.2.0` → `main` titled `Release 1.2.0` and merge it with **Create a merge commit**. Then publish `v1.2.0` from `main` (see below). Never use `develop` itself as the source of a pull request: GitHub would delete it after the merge ("Automatically delete head branches").
 4. Bring `main` back into `develop` if they differ (pull request `main` → `develop`, merge commit).
 
+Windows installers of a release are signed through SignPath: when the workflow reaches the **Sign (windows)** job, approve the signing request in SignPath (you receive an e-mail) within one hour.
+
 Without git: **Actions › Build & Release › Run workflow**, choose the branch (`develop` for a beta, `main` for a stable version) and type the tag (e.g. `v1.2.0-beta.1`). The tag must match the `version` in `package.json`. The workflow builds the installers, creates the tag and publishes the release.
 
 ## Code of conduct

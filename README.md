@@ -161,6 +161,21 @@ Contributions are welcome: bug reports, new filters, translations and code.
 - Security issue? See the [security policy](SECURITY.md). Please do not open a public issue.
 - See the [changelog](CHANGELOG.md) for what changed in each version.
 
+## 🔏 Code signing policy
+
+Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/).
+
+Windows releases are built by GitHub Actions from this repository and signed through SignPath. Only builds of tagged releases are signed, after manual approval.
+
+**Team roles**
+
+- Committers and reviewers: [@50bvd](https://github.com/50bvd)
+- Approvers: [@50bvd](https://github.com/50bvd)
+
+**Privacy policy**
+
+This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it, with one exception: the update check (Settings › Updates, enabled by default and can be turned off) asks the GitHub releases API which versions exist. No clipboard content, filter or personal data is ever sent.
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
