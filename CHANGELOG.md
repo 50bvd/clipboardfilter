@@ -5,6 +5,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.2.0-beta.2] - 2026-09-28
+
+Test release for the in-app updates: 1.2.0-beta.1 should offer it in its update window, download it, install it and restart.
+
 ## [1.2.0-beta.1] - 2026-09-28
 
 ### Added
@@ -99,7 +103,8 @@ First stable release with full Linux support. Changes since 1.0.0:
 
 - First public release (Windows).
 
-[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0-beta.1...develop
+[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0-beta.2...develop
+[1.2.0-beta.2]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0-beta.1...v1.2.0-beta.2
 [1.2.0-beta.1]: https://github.com/50bvd/clipboardfilter/compare/v1.1.1...v1.2.0-beta.1
 [1.1.1]: https://github.com/50bvd/clipboardfilter/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/50bvd/clipboardfilter/compare/v1.0.0...v1.1.0
