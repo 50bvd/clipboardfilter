@@ -31,11 +31,23 @@ function applyTranslations() {
   document.title = t('updates.windowTitle', {}, 'ClipboardFilter update');
 }
 
-/** GitHub release notes are Markdown: show them as readable plain text. */
+/** Removes HTML comments, including nested or unterminated ones. */
+function stripComments(text) {
+  let previous;
+  do {
+    previous = text;
+    text = text.replace(/<!--[\s\S]*?(?:-->|$)/g, '');
+  } while (text !== previous);
+  return text;
+}
+
+/**
+ * GitHub release notes are Markdown: show them as readable plain text.
+ * The result is only ever displayed with textContent, never as HTML.
+ */
 function plainNotes(markdown) {
-  return String(markdown || '')
+  return stripComments(String(markdown || ''))
     .replace(/\r\n/g, '\n')
-    .replace(/<!--[\s\S]*?-->/g, '')
     // GitHub's generated notes: keep the change titles, drop authors and links
     .replace(/ by @[\w-]+ in https:\/\/\S+/g, '')
     .replace(/^\*\*Full Changelog\*\*:.*$/gm, '')
