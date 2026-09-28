@@ -1034,7 +1034,7 @@ function setupEventListeners() {
   });
 
   $('check-updates-btn').addEventListener('click', checkUpdatesNow);
-  $('download-update-btn').addEventListener('click', () => bridge.invoke('updates:open').catch(() => undefined));
+  $('download-update-btn').addEventListener('click', () => bridge.invoke('updates:show-window').catch(() => undefined));
   bridge.onUpdateStatus(renderUpdateStatus);
 
   $('reset-all-defaults-btn').addEventListener('click', resetAllDefaults);

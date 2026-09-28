@@ -6,6 +6,7 @@ ClipboardFilter handles sensitive data, so security reports are taken seriously.
 
 | Version | Supported |
 |---------|-----------|
+| 1.2.0 betas | ✅ (testing) |
 | 1.1.x | ✅ |
 | 1.1.0 betas | ❌ please upgrade to 1.1.1 |
 | 1.0.x | ❌ please upgrade |
