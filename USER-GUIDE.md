@@ -160,7 +160,14 @@ Import/export filter packs.
 - Click "🎙 Change" to change; a badge shows whether the shortcut is active
 
 #### Updates
-- **Check for updates automatically**: once at startup and then twice a day, ClipboardFilter asks GitHub whether a newer version exists and shows a notification. Nothing is downloaded or installed automatically.
+- **Check for updates automatically**: once at startup and then twice a day, ClipboardFilter asks GitHub whether a newer version exists. If there is one, the update window opens.
+- **Update window**: shows the new version and what changed. **Download and install** downloads the file matching your installation, checks its SHA-256 fingerprint against the release's `SHA256SUMS.txt`, installs it and restarts ClipboardFilter. **Skip this version** stops the window from opening again for that version.
+  - Windows installer: silent update of the installed version.
+  - Windows portable: the new `.exe` is saved next to the current one and started.
+  - AppImage: the AppImage file is replaced (same file name).
+  - `.deb` / `.rpm` / `.pacman`: installed with your package manager after the system password prompt (needs `pkexec`, installed on most desktops).
+  - macOS: the application in the Applications folder is replaced.
+  - If the app cannot update itself, the window offers the download page instead.
 - **Versions to follow**: stable versions only, or stable and beta versions ("Automatic" follows betas when you are using a beta).
 
 #### System compatibility

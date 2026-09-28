@@ -17,6 +17,7 @@ import { APP_ORIGIN, handleAppScheme, registerAppScheme } from './appProtocol';
 import { shouldUseGnomeShortcut, setGnomeShortcut, gnomeShortcutSupported, removeGnomeShortcut } from './gnomeShortcut';
 import { isGnomeLikeDesktop } from './gnomeKeys';
 import { UpdateInfo, checkForUpdates, defaultUpdateChannel, isTrustedReleaseUrl, RELEASES_PAGE } from './updateChecker';
+import { UpdateDownloader } from './updateInstaller';
 
 const APP_ID = 'com.clipboardfilter.app';
 const PROJECT_URL = 'https://github.com/50bvd/clipboardfilter';
@@ -49,6 +50,7 @@ function shellQuote(arg: string): string {
 class ClipboardFilterApp {
   private mainWindow: BrowserWindow | null = null;
   private aboutWindow: BrowserWindow | null = null;
+  private updateWindow: BrowserWindow | null = null;
   private tray: Tray | null = null;
   private filterManager!: FilterManager;
   private runner = new FilterRunner();
@@ -61,6 +63,7 @@ class ClipboardFilterApp {
   private updateInfo: UpdateInfo = { status: 'idle', current: app.getVersion() };
   private updateTimer: NodeJS.Timeout | null = null;
   private notifiedUpdate: string | null = null;
+  private updater = new UpdateDownloader((state) => this.sendToWindows('update-download', state));
   private pasteBusy = false;
   private clearTimer: NodeJS.Timeout | null = null;
   private lastPasteBackend: string | null = null;
@@ -156,8 +159,15 @@ class ClipboardFilterApp {
   }
 
   private isTrustedSender(event: IpcMainInvokeEvent): boolean {
-    return !!this.mainWindow && event.sender === this.mainWindow.webContents
+    const windows = [this.mainWindow, this.updateWindow];
+    return windows.some(w => !!w && !w.isDestroyed() && event.sender === w.webContents)
       && (event.senderFrame?.url || '').startsWith(`${APP_ORIGIN}/`);
+  }
+
+  private sendToWindows(channel: string, payload: unknown): void {
+    for (const w of [this.mainWindow, this.updateWindow]) {
+      if (w && !w.isDestroyed()) w.webContents.send(channel, payload);
+    }
   }
 
   // ==================== WINDOWS ====================
@@ -256,6 +266,50 @@ class ClipboardFilterApp {
     this.aboutWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
   }
 
+  private showUpdateWindow(): void {
+    if (this.updateWindow) {
+      if (this.updateWindow.isMinimized()) this.updateWindow.restore();
+      this.updateWindow.show();
+      this.updateWindow.focus();
+      return;
+    }
+    this.updateWindow = new BrowserWindow({
+      width: 520,
+      height: 580,
+      minWidth: 420,
+      minHeight: 460,
+      title: localeManager.t('updates.windowTitle'),
+      minimizable: true,
+      maximizable: false,
+      autoHideMenuBar: true,
+      icon: ICON_PATH,
+      show: false,
+      backgroundColor: nativeTheme.shouldUseDarkColors ? '#0d1117' : '#f5f5f5',
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        contextIsolation: true,
+        nodeIntegration: false,
+        sandbox: true,
+        webSecurity: true,
+        spellcheck: false,
+        devTools: IS_DEV
+      }
+    });
+    this.updateWindow.loadURL(`${APP_ORIGIN}/dist/update.html`);
+    this.updateWindow.once('ready-to-show', () => this.updateWindow?.show());
+    this.updateWindow.on('closed', () => { this.updateWindow = null; });
+  }
+
+  private async installUpdate(): Promise<boolean> {
+    const quit = await this.updater.install();
+    if (quit) {
+      this.isQuitting = true;
+      this.filterManager.flush();
+      app.quit();
+    }
+    return quit;
+  }
+
   // ==================== TRAY ====================
 
   private setupTray(): void {
@@ -280,7 +334,7 @@ class ClipboardFilterApp {
     const template: MenuItemConstructorOptions[] = [];
     if (this.updateInfo.status === 'available') {
       template.push(
-        { label: localeManager.t('menu.updateAvailable', { version: this.updateInfo.latest || '' }), click: () => this.openUpdatePage() },
+        { label: localeManager.t('menu.updateAvailable', { version: this.updateInfo.latest || '' }), click: () => this.showUpdateWindow() },
         { type: 'separator' }
       );
     }
@@ -371,7 +425,7 @@ class ClipboardFilterApp {
     const settings = this.filterManager.getSettings();
     const channel = settings.updateChannel === 'auto' ? defaultUpdateChannel() : settings.updateChannel;
     this.updateInfo = { ...this.updateInfo, status: 'checking' };
-    this.mainWindow?.webContents.send('update-status', this.updateInfo);
+    this.sendToWindows('update-status', this.updateInfo);
     try {
       this.updateInfo = await checkForUpdates(channel === 'beta');
     } catch (error) {
@@ -380,22 +434,15 @@ class ClipboardFilterApp {
     }
 
     const info = this.updateInfo;
-    if (info.status === 'available' && !manual && info.latest !== this.notifiedUpdate) {
+    if (info.status === 'available') await this.updater.refreshSupport(info.latest, info.assets);
+    if (info.status === 'available' && !manual && info.latest !== this.notifiedUpdate
+      && info.latest !== settings.skippedUpdate) {
       this.notifiedUpdate = info.latest || null;
-      if (Notification.isSupported()) {
-        try {
-          const n = new Notification({
-            title: localeManager.t('notifications.updateTitle'),
-            body: localeManager.t('notifications.updateBody', { version: info.latest || '' }),
-            icon: ICON_PATH
-          });
-          n.on('click', () => this.openUpdatePage());
-          n.show();
-        } catch { /* ignore */ }
-      }
+      // New version found in the background: open the update window
+      this.showUpdateWindow();
     }
     this.updateTrayMenu();
-    this.mainWindow?.webContents.send('update-status', info);
+    this.sendToWindows('update-status', info);
     return info;
   }
 
@@ -631,6 +678,23 @@ class ClipboardFilterApp {
     this.handle('updates:status', () => this.updateInfo);
     this.handle('updates:check', () => this.runUpdateCheck(true));
     this.handle('updates:open', () => { this.openUpdatePage(); return true; });
+    this.handle('updates:show-window', () => { this.showUpdateWindow(); return true; });
+    this.handle('updates:download-state', () => this.updater.getState());
+    this.handle('updates:download', () => {
+      const info = this.updateInfo;
+      if (info.status !== 'available' || !info.latest) return this.updater.getState();
+      // Runs in the background; progress is sent with 'update-download'
+      this.updater.download(info.latest, info.assets || []).catch(() => undefined);
+      return this.updater.getState();
+    });
+    this.handle('updates:cancel', () => { this.updater.cancel(); return true; });
+    this.handle('updates:install', () => this.installUpdate());
+    this.handle('updates:skip', () => {
+      if (this.updateInfo.latest) this.filterManager.updateSettings({ skippedUpdate: this.updateInfo.latest });
+      this.updateWindow?.close();
+      return true;
+    });
+    this.handle('updates:close-window', () => { this.updateWindow?.close(); return true; });
 
     // Filters
     this.handle('filters:add', (filter) => { fm().addFilter(filter); return data(); });

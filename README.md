@@ -35,7 +35,7 @@ Get the latest version on the [releases page](https://github.com/50bvd/clipboard
   - [.rpm](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.1/clipboard-filter-1.1.1.x86_64.rpm>) (Fedora, RHEL, openSUSE…)
   - [.pacman](<https://github.com/50bvd/clipboardfilter/releases/download/v1.1.1/clipboard-filter-1.1.1.pacman>) (Arch, Manjaro…)
 
-The app tells you when a new version is available (Settings › Updates).
+When a new version is available, ClipboardFilter opens an update window: one click downloads it, checks it against the release's `SHA256SUMS.txt` and installs it, then the app restarts (Settings › Updates).
 
 ### Verify your download
 
@@ -190,7 +190,7 @@ Until the SignPath signing is active, Windows executables are signed with a self
 
 **Privacy policy**
 
-This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it, with one exception: the update check (Settings › Updates, enabled by default and can be turned off) asks the GitHub releases API which versions exist. No clipboard content, filter or personal data is ever sent.
+This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it, with one exception: the update check (Settings › Updates, enabled by default and can be turned off) asks the GitHub releases API which versions exist, and an update is downloaded from GitHub only when you click "Download and install". No clipboard content, filter or personal data is ever sent.
 
 ## 📄 License
 

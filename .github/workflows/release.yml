@@ -221,8 +221,43 @@ jobs:
         with:
           path: artifacts
 
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: CHANGELOG.md
+          sparse-checkout-cone-mode: false
+          path: repo
+
+      # The release description is the version's section of CHANGELOG.md
+      # (also shown in the app's update window)
+      - name: Release notes
+        id: notes
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          VERSION="${TAG#v}"
+          awk -v v="$VERSION" '
+            /^## \[/ { if (found) exit; if (index($0, "## [" v "]") == 1) { found = 1; next } }
+            /^\[[^]]+\]: / { if (found) exit }
+            found { print }
+          ' repo/CHANGELOG.md > release-notes.md
+          if grep -q '[^[:space:]]' release-notes.md; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::No CHANGELOG.md section for $VERSION: using generated release notes"
+          fi
+          cat release-notes.md
+
       - name: Keep only the final installers
         run: rm -rf artifacts/*-unsigned artifacts/*-to-sign
+
+      # GitHub replaces spaces with dots in uploaded file names: rename the
+      # files first so that SHA256SUMS.txt lists the names users download
+      - name: Use the published file names
+        run: |
+          find artifacts -type f -name '* *' | while IFS= read -r f; do
+            mv "$f" "$(dirname "$f")/$(basename "$f" | tr ' ' '.')"
+          done
 
       - name: Compute SHA-256 checksums
         run: |
@@ -245,4 +280,5 @@ jobs:
           target_commitish: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: ${{ contains(inputs.tag || github.ref_name, '-') }}
-          generate_release_notes: true
+          body_path: ${{ steps.notes.outputs.found == 'true' && 'release-notes.md' || '' }}
+          generate_release_notes: ${{ steps.notes.outputs.found != 'true' }}

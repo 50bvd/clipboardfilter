@@ -5,6 +5,6 @@ const path = require('path');
 const root = path.join(__dirname, '..');
 const dist = path.join(root, 'dist');
 fs.mkdirSync(dist, { recursive: true });
-for (const file of ['src/renderer.html', 'src/renderer.js', 'src/styles.css']) {
+for (const file of ['src/renderer.html', 'src/renderer.js', 'src/styles.css', 'src/update.html', 'src/update.js', 'src/update.css']) {
   fs.copyFileSync(path.join(root, file), path.join(dist, path.basename(file)));
 }

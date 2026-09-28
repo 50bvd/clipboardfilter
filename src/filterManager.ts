@@ -47,6 +47,8 @@ export interface AppSettings {
   startMinimized: boolean;
   checkUpdates: boolean;
   updateChannel: 'auto' | 'stable' | 'beta';
+  /** Version the user chose to skip ('' = none) */
+  skippedUpdate: string;
 }
 
 interface StoreSchema {
@@ -114,7 +116,8 @@ export function defaultSettings(): AppSettings {
     startMinimized: process.platform !== 'linux',
     checkUpdates: true,
     // "auto": follow pre-releases when running a pre-release, stable otherwise
-    updateChannel: 'auto'
+    updateChannel: 'auto',
+    skippedUpdate: ''
   };
 }
 
@@ -268,6 +271,7 @@ export class FilterManager {
     if (typeof input.startMinimized === 'boolean') s.startMinimized = input.startMinimized;
     if (typeof input.checkUpdates === 'boolean') s.checkUpdates = input.checkUpdates;
     if (['auto', 'stable', 'beta'].includes(input.updateChannel)) s.updateChannel = input.updateChannel;
+    if (typeof input.skippedUpdate === 'string' && /^[0-9A-Za-z.+-]{0,64}$/.test(input.skippedUpdate)) s.skippedUpdate = input.skippedUpdate;
     return s;
   }
 
