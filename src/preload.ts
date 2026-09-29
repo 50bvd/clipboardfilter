@@ -14,7 +14,8 @@ const CHANNELS = new Set([
   'settings:update', 'shortcut:suspend',
   'data:reset-defaults', 'data:delete-custom',
   'templates:export', 'templates:import',
-  'updates:status', 'updates:check', 'updates:open'
+  'updates:status', 'updates:check', 'updates:open', 'updates:show-window', 'updates:download-state',
+  'updates:download', 'updates:cancel', 'updates:install', 'updates:skip', 'updates:close-window'
 ]);
 
 async function invoke(channel: string, ...args: unknown[]): Promise<any> {
@@ -33,5 +34,8 @@ contextBridge.exposeInMainWorld('api', {
   },
   onUpdateStatus: (callback: (info: unknown) => void) => {
     ipcRenderer.on('update-status', (_event, info) => callback(info));
+  },
+  onUpdateDownload: (callback: (state: unknown) => void) => {
+    ipcRenderer.on('update-download', (_event, state) => callback(state));
   }
 });

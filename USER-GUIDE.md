@@ -8,7 +8,7 @@ ClipboardFilter is an application that automatically filters your clipboard cont
 
 ### Windows
 1. Download the installer from the releases page
-2. Run `ClipboardFilter.Setup.1.1.1.exe`
+2. Run `ClipboardFilter.Setup.1.2.0.exe`
 3. Follow the installation wizard
 4. The application starts automatically
 
@@ -24,23 +24,23 @@ ClipboardFilter is an application that automatically filters your clipboard cont
 ### Linux
 **AppImage (Universal):**
 ```bash
-chmod +x ClipboardFilter-1.1.1.AppImage
-./ClipboardFilter-1.1.1.AppImage
+chmod +x ClipboardFilter-1.2.0.AppImage
+./ClipboardFilter-1.2.0.AppImage
 ```
 
 **Debian/Ubuntu:**
 ```bash
-sudo dpkg -i clipboard-filter_1.1.1_amd64.deb
+sudo dpkg -i clipboard-filter_1.2.0_amd64.deb
 ```
 
 **Fedora/RHEL:**
 ```bash
-sudo rpm -i clipboard-filter-1.1.1.x86_64.rpm
+sudo rpm -i clipboard-filter-1.2.0.x86_64.rpm
 ```
 
 **Arch Linux:**
 ```bash
-sudo pacman -U clipboard-filter-1.1.1.pacman
+sudo pacman -U clipboard-filter-1.2.0.pacman
 ```
 
 #### Optional helpers (recommended)
@@ -160,7 +160,14 @@ Import/export filter packs.
 - Click "🎙 Change" to change; a badge shows whether the shortcut is active
 
 #### Updates
-- **Check for updates automatically**: once at startup and then twice a day, ClipboardFilter asks GitHub whether a newer version exists and shows a notification. Nothing is downloaded or installed automatically.
+- **Check for updates automatically**: once at startup and then twice a day, ClipboardFilter asks GitHub whether a newer version exists. If there is one, the update window opens.
+- **Update window**: shows the new version and what changed. **Download and install** downloads the file matching your installation, checks its SHA-256 fingerprint against the release's `SHA256SUMS.txt`, installs it and restarts ClipboardFilter. **Skip this version** stops the window from opening again for that version.
+  - Windows installer: silent update of the installed version.
+  - Windows portable: the new `.exe` is saved next to the current one and started.
+  - AppImage: the AppImage file is replaced (same file name).
+  - `.deb` / `.rpm` / `.pacman`: installed with your package manager after the system password prompt (needs `pkexec`, installed on most desktops).
+  - macOS: the application in the Applications folder is replaced.
+  - If the app cannot update itself, the window offers the download page instead.
 - **Versions to follow**: stable versions only, or stable and beta versions ("Automatic" follows betas when you are using a beta).
 
 #### System compatibility
@@ -314,5 +321,5 @@ ClipboardFilter is open-source software under the MIT License.
 
 ---
 
-**Version:** 1.1.1  
+**Version:** 1.2.0  
 **Last updated:** September 2026

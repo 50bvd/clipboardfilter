@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClipboardFilter</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="update.css">
+</head>
+<body class="update-page">
+  <main class="update-card">
+    <header class="update-header">
+      <img src="../assets/icon.png" class="update-logo" alt="">
+      <div>
+        <h1 id="update-title">ClipboardFilter</h1>
+        <p class="update-versions" id="update-versions"></p>
+      </div>
+    </header>
+
+    <section class="update-notes-block" id="notes-block" hidden>
+      <h2 data-i18n="updates.whatsNew">What's new</h2>
+      <div class="update-notes" id="update-notes"></div>
+    </section>
+
+    <section class="update-progress-block" id="progress-block" hidden>
+      <div class="update-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="progress-bar">
+        <div class="update-progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="update-progress-text">
+        <span id="progress-label"></span>
+        <span id="progress-detail"></span>
+      </div>
+    </section>
+
+    <p class="update-message" id="update-message" hidden></p>
+
+    <footer class="update-actions">
+      <button class="btn btn-link" id="skip-btn" data-i18n="updates.skip">Skip this version</button>
+      <span class="update-spacer"></span>
+      <button class="btn btn-secondary" id="later-btn" data-i18n="updates.later">Later</button>
+      <button class="btn btn-secondary" id="cancel-btn" data-i18n="updates.cancel" hidden>Cancel</button>
+      <button class="btn btn-secondary" id="page-btn" data-i18n="updates.openPage" hidden>Open the download page</button>
+      <button class="btn btn-primary" id="download-btn" data-i18n="updates.downloadInstall">Download and install</button>
+      <button class="btn btn-primary" id="install-btn" data-i18n="updates.installRestart" hidden>Install and restart</button>
+    </footer>
+  </main>
+  <script src="update.js"></script>
+</body>
+</html>
