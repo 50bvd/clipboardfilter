@@ -5,6 +5,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-09-29
+
+### Added
+- **In-app updates**: when a new version is found, an update window shows what changed and downloads it with a progress bar. The file is checked against the release's `SHA256SUMS.txt` before being installed, then the app restarts. Works with the Windows installer and portable version, AppImage, .deb, .rpm, .pacman and macOS. "Skip this version" is available.
+
+### Changed
+- Release descriptions come from this changelog.
+
+### Fixed
+- `SHA256SUMS.txt` lists the Windows files under their published names.
+
 ## [1.2.0-beta.2] - 2026-09-28
 
 Test release for the in-app updates: 1.2.0-beta.1 should offer it in its update window, download it, install it and restart.
@@ -103,7 +114,8 @@ First stable release with full Linux support. Changes since 1.0.0:
 
 - First public release (Windows).
 
-[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0-beta.2...develop
+[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0...develop
+[1.2.0]: https://github.com/50bvd/clipboardfilter/compare/v1.1.1...v1.2.0
 [1.2.0-beta.2]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0-beta.1...v1.2.0-beta.2
 [1.2.0-beta.1]: https://github.com/50bvd/clipboardfilter/compare/v1.1.1...v1.2.0-beta.1
 [1.1.1]: https://github.com/50bvd/clipboardfilter/compare/v1.1.0...v1.1.1
