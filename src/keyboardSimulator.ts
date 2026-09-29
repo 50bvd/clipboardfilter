@@ -2,21 +2,18 @@
 // CLIPBOARDFILTER - Keyboard simulation (paste)
 // Sends the platform "paste" keystroke to the focused application.
 //
-//  - Windows : persistent PowerShell helper (no process spawn per paste),
-//              waits for the user to release the hotkey modifiers first.
+//  - Windows : SendInput API called in-process (windowsInput.ts), after the
+//              user has released the hotkey modifiers. No PowerShell.
 //  - macOS   : osascript / System Events (needs Accessibility permission).
 //  - Linux   : X11 -> xdotool ; Wayland -> ydotool, dotool, wtype, then
 //              xdotool (XWayland windows only). Commands are executed
 //              without a shell.
 // ==================================================
 
-import { app, systemPreferences } from 'electron';
-import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
-import * as fs from 'fs';
-import * as path from 'path';
-import { findCommand, getSessionInfo, run, windowsSystemCommand } from './platform';
+import { systemPreferences } from 'electron';
+import { findCommand, getSessionInfo, run } from './platform';
+import { loadWin32, windowsPaste } from './windowsInput';
 
-const POWERSHELL = 'System32\\WindowsPowerShell\\v1.0\\powershell.exe';
 const OSASCRIPT = '/usr/bin/osascript';
 
 export interface PasteOutcome {
@@ -34,129 +31,6 @@ interface Backend {
 }
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
-
-// ---------- Windows ----------
-
-const WINDOWS_HELPER = String.raw`
-$ErrorActionPreference = 'Stop'
-Add-Type -TypeDefinition @'
-using System;
-using System.Runtime.InteropServices;
-using System.Threading;
-public static class CFPaste {
-  [DllImport("user32.dll")] private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
-  [DllImport("user32.dll")] private static extern short GetAsyncKeyState(int vKey);
-  private const uint KEYUP = 0x0002;
-  private static readonly int[] Modifiers = { 0x10, 0x11, 0x12, 0x5B, 0x5C };
-  private static bool AnyModifierDown() {
-    foreach (int vk in Modifiers) { if ((GetAsyncKeyState(vk) & 0x8000) != 0) return true; }
-    return false;
-  }
-  public static void Paste(int maxWaitMs) {
-    int waited = 0;
-    while (AnyModifierDown() && waited < maxWaitMs) { Thread.Sleep(10); waited += 10; }
-    keybd_event(0x11, 0, 0, UIntPtr.Zero);
-    keybd_event(0x56, 0, 0, UIntPtr.Zero);
-    keybd_event(0x56, 0, KEYUP, UIntPtr.Zero);
-    keybd_event(0x11, 0, KEYUP, UIntPtr.Zero);
-  }
-}
-'@
-[Console]::Out.WriteLine('READY')
-[Console]::Out.Flush()
-while ($true) {
-  $line = [Console]::In.ReadLine()
-  if ($null -eq $line -or $line -eq 'exit') { break }
-  if ($line -eq 'paste') {
-    [CFPaste]::Paste(1500)
-    [Console]::Out.WriteLine('OK')
-    [Console]::Out.Flush()
-  }
-}
-`;
-
-class WindowsPasteHelper {
-  private proc: ChildProcessWithoutNullStreams | null = null;
-  private ready: Promise<boolean> | null = null;
-  private buffer = '';
-  private waiters: Array<(line: string) => void> = [];
-
-  public start(): Promise<boolean> {
-    if (this.ready) return this.ready;
-    this.ready = new Promise<boolean>((resolve) => {
-      try {
-        const dir = app.getPath('userData');
-        fs.mkdirSync(dir, { recursive: true });
-        const scriptPath = path.join(dir, 'paste-helper.ps1');
-        fs.writeFileSync(scriptPath, WINDOWS_HELPER, 'utf-8');
-        const proc = spawn(windowsSystemCommand(POWERSHELL), [
-          '-NoProfile', '-NoLogo', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', scriptPath
-        ], { windowsHide: true });
-        this.proc = proc;
-        const timer = setTimeout(() => resolve(false), 15000);
-        proc.stdout.setEncoding('utf8');
-        proc.stdout.on('data', (chunk: string) => {
-          this.buffer += chunk;
-          let idx: number;
-          while ((idx = this.buffer.indexOf('\n')) !== -1) {
-            const line = this.buffer.slice(0, idx).trim();
-            this.buffer = this.buffer.slice(idx + 1);
-            if (line === 'READY') { clearTimeout(timer); resolve(true); continue; }
-            const w = this.waiters.shift();
-            if (w) w(line);
-          }
-        });
-        proc.stderr.on('data', (d) => console.error('[Paste helper]', String(d).trim()));
-        proc.on('error', () => { clearTimeout(timer); resolve(false); this.reset(); });
-        proc.on('exit', () => { clearTimeout(timer); resolve(false); this.reset(); });
-        proc.stdin.on('error', () => undefined);
-      } catch (error) {
-        console.error('[Paste helper] Failed to start:', error);
-        resolve(false);
-      }
-    });
-    return this.ready;
-  }
-
-  public async paste(): Promise<boolean> {
-    if (!(await this.start()) || !this.proc) return false;
-    return new Promise<boolean>((resolve) => {
-      const timer = setTimeout(() => {
-        const i = this.waiters.indexOf(onLine);
-        if (i !== -1) this.waiters.splice(i, 1);
-        resolve(false);
-      }, 4000);
-      const onLine = (line: string) => { clearTimeout(timer); resolve(line === 'OK'); };
-      this.waiters.push(onLine);
-      this.proc!.stdin.write('paste\n');
-    });
-  }
-
-  public stop(): void {
-    try { this.proc?.stdin.write('exit\n'); } catch { /* ignore */ }
-    try { this.proc?.kill(); } catch { /* ignore */ }
-    this.reset();
-  }
-
-  private reset(): void {
-    this.proc = null;
-    this.ready = null;
-    this.buffer = '';
-    const waiters = this.waiters;
-    this.waiters = [];
-    waiters.forEach(w => w('ERROR'));
-  }
-}
-
-const windowsHelper = new WindowsPasteHelper();
-
-async function windowsSendKeysFallback(): Promise<boolean> {
-  const r = await run(windowsSystemCommand(POWERSHELL), [
-    '-NoProfile', '-NonInteractive', '-Command',
-    "$w = New-Object -ComObject wscript.shell; $w.SendKeys('^v')"
-  ], { timeoutMs: 5000 });
-  return r.code === 0;
-}
 
 // ---------- Linux ----------
 
@@ -201,18 +75,18 @@ function linuxBackends(): Backend[] {
 // ---------- Public API ----------
 
 export function listPasteBackends(): { name: string; available: boolean; reliable: boolean }[] {
-  if (process.platform === 'win32') return [{ name: 'powershell', available: true, reliable: true }];
+  if (process.platform === 'win32') return [{ name: 'sendinput', available: !!loadWin32(), reliable: true }];
   if (process.platform === 'darwin') return [{ name: 'osascript', available: true, reliable: true }];
   return linuxBackends().map(b => ({ name: b.name, available: b.available(), reliable: b.reliable }));
 }
 
 /** Pre-starts slow helpers so that the first paste is instant. */
 export function warmUpPaste(): void {
-  if (process.platform === 'win32') windowsHelper.start().catch(() => undefined);
+  if (process.platform === 'win32') loadWin32();
 }
 
 export function disposePaste(): void {
-  if (process.platform === 'win32') windowsHelper.stop();
+  /* nothing to release */
 }
 
 export function hasMacAccessibility(prompt: boolean): boolean {
@@ -223,9 +97,8 @@ export function hasMacAccessibility(prompt: boolean): boolean {
 export async function simulatePaste(): Promise<PasteOutcome> {
   try {
     if (process.platform === 'win32') {
-      if (await windowsHelper.paste()) return { ok: true, backend: 'powershell', reliable: true };
-      const ok = await windowsSendKeysFallback();
-      return { ok, backend: 'sendkeys', reliable: ok };
+      const ok = await windowsPaste();
+      return { ok, backend: ok ? 'sendinput' : null, reliable: ok };
     }
 
     if (process.platform === 'darwin') {
