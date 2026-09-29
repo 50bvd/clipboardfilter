@@ -15,3 +15,7 @@ test('app:// serves only dist/ and assets/ files of the bundle', () => {
     assert.equal(resolveAppPath(bad), null, bad);
   }
 });
+
+test('unit tests use the electron stub, not the Electron binary', () => {
+  assert.equal(require.resolve('electron'), path.join(__dirname, 'electron-stub.js'));
+});
