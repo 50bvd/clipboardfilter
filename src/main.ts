@@ -127,6 +127,8 @@ class ClipboardFilterApp {
     if (settings.autoStart) setAutoStart(true); // refresh the path (AppImage may have moved)
     if (settings.autoFilter) this.watcher.start();
     if (settings.pasteMode === 'simulate') warmUpPaste();
+    // Versions before 1.2.1 wrote a PowerShell paste helper here
+    fs.promises.rm(path.join(app.getPath('userData'), 'paste-helper.ps1'), { force: true }).catch(() => undefined);
 
     this.markReady();
     const hidden = wasOpenedAtLogin(process.argv);
