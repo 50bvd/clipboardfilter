@@ -70,12 +70,6 @@ export function findCommand(name: string): string | null {
   return found;
 }
 
-/** Absolute path of a Windows system executable (never resolved from the working directory). */
-export function windowsSystemCommand(relative: string): string {
-  const root = process.env.SystemRoot || process.env.windir || 'C:\\Windows';
-  return path.win32.join(root, relative);
-}
-
 export interface RunResult {
   code: number | null;
   stdout: string;

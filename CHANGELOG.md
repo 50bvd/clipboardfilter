@@ -5,6 +5,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-09-29
+
+### Changed
+- Windows: the automatic paste calls the Windows SendInput API directly instead of running a PowerShell script. Security software (for example Palo Alto Cortex XDR) could flag the PowerShell helper as a keylogger. The old `paste-helper.ps1` file is deleted at startup.
+
+## [1.2.1-beta.1] - 2026-09-29
+
+### Changed
+- Windows: the automatic paste calls the Windows SendInput API directly instead of running a PowerShell script. Security software (for example Palo Alto Cortex XDR) could flag the PowerShell helper as a keylogger. The old `paste-helper.ps1` file is deleted at startup.
+
 ## [1.2.0] - 2026-09-29
 
 ### Added
@@ -114,7 +124,9 @@ First stable release with full Linux support. Changes since 1.0.0:
 
 - First public release (Windows).
 
-[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0...develop
+[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.1...develop
+[1.2.1]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0...v1.2.1
+[1.2.1-beta.1]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0...v1.2.1-beta.1
 [1.2.0]: https://github.com/50bvd/clipboardfilter/compare/v1.1.1...v1.2.0
 [1.2.0-beta.2]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0-beta.1...v1.2.0-beta.2
 [1.2.0-beta.1]: https://github.com/50bvd/clipboardfilter/compare/v1.1.1...v1.2.0-beta.1

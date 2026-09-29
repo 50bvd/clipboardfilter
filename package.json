@@ -1,6 +1,6 @@
 {
   "name": "clipboard-filter",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Filters secrets and personal data out of your clipboard before you paste them",
   "main": "dist/main.js",
   "author": {
@@ -19,7 +19,7 @@
     "start": "npm run build && electron .",
     "dev": "npm run build && electron . --dev",
     "watch": "tsc --watch",
-    "test": "npm run build && node --test test/*.test.js",
+    "test": "npm run build && node --require ./test/setup.js --test test/*.test.js",
     "bench": "npm run build && node scripts/bench.js",
     "package:win": "electron-builder --win --x64",
     "package:linux": "electron-builder --linux",
@@ -180,5 +180,8 @@
   "desktopName": "com.clipboardfilter.app.desktop",
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "koffi": "3.3.2"
   }
 }
