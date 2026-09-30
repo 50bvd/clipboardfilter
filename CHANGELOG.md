@@ -5,6 +5,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.2.5] - 2026-09-30
+
+### Fixed
+- A 64-character Wi-Fi PSK was masked by the WPA passphrase filter and its last character was left visible.
+- No filter runs across lines anymore: a number at the end of a line (UTR, SIREN, NIR…) could be joined with the next line.
+- IBAN: uppercase whole words only (a Solana address was taken for an IBAN); an IBAN is masked as an IBAN rather than as a VAT or SIRET number.
+- Order of the broad filters: an MD5 hash is masked as a hash (not as a Solana address), a date of birth is no longer masked again as a path.
+- E-mail addresses are masked after the specific filters, so a Sentry DSN or a vCenter login is masked by its own filter.
+- Filtering is stable: already masked text is neither changed nor counted again.
+- Matricule: the value has to contain a digit.
+- Existing configurations get these fixes automatically (default filters you did not modify).
+
 ## [1.2.4] - 2026-09-30
 
 ### Fixed
@@ -162,7 +174,8 @@ First stable release with full Linux support. Changes since 1.0.0:
 
 - First public release (Windows).
 
-[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.4...develop
+[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.5...develop
+[1.2.5]: https://github.com/50bvd/clipboardfilter/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/50bvd/clipboardfilter/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/50bvd/clipboardfilter/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/50bvd/clipboardfilter/compare/v1.2.1...v1.2.2
