@@ -5,6 +5,20 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.2.4] - 2026-09-30
+
+### Fixed
+- With optional filters enabled, broad filters cut other secrets up: a card number became `4*** ** ** ***…` (NIR), database URLs and webhooks became `https:/***PATH_REDACTED***` (paths), crypto addresses became `***AZURE_SECRET_REDACTED***`. Broad filters (paths, numbers, IDs, generic tokens) now run after the specific ones.
+- Optional filters that masked normal text are narrower:
+  - paths: a lone `/` ("Réseau / système") and URLs are no longer taken for paths;
+  - CVV: needs "CVV", "CVC" or "cryptogramme" (any 3-4 digit number was masked, e.g. "1500 euros");
+  - postal address: needs a street type (rue, avenue, boulevard, street…);
+  - phone: real phone formats only (a postal code or a date was masked);
+  - French NIR: no longer matches inside a longer number;
+  - Azure client secret: the real format (`…8Q~…`) instead of any 34-40 character word;
+  - Solana: whole words only.
+- Existing configurations get these fixes automatically (default filters you did not modify).
+
 ## [1.2.3] - 2026-09-30
 
 Every default filter was checked against a sample of the format it detects and against normal French and English text.
@@ -148,7 +162,8 @@ First stable release with full Linux support. Changes since 1.0.0:
 
 - First public release (Windows).
 
-[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.3...develop
+[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.4...develop
+[1.2.4]: https://github.com/50bvd/clipboardfilter/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/50bvd/clipboardfilter/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/50bvd/clipboardfilter/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0...v1.2.1

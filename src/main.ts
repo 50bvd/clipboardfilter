@@ -4,7 +4,7 @@ import {
 } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
-import { FilterManager, ValidationError, resolveDefaultFiltersPath } from './filterManager';
+import { FilterManager, ValidationError, inMatchOrder, resolveDefaultFiltersPath } from './filterManager';
 import { FilterRunner, FilterTimeoutError } from './filterRunner';
 import { localeManager } from './localeManager';
 import {
@@ -117,8 +117,8 @@ class ClipboardFilterApp {
     const settings = this.filterManager.getSettings();
     localeManager.setLocale(settings.language);
 
-    this.runner.setRules(this.filterManager.getFilters());
-    this.filterManager.onRulesChanged(() => this.runner.setRules(this.filterManager.getFilters()));
+    this.runner.setRules(inMatchOrder(this.filterManager.getFilters()));
+    this.filterManager.onRulesChanged(() => this.runner.setRules(inMatchOrder(this.filterManager.getFilters())));
 
     this.setupTray();
     this.setupIPC();

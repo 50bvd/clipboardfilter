@@ -194,6 +194,48 @@ export const PATTERN_MIGRATIONS: Record<string, { from: string[]; to: string; ca
       "(?:S/N|Serial|SN)[\\s:]?[A-Z0-9]{8,20}"
     ],
     to: "(?:S/N|Serial(?:\\s*(?:No|Number))?|SN)\\b[\\s#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{8,20}"
+  },
+  "filters.developer.azureClientSecret": {
+    from: [
+      "[a-zA-Z0-9~_\\-\\.]{34,40}"
+    ],
+    to: "\\b[a-zA-Z0-9_\\-.]{3}[0-9]Q~[a-zA-Z0-9_~.\\-]{31,34}"
+  },
+  "filters.system.unixPath": {
+    from: [
+      "/(?:[^/\\s]+/)*[^/\\s]*"
+    ],
+    to: "(?<![\\w:/.~-])/(?:[^/\\s]+/)+[^/\\s]*"
+  },
+  "filters.finance.nirFrance": {
+    from: [
+      "[12][0-9]{2}[01][0-9][0-9]{2}[0-9]{3}[0-9]{3}[0-9]{2}"
+    ],
+    to: "\\b[12]\\s?[0-9]{2}\\s?[0-9]{2}\\s?(?:[0-9]{2}|2[AB])\\s?[0-9]{3}\\s?[0-9]{3}(?:\\s?[0-9]{2})?\\b"
+  },
+  "filters.finance.cvv": {
+    from: [
+      "\\b[0-9]{3,4}\\b"
+    ],
+    to: "\\b(?:CVV2?|CVC2?|CID|CSC|cryptogramme)[\\s:#=]*[0-9]{3,4}\\b"
+  },
+  "filters.finance.solana": {
+    from: [
+      "[1-9A-HJ-NP-Za-km-z]{32,44}"
+    ],
+    to: "\\b[1-9A-HJ-NP-Za-km-z]{32,44}\\b"
+  },
+  "filters.personal.address": {
+    from: [
+      "[0-9]{1,5}\\s[a-zA-Z\\s]{3,}"
+    ],
+    to: "\\b[0-9]{1,5}(?:\\s?(?:bis|ter))?,?\\s(?:rue|avenue|av\\.|boulevard|bd|place|chemin|allée|impasse|route|quai|cours|square|street|st\\.|road|rd\\.|ave\\.?|lane|drive|court|way|blvd)\\b[^\\n,;]{0,40}"
+  },
+  "filters.personal.phone": {
+    from: [
+      "\\+?[0-9]{1,3}[\\s\\-]?\\(?[0-9]{1,4}\\)?[\\s\\-]?[0-9]{1,4}[\\s\\-]?[0-9]{1,4}[\\s\\-]?[0-9]{1,9}"
+    ],
+    to: "(?<![\\w+])(?:\\+[0-9]{1,3}[\\s.\\-]?|\\b0)[1-9](?:[\\s.\\-]?[0-9]{2}){4}\\b|(?<![\\w+])\\+[0-9]{1,3}[\\s.\\-]?\\(?[0-9]{1,4}\\)?(?:[\\s.\\-]?[0-9]{2,4}){2,4}\\b|(?<![\\w+])\\(?\\b[0-9]{3}\\)?[\\s.\\-][0-9]{3}[\\s.\\-][0-9]{4}\\b"
   }
 };
 
@@ -201,8 +243,30 @@ export const PATTERN_MIGRATIONS: Record<string, { from: string[]; to: string; ca
 export const REPLACEMENT_MIGRATIONS: Record<string, { from: string; to: string }> = {
   "filters.developer.rsaPrivateKey": { from: "-----BEGIN PRIVATE KEY-----\\n***REDACTED***\\n-----END PRIVATE KEY-----", to: "-----BEGIN PRIVATE KEY-----\n***REDACTED***\n-----END PRIVATE KEY-----" },
   "filters.system.openvpnKey": { from: "-----BEGIN OpenVPN Static key V1-----\\n***REDACTED***\\n-----END OpenVPN Static key V1-----", to: "-----BEGIN OpenVPN Static key V1-----\n***REDACTED***\n-----END OpenVPN Static key V1-----" },
-  "filters.health.rppsFrance": { from: "***********", to: "RPPS ***********" }
+  "filters.health.rppsFrance": { from: "***********", to: "RPPS ***********" },
+  "filters.finance.cvv": { from: "***", to: "CVV ***" }
 };
+
+/**
+ * Broad default filters (paths, plain numbers, long tokens). They are applied
+ * after all the other filters, so that a card number, a connection string or
+ * a crypto address is masked as such before a generic pattern cuts it up.
+ */
+const BROAD_FILTERS = new Set([
+  'filters.developer.azureClientSecret', 'filters.system.windowsPath', 'filters.system.unixPath',
+  'filters.finance.nirFrance', 'filters.finance.siretFrance', 'filters.finance.sirenFrance', 'filters.finance.ribFrance',
+  'filters.finance.ssnUsa', 'filters.finance.einUsa', 'filters.finance.routingUsa', 'filters.finance.itinUsa',
+  'filters.finance.utrUk', 'filters.finance.iban', 'filters.finance.cvv', 'filters.finance.solana',
+  'filters.personal.phone', 'filters.personal.ipv4', 'filters.personal.ipv6', 'filters.personal.mac',
+  'filters.personal.birthdate', 'filters.personal.address', 'filters.personal.postalCode', 'filters.personal.gps',
+  'filters.system.md5Hash', 'filters.system.sha256Hash', 'filters.system.macAddress'
+]);
+
+/** Filters in the order they are applied (specific first, broad last; stable otherwise). */
+export function inMatchOrder<T extends { descriptionKey?: string }>(filters: T[]): T[] {
+  const broad = (f: T) => !!f.descriptionKey && BROAD_FILTERS.has(f.descriptionKey);
+  return [...filters.filter(f => !broad(f)), ...filters.filter(broad)];
+}
 
 export function defaultSettings(): AppSettings {
   return {
