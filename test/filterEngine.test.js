@@ -30,7 +30,7 @@ test('same output as the 1.0.0 engine on the 1.0.0 default filters', () => {
 
 test('secrets are actually masked', () => {
   const { filtered, count } = filterOnce(defaults, SAMPLE);
-  assert.ok(count > 10);
+  assert.ok(count >= 10); // one per secret (the JWT after "Bearer" is no longer masked twice)
   for (const secret of [FAKE.openai, FAKE.awsKeyId, FAKE.github, FAKE.dbPassword, 'jane.doe@example.com', '4111111111111111']) {
     assert.ok(!filtered.includes(secret), `${secret} leaked`);
   }
@@ -162,4 +162,28 @@ test('default filters: no match inside words, no double masking, real line break
 
   const key = run(['-----BEGIN PRIVATE', ' KEY-----\n', 'MIIE', 'vQIBADANBg', '\n-----END PRIVATE', ' KEY-----'].join(''));
   assert.equal(key.filtered, '-----BEGIN PRIVATE KEY-----\n***REDACTED***\n-----END PRIVATE KEY-----');
+});
+
+test('default filters leave normal text alone', () => {
+  // French and English prose, uppercase headings, code, numbers, URLs
+  const text = fs.readFileSync(path.join(__dirname, 'normal-text.txt'), 'utf-8');
+  const r = applyRules(compileRules(defaults), text, true);
+  assert.deepEqual(r.details, []);
+  assert.equal(r.filtered, text);
+});
+
+test('context-dependent default filters still catch the real formats', () => {
+  const set = compileRules(defaults);
+  const j = (...p) => p.join('');
+  const cases = [
+    ['BIC BNPAFRPPXXX', 'BNPAFRPP'], ['Code BIC : DEUTDEFF', 'DEUTDEFF'], ['SWIFT code: CRLYFRPP', 'CRLYFRPP'],
+    ['N° RPPS : 10001234567', '10001234567'],
+    ['rocommunity public123 10.0.0.0/24', 'public123'], ['community=s3cret', 's3cret'],
+    [j('"pass', 'phrase": "Correct', 'Horse9"'), 'Horse9'],
+    ['set secret "$9$abcDEF123"', 'abcDEF123'],
+    [j('?sv=2022-11-02&se=2026-01-01&s', 'ig=abcDEF%3D'), 'abcDEF']
+  ];
+  for (const [text, secret] of cases) {
+    assert.ok(!applyRules(set, text).filtered.includes(secret), text);
+  }
 });
