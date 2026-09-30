@@ -27,13 +27,13 @@ A secure clipboard filtering application that automatically detects and masks se
 
 Get the latest version on the [releases page](https://github.com/50bvd/clipboardfilter/releases/latest), or directly:
 
-- **Windows**: [installer](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.3/ClipboardFilter.Setup.1.2.3.exe>) · [portable](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.3/ClipboardFilter.1.2.3.exe>)
-- **macOS**: [Apple Silicon (arm64)](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.3/ClipboardFilter-1.2.3-arm64.dmg>) · [Intel (x64)](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.3/ClipboardFilter-1.2.3.dmg>)
+- **Windows**: [installer](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.4/ClipboardFilter.Setup.1.2.4.exe>) · [portable](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.4/ClipboardFilter.1.2.4.exe>)
+- **macOS**: [Apple Silicon (arm64)](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.4/ClipboardFilter-1.2.4-arm64.dmg>) · [Intel (x64)](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.4/ClipboardFilter-1.2.4.dmg>)
 - **Linux**:
-  - [AppImage](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.3/ClipboardFilter-1.2.3.AppImage>) (any distribution)
-  - [.deb](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.3/clipboard-filter_1.2.3_amd64.deb>) (Debian, Ubuntu, Mint…)
-  - [.rpm](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.3/clipboard-filter-1.2.3.x86_64.rpm>) (Fedora, RHEL, openSUSE…)
-  - [.pacman](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.3/clipboard-filter-1.2.3.pacman>) (Arch, Manjaro…)
+  - [AppImage](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.4/ClipboardFilter-1.2.4.AppImage>) (any distribution)
+  - [.deb](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.4/clipboard-filter_1.2.4_amd64.deb>) (Debian, Ubuntu, Mint…)
+  - [.rpm](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.4/clipboard-filter-1.2.4.x86_64.rpm>) (Fedora, RHEL, openSUSE…)
+  - [.pacman](<https://github.com/50bvd/clipboardfilter/releases/download/v1.2.4/clipboard-filter-1.2.4.pacman>) (Arch, Manjaro…)
 
 When a new version is available, ClipboardFilter opens an update window: one click downloads it, checks it against the release's `SHA256SUMS.txt` and installs it, then the app restarts (Settings › Updates).
 
@@ -43,13 +43,13 @@ Every release file is built by GitHub Actions from this repository and comes wit
 
 ```bash
 # Proves the file was built by this repository's release workflow
-gh attestation verify ClipboardFilter-1.2.3.AppImage --repo 50bvd/clipboardfilter
+gh attestation verify ClipboardFilter-1.2.4.AppImage --repo 50bvd/clipboardfilter
 
 # Checks the file was not corrupted or modified
 sha256sum -c SHA256SUMS.txt --ignore-missing
 ```
 
-On Windows (PowerShell): `Get-FileHash .\ClipboardFilter.Setup.1.2.3.exe` and compare with `SHA256SUMS.txt`.
+On Windows (PowerShell): `Get-FileHash .\ClipboardFilter.Setup.1.2.4.exe` and compare with `SHA256SUMS.txt`.
 
 ## 🚀 Quick Start
 

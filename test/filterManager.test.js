@@ -132,3 +132,12 @@ test('an edited default filter is never migrated', () => {
   const f = new FilterManager(file, DEFAULTS, LOCALES).getFilters().find(x => x.descriptionKey === 'filters.system.snmpCommunity');
   assert.equal(f.pattern, custom);
 });
+
+test('broad filters are applied after the specific ones', () => {
+  const { inMatchOrder } = require('../dist/filterManager');
+  const keys = inMatchOrder(JSON.parse(fs.readFileSync(DEFAULTS, 'utf-8')).filters).map(f => f.descriptionKey);
+  assert.ok(keys.indexOf('filters.finance.creditCard') < keys.indexOf('filters.finance.nirFrance'));
+  assert.ok(keys.indexOf('filters.developer.postgresql') < keys.indexOf('filters.system.unixPath'));
+  assert.ok(keys.indexOf('filters.finance.bitcoin') < keys.indexOf('filters.developer.azureClientSecret'));
+  assert.equal(keys.length, 112);
+});
