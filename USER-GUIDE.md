@@ -8,7 +8,7 @@ ClipboardFilter is an application that automatically filters your clipboard cont
 
 ### Windows
 1. Download the installer from the releases page
-2. Run `ClipboardFilter.Setup.1.2.5.exe`
+2. Run `ClipboardFilter.Setup.1.2.6.exe`
 3. Follow the installation wizard
 4. The application starts automatically
 
@@ -24,23 +24,23 @@ ClipboardFilter is an application that automatically filters your clipboard cont
 ### Linux
 **AppImage (Universal):**
 ```bash
-chmod +x ClipboardFilter-1.2.5.AppImage
-./ClipboardFilter-1.2.5.AppImage
+chmod +x ClipboardFilter-1.2.6.AppImage
+./ClipboardFilter-1.2.6.AppImage
 ```
 
 **Debian/Ubuntu:**
 ```bash
-sudo dpkg -i clipboard-filter_1.2.5_amd64.deb
+sudo dpkg -i clipboard-filter_1.2.6_amd64.deb
 ```
 
 **Fedora/RHEL:**
 ```bash
-sudo rpm -i clipboard-filter-1.2.5.x86_64.rpm
+sudo rpm -i clipboard-filter-1.2.6.x86_64.rpm
 ```
 
 **Arch Linux:**
 ```bash
-sudo pacman -U clipboard-filter-1.2.5.pacman
+sudo pacman -U clipboard-filter-1.2.6.pacman
 ```
 
 #### Optional helpers (recommended)
@@ -321,5 +321,5 @@ ClipboardFilter is open-source software under the MIT License.
 
 ---
 
-**Version:** 1.2.5  
+**Version:** 1.2.6  
 **Last updated:** September 2026
