@@ -76,7 +76,7 @@
     {
       "category": "Developer",
       "descriptionKey": "filters.developer.awsSecretKey",
-      "pattern": "aws[_\\-]?secret[_\\-]?access[_\\-]?key[\\s:=]+[A-Za-z0-9/+=]{40}",
+      "pattern": "aws[_\\-]?secret[_\\-]?access[_\\-]?key[ \\t:=]+[A-Za-z0-9/+=]{40}",
       "replacement": "aws_secret_access_key=***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -84,7 +84,7 @@
     {
       "category": "Developer",
       "descriptionKey": "filters.developer.awsSessionToken",
-      "pattern": "aws[_\\-]?session[_\\-]?token[\\s:=]+[A-Za-z0-9/+=]{100,}",
+      "pattern": "aws[_\\-]?session[_\\-]?token[ \\t:=]+[A-Za-z0-9/+=]{100,}",
       "replacement": "aws_session_token=***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -140,7 +140,7 @@
     {
       "category": "Developer",
       "descriptionKey": "filters.developer.refreshToken",
-      "pattern": "refresh[_\\-]?token[\\s:=]+[a-zA-Z0-9\\-._~+/]+=*",
+      "pattern": "refresh[_\\-]?token[ \\t:=]+[a-zA-Z0-9\\-._~+/]+=*",
       "replacement": "refresh_token=***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -188,7 +188,7 @@
     {
       "category": "Developer",
       "descriptionKey": "filters.developer.sshPassphrase",
-      "pattern": "passphrase[\"']?\\s*[:=]\\s*[\"']?[^\\s;\"']{8,}",
+      "pattern": "passphrase[\"']?[ \\t]*[:=][ \\t]*[\"']?[^\\s;\"']{8,}",
       "replacement": "passphrase: ***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -324,7 +324,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.vmwareEsxi",
-      "pattern": "vim\\.host\\.LocalAccountManager\\.password[\\s:=]+[^\\s]+",
+      "pattern": "vim\\.host\\.LocalAccountManager\\.password[ \\t:=]+[^\\s]+",
       "replacement": "vim.host.LocalAccountManager.password=***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -332,7 +332,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.snmpCommunity",
-      "pattern": "\\b(?:(?:ro|rw)community\\s+|community\\s*[:=]\\s*)(?!\\*\\*\\*REDACTED)[^\\s;]+",
+      "pattern": "\\b(?:(?:ro|rw)community[ \\t]+|community[ \\t]*[:=][ \\t]*)(?!\\*\\*\\*REDACTED)[^\\s;]+",
       "replacement": "community: ***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -340,7 +340,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.snmpV3Auth",
-      "pattern": "snmpv3[\\s\\-]?auth[\\s:=]+[^\\s]+",
+      "pattern": "snmpv3[ \\t\\-]?auth[ \\t:=]+[^\\s]+",
       "replacement": "snmpv3-auth: ***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -348,7 +348,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.snmpV3Priv",
-      "pattern": "snmpv3[\\s\\-]?priv[\\s:=]+[^\\s]+",
+      "pattern": "snmpv3[ \\t\\-]?priv[ \\t:=]+[^\\s]+",
       "replacement": "snmpv3-priv: ***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -356,7 +356,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.ldapBind",
-      "pattern": "(?:bindpw|bind_password)[\\s:=]+[^\\s]+",
+      "pattern": "(?:bindpw|bind_password)[ \\t:=]+[^\\s]+",
       "replacement": "bindpw: ***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -364,7 +364,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.vpnSecret",
-      "pattern": "(?:VPN|IPSec)[\\s_-]?(?:Secret|PSK):?\\s*[^\\s;]+",
+      "pattern": "(?:VPN|IPSec)[ \\t_-]?(?:Secret|PSK):?[ \\t]*[^\\s;]+",
       "replacement": "VPN Secret: ***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -380,7 +380,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.wireguard",
-      "pattern": "(?:PrivateKey|private_key)[\\s:=]+[A-Za-z0-9+/]{43}=",
+      "pattern": "(?:PrivateKey|private_key)[ \\t:=]+[A-Za-z0-9+/]{43}=",
       "replacement": "PrivateKey: ***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -388,7 +388,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.wifiWpaKey",
-      "pattern": "(?:wpa_passphrase|psk)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s]{8,63}",
+      "pattern": "(?:wpa_passphrase|psk)[ \\t:=]+(?!\\*\\*\\*REDACTED)[^\\s]{8,63}(?!\\S)",
       "replacement": "wpa_passphrase: ***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -404,7 +404,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.windowsPath",
-      "pattern": "[A-Z]:\\\\(?:[^\\\\/:*?\"<>|\\r\\n]+\\\\)*[^\\\\/:*?\"<>|\\r\\n]*",
+      "pattern": "[A-Z]:\\\\(?=[^\\\\/:*?\"<>|\\r\\n])(?:[^\\\\/:*?\"<>|\\r\\n]+\\\\)*[^\\\\/:*?\"<>|\\r\\n]*",
       "replacement": "C:\\***PATH_REDACTED***",
       "useRegex": true,
       "enabled": false
@@ -412,7 +412,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.unixPath",
-      "pattern": "(?<![\\w:/.~-])/(?:[^/\\s]+/)+[^/\\s]*",
+      "pattern": "(?<![\\w:/.~*-])/(?:[^/\\s*]+/)+[^/\\s*]*",
       "replacement": "/***PATH_REDACTED***",
       "useRegex": true,
       "enabled": false
@@ -420,7 +420,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.cookieSession",
-      "pattern": "(?:SESSION|PHPSESSID|JSESSIONID)[\\s:=]+[a-zA-Z0-9]{20,}",
+      "pattern": "(?:SESSION|PHPSESSID|JSESSIONID)[ \\t:=]+[a-zA-Z0-9]{20,}",
       "replacement": "SESSION=***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -428,7 +428,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.sessionId",
-      "pattern": "session[_\\-]?id[\\s:=]+[a-zA-Z0-9\\-]{20,}",
+      "pattern": "session[_\\-]?id[ \\t:=]+[a-zA-Z0-9\\-]{20,}",
       "replacement": "session_id=***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -436,7 +436,7 @@
     {
       "category": "Finance",
       "descriptionKey": "filters.finance.nirFrance",
-      "pattern": "\\b[12]\\s?[0-9]{2}\\s?[0-9]{2}\\s?(?:[0-9]{2}|2[AB])\\s?[0-9]{3}\\s?[0-9]{3}(?:\\s?[0-9]{2})?\\b",
+      "pattern": "\\b[12][ \\t]?[0-9]{2}[ \\t]?[0-9]{2}[ \\t]?(?:[0-9]{2}|2[AB])[ \\t]?[0-9]{3}[ \\t]?[0-9]{3}(?:[ \\t]?[0-9]{2})?\\b",
       "replacement": "*** ** ** *** *** **",
       "useRegex": true,
       "enabled": false
@@ -444,7 +444,7 @@
     {
       "category": "Finance",
       "descriptionKey": "filters.finance.siretFrance",
-      "pattern": "\\b[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{5}\\b",
+      "pattern": "\\b[0-9]{3}[ \\t\\-]?[0-9]{3}[ \\t\\-]?[0-9]{3}[ \\t\\-]?[0-9]{5}\\b",
       "replacement": "*** *** *** *****",
       "useRegex": true,
       "enabled": false
@@ -452,7 +452,7 @@
     {
       "category": "Finance",
       "descriptionKey": "filters.finance.sirenFrance",
-      "pattern": "\\b[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{3}\\b",
+      "pattern": "\\b[0-9]{3}[ \\t\\-]?[0-9]{3}[ \\t\\-]?[0-9]{3}\\b",
       "replacement": "*** *** ***",
       "useRegex": true,
       "enabled": false
@@ -460,7 +460,7 @@
     {
       "category": "Finance",
       "descriptionKey": "filters.finance.ribFrance",
-      "pattern": "\\b[0-9]{5}[\\s\\-]?[0-9]{5}[\\s\\-]?[0-9]{11}[\\s\\-]?[0-9]{2}\\b",
+      "pattern": "\\b[0-9]{5}[ \\t\\-]?[0-9]{5}[ \\t\\-]?[0-9]{11}[ \\t\\-]?[0-9]{2}\\b",
       "replacement": "***** ***** *********** **",
       "useRegex": true,
       "enabled": false
@@ -468,7 +468,7 @@
     {
       "category": "Finance",
       "descriptionKey": "filters.finance.tvaFrance",
-      "pattern": "FR[0-9]{2}[\\s]?[0-9]{9}",
+      "pattern": "\\bFR[0-9]{2}[ ]?[0-9]{9}\\b",
       "replacement": "FR** *********",
       "useRegex": true,
       "enabled": false
@@ -476,7 +476,7 @@
     {
       "category": "Finance",
       "descriptionKey": "filters.finance.ssnUsa",
-      "pattern": "\\b[0-9]{3}[\\-\\s]?[0-9]{2}[\\-\\s]?[0-9]{4}\\b",
+      "pattern": "\\b[0-9]{3}[\\- \\t]?[0-9]{2}[\\- \\t]?[0-9]{4}\\b",
       "replacement": "***-**-****",
       "useRegex": true,
       "enabled": false
@@ -500,7 +500,7 @@
     {
       "category": "Finance",
       "descriptionKey": "filters.finance.itinUsa",
-      "pattern": "\\b9[0-9]{2}[\\-\\s]?[0-9]{2}[\\-\\s]?[0-9]{4}\\b",
+      "pattern": "\\b9[0-9]{2}[\\- \\t]?[0-9]{2}[\\- \\t]?[0-9]{4}\\b",
       "replacement": "9**-**-****",
       "useRegex": true,
       "enabled": false
@@ -532,10 +532,11 @@
     {
       "category": "Finance",
       "descriptionKey": "filters.finance.iban",
-      "pattern": "[A-Z]{2}[0-9]{2}[A-Z0-9]{10,30}",
+      "pattern": "\\b[A-Z]{2}[0-9]{2}(?:[ ]?[A-Z0-9]{4}){2,7}(?:[ ]?[A-Z0-9]{1,4})?\\b",
       "replacement": "XX##***IBAN_REDACTED***",
       "useRegex": true,
-      "enabled": false
+      "enabled": false,
+      "caseSensitive": true
     },
     {
       "category": "Finance",
@@ -557,7 +558,7 @@
     {
       "category": "Finance",
       "descriptionKey": "filters.finance.cvv",
-      "pattern": "\\b(?:CVV2?|CVC2?|CID|CSC|cryptogramme)[\\s:#=]*[0-9]{3,4}\\b",
+      "pattern": "\\b(?:CVV2?|CVC2?|CID|CSC|cryptogramme)[ \\t:#=]*[0-9]{3,4}\\b",
       "replacement": "CVV ***",
       "useRegex": true,
       "enabled": false
@@ -589,7 +590,7 @@
     {
       "category": "Personal",
       "descriptionKey": "filters.personal.email",
-      "pattern": "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}",
+      "pattern": "[a-zA-Z0-9._%+-]+@(?!vsphere\\.local:\\*\\*\\*REDACTED)[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}",
       "replacement": "***@***.***",
       "useRegex": true,
       "enabled": true
@@ -597,7 +598,7 @@
     {
       "category": "Personal",
       "descriptionKey": "filters.personal.phone",
-      "pattern": "(?<![\\w+])(?:\\+[0-9]{1,3}[\\s.\\-]?|\\b0)[1-9](?:[\\s.\\-]?[0-9]{2}){4}\\b|(?<![\\w+])\\+[0-9]{1,3}[\\s.\\-]?\\(?[0-9]{1,4}\\)?(?:[\\s.\\-]?[0-9]{2,4}){2,4}\\b|(?<![\\w+])\\(?\\b[0-9]{3}\\)?[\\s.\\-][0-9]{3}[\\s.\\-][0-9]{4}\\b",
+      "pattern": "(?<![\\w+])(?:\\+[0-9]{1,3}[ \\t.\\-]?|\\b0)[1-9](?:[ \\t.\\-]?[0-9]{2}){4}\\b|(?<![\\w+])\\+[0-9]{1,3}[ \\t.\\-]?\\(?[0-9]{1,4}\\)?(?:[ \\t.\\-]?[0-9]{2,4}){2,4}\\b|(?<![\\w+])\\(?\\b[0-9]{3}\\)?[ \\t.\\-][0-9]{3}[ \\t.\\-][0-9]{4}\\b",
       "replacement": "+** *** *** ****",
       "useRegex": true,
       "enabled": false
@@ -629,7 +630,7 @@
     {
       "category": "Personal",
       "descriptionKey": "filters.personal.passport",
-      "pattern": "(?:Passport|Passeport)[\\s#:-]+[A-Z]{1,2}[0-9]{6,9}",
+      "pattern": "(?:Passport|Passeport)[ \\t#:-]+[A-Z]{1,2}[0-9]{6,9}",
       "replacement": "XX*******",
       "useRegex": true,
       "enabled": false
@@ -637,7 +638,7 @@
     {
       "category": "Personal",
       "descriptionKey": "filters.personal.drivingLicense",
-      "pattern": "(?:DL|License|Permis)[\\s#:-]+[A-Z0-9]{6,15}",
+      "pattern": "(?:DL|License|Permis)[ \\t#:-]+[A-Z0-9]{6,15}",
       "replacement": "***LICENSE_REDACTED***",
       "useRegex": true,
       "enabled": false
@@ -653,7 +654,7 @@
     {
       "category": "Personal",
       "descriptionKey": "filters.personal.address",
-      "pattern": "\\b[0-9]{1,5}(?:\\s?(?:bis|ter))?,?\\s(?:rue|avenue|av\\.|boulevard|bd|place|chemin|allée|impasse|route|quai|cours|square|street|st\\.|road|rd\\.|ave\\.?|lane|drive|court|way|blvd)\\b[^\\n,;]{0,40}",
+      "pattern": "\\b[0-9]{1,5}(?:[ \\t]?(?:bis|ter))?,?[ \\t](?:rue|avenue|av\\.|boulevard|bd|place|chemin|allée|impasse|route|quai|cours|square|street|st\\.|road|rd\\.|ave\\.?|lane|drive|court|way|blvd)\\b[^\\n,;]{0,40}",
       "replacement": "*** ***ADDRESS_REDACTED***",
       "useRegex": true,
       "enabled": false
@@ -669,7 +670,7 @@
     {
       "category": "Personal",
       "descriptionKey": "filters.personal.gps",
-      "pattern": "[-+]?[0-9]{1,3}\\.[0-9]+[,\\s]+[-+]?[0-9]{1,3}\\.[0-9]+",
+      "pattern": "[-+]?[0-9]{1,3}\\.[0-9]+[, \\t]+[-+]?[0-9]{1,3}\\.[0-9]+",
       "replacement": "***.******, ***.******",
       "useRegex": true,
       "enabled": false
@@ -677,7 +678,7 @@
     {
       "category": "Health",
       "descriptionKey": "filters.health.mrn",
-      "pattern": "MRN\\b[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}",
+      "pattern": "MRN\\b[ \\t#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}",
       "replacement": "MRN: ***REDACTED***",
       "useRegex": true,
       "enabled": false
@@ -685,7 +686,7 @@
     {
       "category": "Health",
       "descriptionKey": "filters.health.patientId",
-      "pattern": "(?:Patient|patient)[\\s\\-]?(?:ID|id)\\b[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}",
+      "pattern": "(?:Patient|patient)[ \\t\\-]?(?:ID|id)\\b[ \\t#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}",
       "replacement": "Patient ID: ***REDACTED***",
       "useRegex": true,
       "enabled": false
@@ -693,7 +694,7 @@
     {
       "category": "Health",
       "descriptionKey": "filters.health.rppsFrance",
-      "pattern": "RPPS[\\s#:°n]*[0-9]{11}\\b",
+      "pattern": "RPPS[ \\t#:°n]*[0-9]{11}\\b",
       "replacement": "RPPS ***********",
       "useRegex": true,
       "enabled": true
@@ -701,7 +702,7 @@
     {
       "category": "HR",
       "descriptionKey": "filters.hr.employeeId",
-      "pattern": "(?:EMP|emp|Employee)[\\s\\-]?(?:ID|id)\\b[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{4,10}",
+      "pattern": "(?:EMP|emp|Employee)[ \\t\\-]?(?:ID|id)\\b[ \\t#:]*(?=[A-Z]*[0-9])[0-9A-Z]{4,10}",
       "replacement": "Employee ID: ***REDACTED***",
       "useRegex": true,
       "enabled": false
@@ -709,7 +710,7 @@
     {
       "category": "HR",
       "descriptionKey": "filters.hr.salary",
-      "pattern": "(?:salary|Salary)[:\\s]+[0-9]{3,}(?:[.,][0-9]{2})?[\\s]?(?:€|\\$|£)",
+      "pattern": "(?:salary|Salary)[: \\t]+[0-9]{3,}(?:[.,][0-9]{2})?[ \\t]?(?:€|\\$|£)",
       "replacement": "Salary: ***REDACTED***",
       "useRegex": true,
       "enabled": false
@@ -717,7 +718,7 @@
     {
       "category": "HR",
       "descriptionKey": "filters.hr.matricule",
-      "pattern": "(?:Matricule|matricule)[:\\s]+[0-9A-Z]{6,15}",
+      "pattern": "(?:Matricule|matricule)[: \\t]+(?=[A-Z]*[0-9])[0-9A-Z]{6,15}",
       "replacement": "Matricule: ***REDACTED***",
       "useRegex": true,
       "enabled": false
@@ -725,7 +726,7 @@
     {
       "category": "HR",
       "descriptionKey": "filters.hr.contract",
-      "pattern": "(?:Contract|contract)[\\s\\-]?(?:Number|number|#)[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}",
+      "pattern": "(?:Contract|contract)[ \\t\\-]?(?:Number|number|#)[ \\t#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}",
       "replacement": "Contract #: ***REDACTED***",
       "useRegex": true,
       "enabled": false
@@ -733,7 +734,7 @@
     {
       "category": "HR",
       "descriptionKey": "filters.hr.payslip",
-      "pattern": "(?:Payslip|payslip|Bulletin)[\\s\\-]?(?:Number|number|#)[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}",
+      "pattern": "(?:Payslip|payslip|Bulletin)[ \\t\\-]?(?:Number|number|#)[ \\t#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}",
       "replacement": "Payslip #: ***REDACTED***",
       "useRegex": true,
       "enabled": false
@@ -829,7 +830,7 @@
     {
       "category": "Personal",
       "descriptionKey": "filters.personal.driverLicense",
-      "pattern": "(?:License|Permis)[\\s\\-]?(?:No|Number|#)?[\\s#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{6,15}",
+      "pattern": "(?:License|Permis)[ \\t\\-]?(?:No|Number|#)?[ \\t#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{6,15}",
       "replacement": "License: ***REDACTED***",
       "useRegex": true,
       "enabled": false
@@ -853,7 +854,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.serialNumber",
-      "pattern": "(?:S/N|Serial(?:\\s*(?:No|Number))?|SN)\\b[\\s#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{8,20}",
+      "pattern": "(?:S/N|Serial(?:[ \\t]*(?:No|Number))?|SN)\\b[ \\t#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{8,20}",
       "replacement": "S/N: ***REDACTED***",
       "useRegex": true,
       "enabled": false
