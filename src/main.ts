@@ -205,11 +205,18 @@ class ClipboardFilterApp {
 
     this.mainWindow.loadURL(`${APP_ORIGIN}/dist/renderer.html`);
     this.mainWindow.once('ready-to-show', () => this.mainWindow?.show());
-    this.mainWindow.on('closed', () => { this.mainWindow = null; });
-    this.mainWindow.on('close', (event) => {
+    this.mainWindow.on('closed', () => {
+      this.mainWindow = null;
+      // A shortcut being recorded when the window closed must not stay suspended
+      if (this.shortcutsSuspended) {
+        this.shortcutsSuspended = false;
+        globalShortcut.setSuspended(false);
+      }
+    });
+    this.mainWindow.on('close', () => {
+      // The window is destroyed (not hidden): the app keeps running in the
+      // background without the interface's memory. It is recreated on demand.
       if (this.isQuitting) return;
-      event.preventDefault();
-      this.mainWindow?.hide();
       if (!this.backgroundNoticeShown) {
         this.backgroundNoticeShown = true;
         this.notify(localeManager.t('notifications.stillRunning'), localeManager.t('notifications.stillRunningBody'));
