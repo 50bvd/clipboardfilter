@@ -99,7 +99,7 @@
     {
       "category": "Developer",
       "descriptionKey": "filters.developer.azureSas",
-      "pattern": "(?:sv|sig|se|spr|sp|sr)=[^&\\s]+(?:&[^&\\s]+)*&?",
+      "pattern": "(?<![A-Za-z0-9_-])(?:sv|sig|se|spr|sp|sr)=[^&\\s]+(?:&[^&\\s]+)*&?",
       "replacement": "***AZURE_SAS_REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -180,7 +180,7 @@
       "category": "Developer",
       "descriptionKey": "filters.developer.rsaPrivateKey",
       "pattern": "-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----[\\s\\S]+?-----END (?:RSA |OPENSSH |EC )?PRIVATE KEY-----",
-      "replacement": "-----BEGIN PRIVATE KEY-----\\n***REDACTED***\\n-----END PRIVATE KEY-----",
+      "replacement": "-----BEGIN PRIVATE KEY-----\n***REDACTED***\n-----END PRIVATE KEY-----",
       "useRegex": true,
       "enabled": true
     },
@@ -331,7 +331,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.snmpCommunity",
-      "pattern": "(?:community|COMMUNITY)[\\s:=]+[^\\s;]+",
+      "pattern": "(?:community|COMMUNITY)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s;]+",
       "replacement": "community: ***REDACTED***",
       "useRegex": true,
       "enabled": true
@@ -372,7 +372,7 @@
       "category": "System",
       "descriptionKey": "filters.system.openvpnKey",
       "pattern": "-----BEGIN OpenVPN Static key V1-----[\\s\\S]+?-----END OpenVPN Static key V1-----",
-      "replacement": "-----BEGIN OpenVPN Static key V1-----\\n***REDACTED***\\n-----END OpenVPN Static key V1-----",
+      "replacement": "-----BEGIN OpenVPN Static key V1-----\n***REDACTED***\n-----END OpenVPN Static key V1-----",
       "useRegex": true,
       "enabled": true
     },
@@ -387,7 +387,7 @@
     {
       "category": "System",
       "descriptionKey": "filters.system.wifiWpaKey",
-      "pattern": "(?:wpa_passphrase|psk)[\\s:=]+[^\\s]{8,63}",
+      "pattern": "(?:wpa_passphrase|psk)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s]{8,63}",
       "replacement": "wpa_passphrase: ***REDACTED***",
       "useRegex": true,
       "enabled": true

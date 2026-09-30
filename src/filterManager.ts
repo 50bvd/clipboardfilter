@@ -95,9 +95,33 @@ const PATTERN_MIGRATIONS: Record<string, { from: string[]; to: string; caseSensi
     from: ['(?:salary|Salary)[:\\s]+[0-9]{3,}(?:[.,][0-9]{2})?[\\s]?(?:â‚¬|\\$|Â£)'],
     to: '(?:salary|Salary)[:\\s]+[0-9]{3,}(?:[.,][0-9]{2})?[\\s]?(?:€|\\$|£)'
   },
+  // 1.0.0: catastrophic backtracking. 1.1.x: also matched inside words
+  // ("wpa_passphrase=..." contains "se=").
   'filters.developer.azureSas': {
-    from: ['(?:sv|sig|se|spr|sp|sr)=(?:[^&\\s]+&?)+'],
-    to: '(?:sv|sig|se|spr|sp|sr)=[^&\\s]+(?:&[^&\\s]+)*&?'
+    from: ['(?:sv|sig|se|spr|sp|sr)=(?:[^&\\s]+&?)+', '(?:sv|sig|se|spr|sp|sr)=[^&\\s]+(?:&[^&\\s]+)*&?'],
+    to: '(?<![A-Za-z0-9_-])(?:sv|sig|se|spr|sp|sr)=[^&\\s]+(?:&[^&\\s]+)*&?'
+  },
+  // Matched again the output of the Cisco SNMP filter ("community ***REDACTED***")
+  'filters.system.snmpCommunity': {
+    from: ['(?:community|COMMUNITY)[\\s:=]+[^\\s;]+'],
+    to: '(?:community|COMMUNITY)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s;]+'
+  },
+  // Matched again the output of the SSH passphrase filter ("wpa_passphrase: ***REDACTED***")
+  'filters.system.wifiWpaKey': {
+    from: ['(?:wpa_passphrase|psk)[\\s:=]+[^\\s]{8,63}'],
+    to: '(?:wpa_passphrase|psk)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s]{8,63}'
+  }
+};
+
+/** Default replacements that contained a literal "\\n" instead of a line break. */
+const REPLACEMENT_MIGRATIONS: Record<string, { from: string; to: string }> = {
+  'filters.developer.rsaPrivateKey': {
+    from: '-----BEGIN PRIVATE KEY-----\\n***REDACTED***\\n-----END PRIVATE KEY-----',
+    to: '-----BEGIN PRIVATE KEY-----\n***REDACTED***\n-----END PRIVATE KEY-----'
+  },
+  'filters.system.openvpnKey': {
+    from: '-----BEGIN OpenVPN Static key V1-----\\n***REDACTED***\\n-----END OpenVPN Static key V1-----',
+    to: '-----BEGIN OpenVPN Static key V1-----\n***REDACTED***\n-----END OpenVPN Static key V1-----'
   }
 };
 
@@ -174,7 +198,12 @@ export class FilterManager {
       const m = f.descriptionKey ? PATTERN_MIGRATIONS[f.descriptionKey] : undefined;
       if (m && m.from.includes(f.pattern)) {
         changed = true;
-        return m.caseSensitive ? { ...f, pattern: m.to, caseSensitive: true } : { ...f, pattern: m.to };
+        f = m.caseSensitive ? { ...f, pattern: m.to, caseSensitive: true } : { ...f, pattern: m.to };
+      }
+      const r = f.descriptionKey ? REPLACEMENT_MIGRATIONS[f.descriptionKey] : undefined;
+      if (r && f.replacement === r.from) {
+        changed = true;
+        f = { ...f, replacement: r.to };
       }
       return f;
     });
