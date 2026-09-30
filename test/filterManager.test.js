@@ -103,3 +103,22 @@ test('store writes atomically and backs up a corrupted file', () => {
   assert.equal(JSON.parse(fs.readFileSync(file, 'utf-8')).a, 2);
   if (process.platform !== 'win32') assert.equal(fs.statSync(file).mode & 0o777, 0o600);
 });
+
+test('1.2 configurations get the fixed default filters', () => {
+  // Default filters as shipped up to 1.2.1
+  const V12 = {
+    'filters.developer.azureSas': { pattern: '(?:sv|sig|se|spr|sp|sr)=[^&\\s]+(?:&[^&\\s]+)*&?' },
+    'filters.system.snmpCommunity': { pattern: '(?:community|COMMUNITY)[\\s:=]+[^\\s;]+' },
+    'filters.system.wifiWpaKey': { pattern: '(?:wpa_passphrase|psk)[\\s:=]+[^\\s]{8,63}' },
+    'filters.developer.rsaPrivateKey': { replacement: '-----BEGIN PRIVATE KEY-----\\n***REDACTED***\\n-----END PRIVATE KEY-----' },
+    'filters.system.openvpnKey': { replacement: '-----BEGIN OpenVPN Static key V1-----\\n***REDACTED***\\n-----END OpenVPN Static key V1-----' }
+  };
+  const current = JSON.parse(fs.readFileSync(DEFAULTS, 'utf-8')).filters;
+  const file = tmpConfig({ filters: current.map((f, i) => ({ ...f, ...V12[f.descriptionKey], id: `id${i}` })) });
+  const fm = new FilterManager(file, DEFAULTS, LOCALES);
+  const byKey = Object.fromEntries(fm.getFilters().map(f => [f.descriptionKey, f]));
+  for (const f of current) {
+    assert.equal(byKey[f.descriptionKey].pattern, f.pattern, f.descriptionKey);
+    assert.equal(byKey[f.descriptionKey].replacement, f.replacement, f.descriptionKey);
+  }
+});

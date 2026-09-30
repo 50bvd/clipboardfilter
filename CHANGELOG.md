@@ -5,6 +5,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-09-30
+
+### Fixed
+- The Azure SAS filter matched inside words: `wpa_passphrase=...` became `wpa_passphra***AZURE_SAS_REDACTED***`.
+- Cisco SNMP communities and Wi-Fi passphrases were masked twice (wrong count, altered text).
+- Private key and OpenVPN key replacements showed a literal `\n` instead of a line break.
+- Existing configurations get these fixes automatically (default filters you did not modify).
+
 ## [1.2.1] - 2026-09-29
 
 ### Changed
@@ -124,7 +132,8 @@ First stable release with full Linux support. Changes since 1.0.0:
 
 - First public release (Windows).
 
-[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.1...develop
+[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.2...develop
+[1.2.2]: https://github.com/50bvd/clipboardfilter/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0...v1.2.1
 [1.2.1-beta.1]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0...v1.2.1-beta.1
 [1.2.0]: https://github.com/50bvd/clipboardfilter/compare/v1.1.1...v1.2.0
