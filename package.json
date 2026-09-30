@@ -1,6 +1,6 @@
 {
   "name": "clipboard-filter",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Filters secrets and personal data out of your clipboard before you paste them",
   "main": "dist/main.js",
   "author": {
