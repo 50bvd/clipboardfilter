@@ -187,3 +187,18 @@ test('context-dependent default filters still catch the real formats', () => {
     assert.ok(!applyRules(set, text).filtered.includes(secret), text);
   }
 });
+
+test('with every filter enabled, specific filters win over broad ones', () => {
+  const { inMatchOrder } = require('../dist/filterManager');
+  const all = inMatchOrder(defaults.map(f => ({ ...f, enabled: true })));
+  const r = applyRules(compileRules(all), SAMPLE, true);
+  // Masked by their own filter, not cut up by a path, NIR or generic token filter
+  assert.match(r.filtered, /Card \*\*\*\*-\*\*\*\*-\*\*\*\*-XXXX/);
+  assert.match(r.filtered, /postgresql:\/\/\*\*\*REDACTED\*\*\*/);
+  assert.match(r.filtered, /https:\/\/hooks\.slack\.com\/services\/\*\*\*REDACTED\*\*\*/);
+  assert.match(r.filtered, /Bearer eyJ\*\*\*JWT_REDACTED\*\*\*/);
+  // Prose, prices and slashes in sentences are left alone
+  assert.match(r.filtered, /Lorem ipsum dolor sit amet, consectetur adipiscing elit/);
+  const prose = 'Budget : 1500 euros. Réseau / système. Réunion à 14h30, version 1.2.3.';
+  assert.equal(applyRules(compileRules(all), prose).filtered, prose);
+});
