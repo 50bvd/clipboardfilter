@@ -72,57 +72,136 @@ const MAX_TEXT = 200;
 const SHORTCUT_RE = /^[A-Za-z0-9]+(\+[A-Za-z0-9]+){0,4}$/;
 
 // BIC: bank (4 letters) + ISO 3166 country code + location (+ branch)
-const SWIFT_PATTERN = "\\b[A-Z]{4}(?:A[DEFGILMOQRSTUWXZ]|B[ABDEFGHIJLMNOQRSTVWYZ]|C[ACDFGHIKLMNORUVWXYZ]|D[EJKMOZ]|E[CEGHRST]|F[IJKMOR]|G[ABDEFGHILMNPQRSTUWY]|H[KMNRTU]|I[DELMNOQRST]|J[EMOP]|K[EGHIMNPRWYZ]|L[ABCIKRSTUVY]|M[ACDEFGHKLMNOPQRSTUVWXYZ]|N[ACEFGILOPRUZ]|OM|P[AEFGHKLMNRSTWY]|QA|R[EOSUW]|S[ABCDEGHIJKLMNORSTVXYZ]|T[CDFGHJKLMNORTVWZ]|U[AGMSYZ]|V[ACEGINU]|W[FS]|XK|Y[ET]|Z[AMW])[A-Z0-9]{2}(?:[A-Z0-9]{3})?\\b";
-
-// Default patterns that shipped broken in 1.0.0 and are fixed on upgrade
-// (only when the user did not modify them).
-const PATTERN_MIGRATIONS: Record<string, { from: string[]; to: string; caseSensitive?: boolean }> = {
-  // Never matched in 1.0.0; a plain [A-Z]{8} would now match any 8-letter word
-  'filters.finance.swift': {
-    from: ['\\\\b[A-Z]{6}[A-Z0-9]{2}(?:[A-Z0-9]{3})?\\\\b'],
-    to: SWIFT_PATTERN,
+// Default patterns fixed after a release. A stored filter is updated only when
+// its pattern is still one of the shipped versions (never when the user edited it).
+export const PATTERN_MIGRATIONS: Record<string, { from: string[]; to: string; caseSensitive?: boolean }> = {
+  "filters.finance.swift": {
+    from: [
+      "\\\\b[A-Z]{6}[A-Z0-9]{2}(?:[A-Z0-9]{3})?\\\\b",
+      "\\b[A-Z]{4}(?:A[DEFGILMOQRSTUWXZ]|B[ABDEFGHIJLMNOQRSTVWYZ]|C[ACDFGHIKLMNORUVWXYZ]|D[EJKMOZ]|E[CEGHRST]|F[IJKMOR]|G[ABDEFGHILMNPQRSTUWY]|H[KMNRTU]|I[DELMNOQRST]|J[EMOP]|K[EGHIMNPRWYZ]|L[ABCIKRSTUVY]|M[ACDEFGHKLMNOPQRSTUVWXYZ]|N[ACEFGILOPRUZ]|OM|P[AEFGHKLMNRSTWY]|QA|R[EOSUW]|S[ABCDEGHIJKLMNORSTVXYZ]|T[CDFGHJKLMNORTVWZ]|U[AGMSYZ]|V[ACEGINU]|W[FS]|XK|Y[ET]|Z[AMW])[A-Z0-9]{2}(?:[A-Z0-9]{3})?\\b"
+    ],
+    to: "(?<=\\b(?:[Bb][Ii][Cc]|[Ss][Ww][Ii][Ff][Tt])\\b[^\\n]{0,20})\\b[A-Z]{4}(?:A[DEFGILMOQRSTUWXZ]|B[ABDEFGHIJLMNOQRSTVWYZ]|C[ACDFGHIKLMNORUVWXYZ]|D[EJKMOZ]|E[CEGHRST]|F[IJKMOR]|G[ABDEFGHILMNPQRSTUWY]|H[KMNRTU]|I[DELMNOQRST]|J[EMOP]|K[EGHIMNPRWYZ]|L[ABCIKRSTUVY]|M[ACDEFGHKLMNOPQRSTUVWXYZ]|N[ACEFGILOPRUZ]|OM|P[AEFGHKLMNRSTWY]|QA|R[EOSUW]|S[ABCDEGHIJKLMNORSTVXYZ]|T[CDFGHJKLMNORTVWZ]|U[AGMSYZ]|V[ACEGINU]|W[FS]|XK|Y[ET]|Z[AMW])[A-Z0-9]{2}(?:[A-Z0-9]{3})?\\b",
     caseSensitive: true
   },
-  'filters.personal.passport': {
-    from: ['(?:Passport|Passeport)[\\\\s#:-]+[A-Z]{1,2}[0-9]{6,9}'],
-    to: '(?:Passport|Passeport)[\\s#:-]+[A-Z]{1,2}[0-9]{6,9}'
+  "filters.personal.passport": {
+    from: [
+      "(?:Passport|Passeport)[\\\\s#:-]+[A-Z]{1,2}[0-9]{6,9}"
+    ],
+    to: "(?:Passport|Passeport)[\\s#:-]+[A-Z]{1,2}[0-9]{6,9}"
   },
-  'filters.personal.drivingLicense': {
-    from: ['(?:DL|License|Permis)[\\\\s#:-]+[A-Z0-9]{6,15}'],
-    to: '(?:DL|License|Permis)[\\s#:-]+[A-Z0-9]{6,15}'
+  "filters.personal.drivingLicense": {
+    from: [
+      "(?:DL|License|Permis)[\\\\s#:-]+[A-Z0-9]{6,15}"
+    ],
+    to: "(?:DL|License|Permis)[\\s#:-]+[A-Z0-9]{6,15}"
   },
-  'filters.hr.salary': {
-    from: ['(?:salary|Salary)[:\\s]+[0-9]{3,}(?:[.,][0-9]{2})?[\\s]?(?:â‚¬|\\$|Â£)'],
-    to: '(?:salary|Salary)[:\\s]+[0-9]{3,}(?:[.,][0-9]{2})?[\\s]?(?:€|\\$|£)'
+  "filters.hr.salary": {
+    from: [
+      "(?:salary|Salary)[:\\s]+[0-9]{3,}(?:[.,][0-9]{2})?[\\s]?(?:â‚¬|\\$|Â£)"
+    ],
+    to: "(?:salary|Salary)[:\\s]+[0-9]{3,}(?:[.,][0-9]{2})?[\\s]?(?:€|\\$|£)"
   },
-  // 1.0.0: catastrophic backtracking. 1.1.x: also matched inside words
-  // ("wpa_passphrase=..." contains "se=").
-  'filters.developer.azureSas': {
-    from: ['(?:sv|sig|se|spr|sp|sr)=(?:[^&\\s]+&?)+', '(?:sv|sig|se|spr|sp|sr)=[^&\\s]+(?:&[^&\\s]+)*&?'],
-    to: '(?<![A-Za-z0-9_-])(?:sv|sig|se|spr|sp|sr)=[^&\\s]+(?:&[^&\\s]+)*&?'
+  "filters.developer.azureSas": {
+    from: [
+      "(?:sv|sig|se|spr|sp|sr)=(?:[^&\\s]+&?)+",
+      "(?:sv|sig|se|spr|sp|sr)=[^&\\s]+(?:&[^&\\s]+)*&?",
+      "(?<![A-Za-z0-9_-])(?:sv|sig|se|spr|sp|sr)=[^&\\s]+(?:&[^&\\s]+)*&?"
+    ],
+    to: "(?<![^?&\\s\"'])(?=\\S*sig=)(?:sv|sig|se|st|spr|sp|sr|srt|ss|skoid|sktid|skt|ske|sks|skv)=[^&\\s]+(?:&[^&\\s]+)*&?"
   },
-  // Matched again the output of the Cisco SNMP filter ("community ***REDACTED***")
-  'filters.system.snmpCommunity': {
-    from: ['(?:community|COMMUNITY)[\\s:=]+[^\\s;]+'],
-    to: '(?:community|COMMUNITY)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s;]+'
+  "filters.system.snmpCommunity": {
+    from: [
+      "(?:community|COMMUNITY)[\\s:=]+[^\\s;]+",
+      "(?:community|COMMUNITY)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s;]+"
+    ],
+    to: "\\b(?:(?:ro|rw)community\\s+|community\\s*[:=]\\s*)(?!\\*\\*\\*REDACTED)[^\\s;]+"
   },
-  // Matched again the output of the SSH passphrase filter ("wpa_passphrase: ***REDACTED***")
-  'filters.system.wifiWpaKey': {
-    from: ['(?:wpa_passphrase|psk)[\\s:=]+[^\\s]{8,63}'],
-    to: '(?:wpa_passphrase|psk)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s]{8,63}'
+  "filters.system.wifiWpaKey": {
+    from: [
+      "(?:wpa_passphrase|psk)[\\s:=]+[^\\s]{8,63}"
+    ],
+    to: "(?:wpa_passphrase|psk)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s]{8,63}"
+  },
+  "filters.developer.bitbucket": {
+    from: [
+      "(?:BB|bb)[a-zA-Z0-9]{20,}"
+    ],
+    to: "\\b(?:ATBB|BBDC-)[A-Za-z0-9_+/=-]{20,}",
+    caseSensitive: true
+  },
+  "filters.developer.bearerToken": {
+    from: [
+      "Bearer [a-zA-Z0-9\\-._~+/]+=*"
+    ],
+    to: "Bearer (?=[A-Za-z0-9\\-._~+/]*[0-9])[A-Za-z0-9\\-._~+/]{16,}=*"
+  },
+  "filters.developer.sshPassphrase": {
+    from: [
+      "(?:passphrase|PASSPHRASE)[\\s:=]+[^\\s;]{8,}"
+    ],
+    to: "passphrase[\"']?\\s*[:=]\\s*[\"']?[^\\s;\"']{8,}"
+  },
+  "filters.system.juniperSecret": {
+    from: [
+      "secret \"[^\"]+\""
+    ],
+    to: "secret \"\\$[0-9][^\"]*\""
+  },
+  "filters.health.mrn": {
+    from: [
+      "MRN[:\\s]?[0-9A-Z]{6,15}"
+    ],
+    to: "MRN\\b[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
+  },
+  "filters.health.patientId": {
+    from: [
+      "(?:Patient|patient)[\\s\\-]?(?:ID|id)[:\\s]?[0-9A-Z]{6,15}"
+    ],
+    to: "(?:Patient|patient)[\\s\\-]?(?:ID|id)\\b[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
+  },
+  "filters.health.rppsFrance": {
+    from: [
+      "\\b[0-9]{11}\\b"
+    ],
+    to: "RPPS[\\s#:°n]*[0-9]{11}\\b"
+  },
+  "filters.hr.employeeId": {
+    from: [
+      "(?:EMP|emp|Employee)[\\s\\-]?(?:ID|id)[:\\s]?[0-9A-Z]{4,10}"
+    ],
+    to: "(?:EMP|emp|Employee)[\\s\\-]?(?:ID|id)\\b[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{4,10}"
+  },
+  "filters.hr.contract": {
+    from: [
+      "(?:Contract|contract)[\\s\\-]?(?:Number|number|#)[:\\s]?[0-9A-Z]{6,15}"
+    ],
+    to: "(?:Contract|contract)[\\s\\-]?(?:Number|number|#)[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
+  },
+  "filters.hr.payslip": {
+    from: [
+      "(?:Payslip|payslip|Bulletin)[\\s\\-]?(?:Number|number|#)[:\\s]?[0-9A-Z]{6,15}"
+    ],
+    to: "(?:Payslip|payslip|Bulletin)[\\s\\-]?(?:Number|number|#)[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
+  },
+  "filters.personal.driverLicense": {
+    from: [
+      "(?:License|Permis)[\\s\\-]?(?:No|Number|#)?[\\s:]?[A-Z0-9]{6,15}"
+    ],
+    to: "(?:License|Permis)[\\s\\-]?(?:No|Number|#)?[\\s#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{6,15}"
+  },
+  "filters.system.serialNumber": {
+    from: [
+      "(?:S/N|Serial|SN)[\\s:]?[A-Z0-9]{8,20}"
+    ],
+    to: "(?:S/N|Serial(?:\\s*(?:No|Number))?|SN)\\b[\\s#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{8,20}"
   }
 };
 
-/** Default replacements that contained a literal "\\n" instead of a line break. */
-const REPLACEMENT_MIGRATIONS: Record<string, { from: string; to: string }> = {
-  'filters.developer.rsaPrivateKey': {
-    from: '-----BEGIN PRIVATE KEY-----\\n***REDACTED***\\n-----END PRIVATE KEY-----',
-    to: '-----BEGIN PRIVATE KEY-----\n***REDACTED***\n-----END PRIVATE KEY-----'
-  },
-  'filters.system.openvpnKey': {
-    from: '-----BEGIN OpenVPN Static key V1-----\\n***REDACTED***\\n-----END OpenVPN Static key V1-----',
-    to: '-----BEGIN OpenVPN Static key V1-----\n***REDACTED***\n-----END OpenVPN Static key V1-----'
-  }
+/** Default replacements fixed after a release (same rule as above). */
+export const REPLACEMENT_MIGRATIONS: Record<string, { from: string; to: string }> = {
+  "filters.developer.rsaPrivateKey": { from: "-----BEGIN PRIVATE KEY-----\\n***REDACTED***\\n-----END PRIVATE KEY-----", to: "-----BEGIN PRIVATE KEY-----\n***REDACTED***\n-----END PRIVATE KEY-----" },
+  "filters.system.openvpnKey": { from: "-----BEGIN OpenVPN Static key V1-----\\n***REDACTED***\\n-----END OpenVPN Static key V1-----", to: "-----BEGIN OpenVPN Static key V1-----\n***REDACTED***\n-----END OpenVPN Static key V1-----" },
+  "filters.health.rppsFrance": { from: "***********", to: "RPPS ***********" }
 };
 
 export function defaultSettings(): AppSettings {

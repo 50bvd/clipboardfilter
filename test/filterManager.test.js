@@ -104,21 +104,31 @@ test('store writes atomically and backs up a corrupted file', () => {
   if (process.platform !== 'win32') assert.equal(fs.statSync(file).mode & 0o777, 0o600);
 });
 
-test('1.2 configurations get the fixed default filters', () => {
-  // Default filters as shipped up to 1.2.1
-  const V12 = {
-    'filters.developer.azureSas': { pattern: '(?:sv|sig|se|spr|sp|sr)=[^&\\s]+(?:&[^&\\s]+)*&?' },
-    'filters.system.snmpCommunity': { pattern: '(?:community|COMMUNITY)[\\s:=]+[^\\s;]+' },
-    'filters.system.wifiWpaKey': { pattern: '(?:wpa_passphrase|psk)[\\s:=]+[^\\s]{8,63}' },
-    'filters.developer.rsaPrivateKey': { replacement: '-----BEGIN PRIVATE KEY-----\\n***REDACTED***\\n-----END PRIVATE KEY-----' },
-    'filters.system.openvpnKey': { replacement: '-----BEGIN OpenVPN Static key V1-----\\n***REDACTED***\\n-----END OpenVPN Static key V1-----' }
-  };
+test('every previously shipped default pattern is migrated to the current one', () => {
+  const { PATTERN_MIGRATIONS, REPLACEMENT_MIGRATIONS } = require('../dist/filterManager');
   const current = JSON.parse(fs.readFileSync(DEFAULTS, 'utf-8')).filters;
-  const file = tmpConfig({ filters: current.map((f, i) => ({ ...f, ...V12[f.descriptionKey], id: `id${i}` })) });
-  const fm = new FilterManager(file, DEFAULTS, LOCALES);
-  const byKey = Object.fromEntries(fm.getFilters().map(f => [f.descriptionKey, f]));
-  for (const f of current) {
-    assert.equal(byKey[f.descriptionKey].pattern, f.pattern, f.descriptionKey);
-    assert.equal(byKey[f.descriptionKey].replacement, f.replacement, f.descriptionKey);
+  const byKeyCurrent = Object.fromEntries(current.map(f => [f.descriptionKey, f]));
+  for (const [key, m] of Object.entries(PATTERN_MIGRATIONS)) {
+    assert.equal(m.to, byKeyCurrent[key].pattern, `${key}: migration target is the shipped pattern`);
+    for (const old of m.from) {
+      const file = tmpConfig({ filters: current.map((f, i) => ({ ...f, id: `id${i}`, ...(f.descriptionKey === key ? { pattern: old, caseSensitive: undefined } : {}) })) });
+      const migrated = new FilterManager(file, DEFAULTS, LOCALES).getFilters().find(f => f.descriptionKey === key);
+      assert.equal(migrated.pattern, byKeyCurrent[key].pattern, key);
+      assert.equal(!!migrated.caseSensitive, !!byKeyCurrent[key].caseSensitive, `${key} case sensitivity`);
+    }
   }
+  for (const [key, m] of Object.entries(REPLACEMENT_MIGRATIONS)) {
+    assert.equal(m.to, byKeyCurrent[key].replacement, key);
+    const file = tmpConfig({ filters: current.map((f, i) => ({ ...f, id: `id${i}`, ...(f.descriptionKey === key ? { replacement: m.from } : {}) })) });
+    const migrated = new FilterManager(file, DEFAULTS, LOCALES).getFilters().find(f => f.descriptionKey === key);
+    assert.equal(migrated.replacement, m.to, key);
+  }
+});
+
+test('an edited default filter is never migrated', () => {
+  const current = JSON.parse(fs.readFileSync(DEFAULTS, 'utf-8')).filters;
+  const custom = 'community[:=]custom';
+  const file = tmpConfig({ filters: current.map((f, i) => ({ ...f, id: `id${i}`, ...(f.descriptionKey === 'filters.system.snmpCommunity' ? { pattern: custom } : {}) })) });
+  const f = new FilterManager(file, DEFAULTS, LOCALES).getFilters().find(x => x.descriptionKey === 'filters.system.snmpCommunity');
+  assert.equal(f.pattern, custom);
 });

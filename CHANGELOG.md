@@ -5,6 +5,22 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.2.3] - 2026-09-30
+
+Every default filter was checked against a sample of the format it detects and against normal French and English text.
+
+### Fixed
+- Normal text was masked by some default filters:
+  - "community of…", "strong passphrase protects…", "the bearer of…", `secret "…"` in sentences;
+  - uppercase words such as BUSINESS, HOSPITAL or PLATFORM, taken for SWIFT/BIC codes: a BIC is now masked when it follows "BIC" or "SWIFT";
+  - any 11-digit number (order numbers, `+33612345678`), taken for an RPPS number: it now has to follow "RPPS";
+  - `se=1`, `sp=3`, taken for Azure SAS tokens: the token now has to contain a signature (`sig=`);
+  - words containing "bb", taken for Bitbucket tokens: only `ATBB…` and `BBDC-…` tokens are masked.
+- The JWT after "Bearer" was masked twice.
+- Seven optional filters (medical record number, patient ID, employee ID, contract, payslip, driver's license, serial number) never matched "Label: value".
+- JSON (`"passphrase": "…"`) and snmpd (`rocommunity …`) syntaxes are detected.
+- Existing configurations get these fixes automatically (default filters you did not modify).
+
 ## [1.2.2] - 2026-09-30
 
 ### Fixed
@@ -132,7 +148,8 @@ First stable release with full Linux support. Changes since 1.0.0:
 
 - First public release (Windows).
 
-[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.2...develop
+[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.3...develop
+[1.2.3]: https://github.com/50bvd/clipboardfilter/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/50bvd/clipboardfilter/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0...v1.2.1
 [1.2.1-beta.1]: https://github.com/50bvd/clipboardfilter/compare/v1.2.0...v1.2.1-beta.1
