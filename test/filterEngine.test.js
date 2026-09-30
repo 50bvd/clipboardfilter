@@ -144,3 +144,22 @@ test('fuzz: the literal pre-check never skips a regex that would match', () => {
   }
   assert.ok(checked > 500, `only ${checked} matches checked`);
 });
+
+test('default filters: no match inside words, no double masking, real line breaks', () => {
+  const set = compileRules(defaults);
+  const run = (text) => applyRules(set, text, true);
+
+  // "passphrase=" contains "se=": the Azure SAS filter must not cut the word
+  const wifi = run('wpa_passphrase=MonWifiDeTest2026');
+  assert.equal(wifi.filtered, 'wpa_passphrase: ***REDACTED***');
+  assert.equal(wifi.count, 1);
+  assert.match(run('https://x.blob.core.windows.net/c?sv=2022-11-02&sig=abc%3D').filtered, /\?\*\*\*AZURE_SAS_REDACTED\*\*\*/);
+
+  // One Cisco secret, masked once
+  const snmp = run('snmp-server community TestCommunaute123');
+  assert.equal(snmp.filtered, 'snmp-server community ***REDACTED***');
+  assert.equal(snmp.count, 1);
+
+  const key = run('-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBg\n-----END PRIVATE KEY-----');
+  assert.equal(key.filtered, '-----BEGIN PRIVATE KEY-----\n***REDACTED***\n-----END PRIVATE KEY-----');
+});

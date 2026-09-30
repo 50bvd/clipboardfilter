@@ -103,3 +103,15 @@ test('store writes atomically and backs up a corrupted file', () => {
   assert.equal(JSON.parse(fs.readFileSync(file, 'utf-8')).a, 2);
   if (process.platform !== 'win32') assert.equal(fs.statSync(file).mode & 0o777, 0o600);
 });
+
+test('1.2 configurations get the fixed default filters', () => {
+  const prev = JSON.parse(fs.readFileSync(path.join(__dirname, 'v1.2-default-filters.json'), 'utf-8'));
+  const file = tmpConfig({ filters: prev.filters.map((f, i) => ({ ...f, id: `id${i}` })) });
+  const fm = new FilterManager(file, DEFAULTS, LOCALES);
+  const byKey = Object.fromEntries(fm.getFilters().map(f => [f.descriptionKey, f]));
+  const current = JSON.parse(fs.readFileSync(DEFAULTS, 'utf-8')).filters;
+  for (const f of current) {
+    assert.equal(byKey[f.descriptionKey].pattern, f.pattern, f.descriptionKey);
+    assert.equal(byKey[f.descriptionKey].replacement, f.replacement, f.descriptionKey);
+  }
+});
