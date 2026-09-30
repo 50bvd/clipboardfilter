@@ -5,7 +5,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
-## [1.2.6] - 2026-09-30
+## [1.2.6-beta.1] - 2026-09-30
 
 ### Changed
 - Closing the window frees its memory (about 75 MB): the app keeps filtering in the background and the window is recreated when you open it again.
@@ -180,8 +180,8 @@ First stable release with full Linux support. Changes since 1.0.0:
 
 - First public release (Windows).
 
-[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.6...develop
-[1.2.6]: https://github.com/50bvd/clipboardfilter/compare/v1.2.5...v1.2.6
+[Unreleased]: https://github.com/50bvd/clipboardfilter/compare/v1.2.6-beta.1...develop
+[1.2.6-beta.1]: https://github.com/50bvd/clipboardfilter/compare/v1.2.5...v1.2.6-beta.1
 [1.2.5]: https://github.com/50bvd/clipboardfilter/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/50bvd/clipboardfilter/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/50bvd/clipboardfilter/compare/v1.2.2...v1.2.3
