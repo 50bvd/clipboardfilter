@@ -85,21 +85,24 @@ export const PATTERN_MIGRATIONS: Record<string, { from: string[]; to: string; ca
   },
   "filters.personal.passport": {
     from: [
-      "(?:Passport|Passeport)[\\\\s#:-]+[A-Z]{1,2}[0-9]{6,9}"
+      "(?:Passport|Passeport)[\\\\s#:-]+[A-Z]{1,2}[0-9]{6,9}",
+      "(?:Passport|Passeport)[\\s#:-]+[A-Z]{1,2}[0-9]{6,9}"
     ],
-    to: "(?:Passport|Passeport)[\\s#:-]+[A-Z]{1,2}[0-9]{6,9}"
+    to: "(?:Passport|Passeport)[ \\t#:-]+[A-Z]{1,2}[0-9]{6,9}"
   },
   "filters.personal.drivingLicense": {
     from: [
-      "(?:DL|License|Permis)[\\\\s#:-]+[A-Z0-9]{6,15}"
+      "(?:DL|License|Permis)[\\\\s#:-]+[A-Z0-9]{6,15}",
+      "(?:DL|License|Permis)[\\s#:-]+[A-Z0-9]{6,15}"
     ],
-    to: "(?:DL|License|Permis)[\\s#:-]+[A-Z0-9]{6,15}"
+    to: "(?:DL|License|Permis)[ \\t#:-]+[A-Z0-9]{6,15}"
   },
   "filters.hr.salary": {
     from: [
-      "(?:salary|Salary)[:\\s]+[0-9]{3,}(?:[.,][0-9]{2})?[\\s]?(?:â‚¬|\\$|Â£)"
+      "(?:salary|Salary)[:\\s]+[0-9]{3,}(?:[.,][0-9]{2})?[\\s]?(?:â‚¬|\\$|Â£)",
+      "(?:salary|Salary)[:\\s]+[0-9]{3,}(?:[.,][0-9]{2})?[\\s]?(?:€|\\$|£)"
     ],
-    to: "(?:salary|Salary)[:\\s]+[0-9]{3,}(?:[.,][0-9]{2})?[\\s]?(?:€|\\$|£)"
+    to: "(?:salary|Salary)[: \\t]+[0-9]{3,}(?:[.,][0-9]{2})?[ \\t]?(?:€|\\$|£)"
   },
   "filters.developer.azureSas": {
     from: [
@@ -112,15 +115,17 @@ export const PATTERN_MIGRATIONS: Record<string, { from: string[]; to: string; ca
   "filters.system.snmpCommunity": {
     from: [
       "(?:community|COMMUNITY)[\\s:=]+[^\\s;]+",
-      "(?:community|COMMUNITY)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s;]+"
+      "(?:community|COMMUNITY)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s;]+",
+      "\\b(?:(?:ro|rw)community\\s+|community\\s*[:=]\\s*)(?!\\*\\*\\*REDACTED)[^\\s;]+"
     ],
-    to: "\\b(?:(?:ro|rw)community\\s+|community\\s*[:=]\\s*)(?!\\*\\*\\*REDACTED)[^\\s;]+"
+    to: "\\b(?:(?:ro|rw)community[ \\t]+|community[ \\t]*[:=][ \\t]*)(?!\\*\\*\\*REDACTED)[^\\s;]+"
   },
   "filters.system.wifiWpaKey": {
     from: [
-      "(?:wpa_passphrase|psk)[\\s:=]+[^\\s]{8,63}"
+      "(?:wpa_passphrase|psk)[\\s:=]+[^\\s]{8,63}",
+      "(?:wpa_passphrase|psk)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s]{8,63}"
     ],
-    to: "(?:wpa_passphrase|psk)[\\s:=]+(?!\\*\\*\\*REDACTED)[^\\s]{8,63}"
+    to: "(?:wpa_passphrase|psk)[ \\t:=]+(?!\\*\\*\\*REDACTED)[^\\s]{8,63}(?!\\S)"
   },
   "filters.developer.bitbucket": {
     from: [
@@ -137,9 +142,10 @@ export const PATTERN_MIGRATIONS: Record<string, { from: string[]; to: string; ca
   },
   "filters.developer.sshPassphrase": {
     from: [
-      "(?:passphrase|PASSPHRASE)[\\s:=]+[^\\s;]{8,}"
+      "(?:passphrase|PASSPHRASE)[\\s:=]+[^\\s;]{8,}",
+      "passphrase[\"']?\\s*[:=]\\s*[\"']?[^\\s;\"']{8,}"
     ],
-    to: "passphrase[\"']?\\s*[:=]\\s*[\"']?[^\\s;\"']{8,}"
+    to: "passphrase[\"']?[ \\t]*[:=][ \\t]*[\"']?[^\\s;\"']{8,}"
   },
   "filters.system.juniperSecret": {
     from: [
@@ -149,51 +155,59 @@ export const PATTERN_MIGRATIONS: Record<string, { from: string[]; to: string; ca
   },
   "filters.health.mrn": {
     from: [
-      "MRN[:\\s]?[0-9A-Z]{6,15}"
+      "MRN[:\\s]?[0-9A-Z]{6,15}",
+      "MRN\\b[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
     ],
-    to: "MRN\\b[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
+    to: "MRN\\b[ \\t#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
   },
   "filters.health.patientId": {
     from: [
-      "(?:Patient|patient)[\\s\\-]?(?:ID|id)[:\\s]?[0-9A-Z]{6,15}"
+      "(?:Patient|patient)[\\s\\-]?(?:ID|id)[:\\s]?[0-9A-Z]{6,15}",
+      "(?:Patient|patient)[\\s\\-]?(?:ID|id)\\b[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
     ],
-    to: "(?:Patient|patient)[\\s\\-]?(?:ID|id)\\b[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
+    to: "(?:Patient|patient)[ \\t\\-]?(?:ID|id)\\b[ \\t#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
   },
   "filters.health.rppsFrance": {
     from: [
-      "\\b[0-9]{11}\\b"
+      "\\b[0-9]{11}\\b",
+      "RPPS[\\s#:°n]*[0-9]{11}\\b"
     ],
-    to: "RPPS[\\s#:°n]*[0-9]{11}\\b"
+    to: "RPPS[ \\t#:°n]*[0-9]{11}\\b"
   },
   "filters.hr.employeeId": {
     from: [
-      "(?:EMP|emp|Employee)[\\s\\-]?(?:ID|id)[:\\s]?[0-9A-Z]{4,10}"
+      "(?:EMP|emp|Employee)[\\s\\-]?(?:ID|id)[:\\s]?[0-9A-Z]{4,10}",
+      "(?:EMP|emp|Employee)[\\s\\-]?(?:ID|id)\\b[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{4,10}"
     ],
-    to: "(?:EMP|emp|Employee)[\\s\\-]?(?:ID|id)\\b[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{4,10}"
+    to: "(?:EMP|emp|Employee)[ \\t\\-]?(?:ID|id)\\b[ \\t#:]*(?=[A-Z]*[0-9])[0-9A-Z]{4,10}"
   },
   "filters.hr.contract": {
     from: [
-      "(?:Contract|contract)[\\s\\-]?(?:Number|number|#)[:\\s]?[0-9A-Z]{6,15}"
+      "(?:Contract|contract)[\\s\\-]?(?:Number|number|#)[:\\s]?[0-9A-Z]{6,15}",
+      "(?:Contract|contract)[\\s\\-]?(?:Number|number|#)[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
     ],
-    to: "(?:Contract|contract)[\\s\\-]?(?:Number|number|#)[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
+    to: "(?:Contract|contract)[ \\t\\-]?(?:Number|number|#)[ \\t#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
   },
   "filters.hr.payslip": {
     from: [
-      "(?:Payslip|payslip|Bulletin)[\\s\\-]?(?:Number|number|#)[:\\s]?[0-9A-Z]{6,15}"
+      "(?:Payslip|payslip|Bulletin)[\\s\\-]?(?:Number|number|#)[:\\s]?[0-9A-Z]{6,15}",
+      "(?:Payslip|payslip|Bulletin)[\\s\\-]?(?:Number|number|#)[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
     ],
-    to: "(?:Payslip|payslip|Bulletin)[\\s\\-]?(?:Number|number|#)[\\s#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
+    to: "(?:Payslip|payslip|Bulletin)[ \\t\\-]?(?:Number|number|#)[ \\t#:]*(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
   },
   "filters.personal.driverLicense": {
     from: [
-      "(?:License|Permis)[\\s\\-]?(?:No|Number|#)?[\\s:]?[A-Z0-9]{6,15}"
+      "(?:License|Permis)[\\s\\-]?(?:No|Number|#)?[\\s:]?[A-Z0-9]{6,15}",
+      "(?:License|Permis)[\\s\\-]?(?:No|Number|#)?[\\s#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{6,15}"
     ],
-    to: "(?:License|Permis)[\\s\\-]?(?:No|Number|#)?[\\s#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{6,15}"
+    to: "(?:License|Permis)[ \\t\\-]?(?:No|Number|#)?[ \\t#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{6,15}"
   },
   "filters.system.serialNumber": {
     from: [
-      "(?:S/N|Serial|SN)[\\s:]?[A-Z0-9]{8,20}"
+      "(?:S/N|Serial|SN)[\\s:]?[A-Z0-9]{8,20}",
+      "(?:S/N|Serial(?:\\s*(?:No|Number))?|SN)\\b[\\s#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{8,20}"
     ],
-    to: "(?:S/N|Serial(?:\\s*(?:No|Number))?|SN)\\b[\\s#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{8,20}"
+    to: "(?:S/N|Serial(?:[ \\t]*(?:No|Number))?|SN)\\b[ \\t#:.]*(?=[A-Z]*[0-9])[A-Z0-9]{8,20}"
   },
   "filters.developer.azureClientSecret": {
     from: [
@@ -203,21 +217,24 @@ export const PATTERN_MIGRATIONS: Record<string, { from: string[]; to: string; ca
   },
   "filters.system.unixPath": {
     from: [
-      "/(?:[^/\\s]+/)*[^/\\s]*"
+      "/(?:[^/\\s]+/)*[^/\\s]*",
+      "(?<![\\w:/.~-])/(?:[^/\\s]+/)+[^/\\s]*"
     ],
-    to: "(?<![\\w:/.~-])/(?:[^/\\s]+/)+[^/\\s]*"
+    to: "(?<![\\w:/.~*-])/(?:[^/\\s*]+/)+[^/\\s*]*"
   },
   "filters.finance.nirFrance": {
     from: [
-      "[12][0-9]{2}[01][0-9][0-9]{2}[0-9]{3}[0-9]{3}[0-9]{2}"
+      "[12][0-9]{2}[01][0-9][0-9]{2}[0-9]{3}[0-9]{3}[0-9]{2}",
+      "\\b[12]\\s?[0-9]{2}\\s?[0-9]{2}\\s?(?:[0-9]{2}|2[AB])\\s?[0-9]{3}\\s?[0-9]{3}(?:\\s?[0-9]{2})?\\b"
     ],
-    to: "\\b[12]\\s?[0-9]{2}\\s?[0-9]{2}\\s?(?:[0-9]{2}|2[AB])\\s?[0-9]{3}\\s?[0-9]{3}(?:\\s?[0-9]{2})?\\b"
+    to: "\\b[12][ \\t]?[0-9]{2}[ \\t]?[0-9]{2}[ \\t]?(?:[0-9]{2}|2[AB])[ \\t]?[0-9]{3}[ \\t]?[0-9]{3}(?:[ \\t]?[0-9]{2})?\\b"
   },
   "filters.finance.cvv": {
     from: [
-      "\\b[0-9]{3,4}\\b"
+      "\\b[0-9]{3,4}\\b",
+      "\\b(?:CVV2?|CVC2?|CID|CSC|cryptogramme)[\\s:#=]*[0-9]{3,4}\\b"
     ],
-    to: "\\b(?:CVV2?|CVC2?|CID|CSC|cryptogramme)[\\s:#=]*[0-9]{3,4}\\b"
+    to: "\\b(?:CVV2?|CVC2?|CID|CSC|cryptogramme)[ \\t:#=]*[0-9]{3,4}\\b"
   },
   "filters.finance.solana": {
     from: [
@@ -227,15 +244,150 @@ export const PATTERN_MIGRATIONS: Record<string, { from: string[]; to: string; ca
   },
   "filters.personal.address": {
     from: [
-      "[0-9]{1,5}\\s[a-zA-Z\\s]{3,}"
+      "[0-9]{1,5}\\s[a-zA-Z\\s]{3,}",
+      "\\b[0-9]{1,5}(?:\\s?(?:bis|ter))?,?\\s(?:rue|avenue|av\\.|boulevard|bd|place|chemin|allée|impasse|route|quai|cours|square|street|st\\.|road|rd\\.|ave\\.?|lane|drive|court|way|blvd)\\b[^\\n,;]{0,40}"
     ],
-    to: "\\b[0-9]{1,5}(?:\\s?(?:bis|ter))?,?\\s(?:rue|avenue|av\\.|boulevard|bd|place|chemin|allée|impasse|route|quai|cours|square|street|st\\.|road|rd\\.|ave\\.?|lane|drive|court|way|blvd)\\b[^\\n,;]{0,40}"
+    to: "\\b[0-9]{1,5}(?:[ \\t]?(?:bis|ter))?,?[ \\t](?:rue|avenue|av\\.|boulevard|bd|place|chemin|allée|impasse|route|quai|cours|square|street|st\\.|road|rd\\.|ave\\.?|lane|drive|court|way|blvd)\\b[^\\n,;]{0,40}"
   },
   "filters.personal.phone": {
     from: [
-      "\\+?[0-9]{1,3}[\\s\\-]?\\(?[0-9]{1,4}\\)?[\\s\\-]?[0-9]{1,4}[\\s\\-]?[0-9]{1,4}[\\s\\-]?[0-9]{1,9}"
+      "\\+?[0-9]{1,3}[\\s\\-]?\\(?[0-9]{1,4}\\)?[\\s\\-]?[0-9]{1,4}[\\s\\-]?[0-9]{1,4}[\\s\\-]?[0-9]{1,9}",
+      "(?<![\\w+])(?:\\+[0-9]{1,3}[\\s.\\-]?|\\b0)[1-9](?:[\\s.\\-]?[0-9]{2}){4}\\b|(?<![\\w+])\\+[0-9]{1,3}[\\s.\\-]?\\(?[0-9]{1,4}\\)?(?:[\\s.\\-]?[0-9]{2,4}){2,4}\\b|(?<![\\w+])\\(?\\b[0-9]{3}\\)?[\\s.\\-][0-9]{3}[\\s.\\-][0-9]{4}\\b"
     ],
-    to: "(?<![\\w+])(?:\\+[0-9]{1,3}[\\s.\\-]?|\\b0)[1-9](?:[\\s.\\-]?[0-9]{2}){4}\\b|(?<![\\w+])\\+[0-9]{1,3}[\\s.\\-]?\\(?[0-9]{1,4}\\)?(?:[\\s.\\-]?[0-9]{2,4}){2,4}\\b|(?<![\\w+])\\(?\\b[0-9]{3}\\)?[\\s.\\-][0-9]{3}[\\s.\\-][0-9]{4}\\b"
+    to: "(?<![\\w+])(?:\\+[0-9]{1,3}[ \\t.\\-]?|\\b0)[1-9](?:[ \\t.\\-]?[0-9]{2}){4}\\b|(?<![\\w+])\\+[0-9]{1,3}[ \\t.\\-]?\\(?[0-9]{1,4}\\)?(?:[ \\t.\\-]?[0-9]{2,4}){2,4}\\b|(?<![\\w+])\\(?\\b[0-9]{3}\\)?[ \\t.\\-][0-9]{3}[ \\t.\\-][0-9]{4}\\b"
+  },
+  "filters.developer.awsSecretKey": {
+    from: [
+      "aws[_\\-]?secret[_\\-]?access[_\\-]?key[\\s:=]+[A-Za-z0-9/+=]{40}"
+    ],
+    to: "aws[_\\-]?secret[_\\-]?access[_\\-]?key[ \\t:=]+[A-Za-z0-9/+=]{40}"
+  },
+  "filters.developer.awsSessionToken": {
+    from: [
+      "aws[_\\-]?session[_\\-]?token[\\s:=]+[A-Za-z0-9/+=]{100,}"
+    ],
+    to: "aws[_\\-]?session[_\\-]?token[ \\t:=]+[A-Za-z0-9/+=]{100,}"
+  },
+  "filters.developer.refreshToken": {
+    from: [
+      "refresh[_\\-]?token[\\s:=]+[a-zA-Z0-9\\-._~+/]+=*"
+    ],
+    to: "refresh[_\\-]?token[ \\t:=]+[a-zA-Z0-9\\-._~+/]+=*"
+  },
+  "filters.system.vmwareEsxi": {
+    from: [
+      "vim\\.host\\.LocalAccountManager\\.password[\\s:=]+[^\\s]+"
+    ],
+    to: "vim\\.host\\.LocalAccountManager\\.password[ \\t:=]+[^\\s]+"
+  },
+  "filters.system.snmpV3Auth": {
+    from: [
+      "snmpv3[\\s\\-]?auth[\\s:=]+[^\\s]+"
+    ],
+    to: "snmpv3[ \\t\\-]?auth[ \\t:=]+[^\\s]+"
+  },
+  "filters.system.snmpV3Priv": {
+    from: [
+      "snmpv3[\\s\\-]?priv[\\s:=]+[^\\s]+"
+    ],
+    to: "snmpv3[ \\t\\-]?priv[ \\t:=]+[^\\s]+"
+  },
+  "filters.system.ldapBind": {
+    from: [
+      "(?:bindpw|bind_password)[\\s:=]+[^\\s]+"
+    ],
+    to: "(?:bindpw|bind_password)[ \\t:=]+[^\\s]+"
+  },
+  "filters.system.vpnSecret": {
+    from: [
+      "(?:VPN|IPSec)[\\s_-]?(?:Secret|PSK):?\\s*[^\\s;]+"
+    ],
+    to: "(?:VPN|IPSec)[ \\t_-]?(?:Secret|PSK):?[ \\t]*[^\\s;]+"
+  },
+  "filters.system.wireguard": {
+    from: [
+      "(?:PrivateKey|private_key)[\\s:=]+[A-Za-z0-9+/]{43}="
+    ],
+    to: "(?:PrivateKey|private_key)[ \\t:=]+[A-Za-z0-9+/]{43}="
+  },
+  "filters.system.cookieSession": {
+    from: [
+      "(?:SESSION|PHPSESSID|JSESSIONID)[\\s:=]+[a-zA-Z0-9]{20,}"
+    ],
+    to: "(?:SESSION|PHPSESSID|JSESSIONID)[ \\t:=]+[a-zA-Z0-9]{20,}"
+  },
+  "filters.system.sessionId": {
+    from: [
+      "session[_\\-]?id[\\s:=]+[a-zA-Z0-9\\-]{20,}"
+    ],
+    to: "session[_\\-]?id[ \\t:=]+[a-zA-Z0-9\\-]{20,}"
+  },
+  "filters.finance.siretFrance": {
+    from: [
+      "\\b[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{5}\\b"
+    ],
+    to: "\\b[0-9]{3}[ \\t\\-]?[0-9]{3}[ \\t\\-]?[0-9]{3}[ \\t\\-]?[0-9]{5}\\b"
+  },
+  "filters.finance.sirenFrance": {
+    from: [
+      "\\b[0-9]{3}[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{3}\\b"
+    ],
+    to: "\\b[0-9]{3}[ \\t\\-]?[0-9]{3}[ \\t\\-]?[0-9]{3}\\b"
+  },
+  "filters.finance.ribFrance": {
+    from: [
+      "\\b[0-9]{5}[\\s\\-]?[0-9]{5}[\\s\\-]?[0-9]{11}[\\s\\-]?[0-9]{2}\\b"
+    ],
+    to: "\\b[0-9]{5}[ \\t\\-]?[0-9]{5}[ \\t\\-]?[0-9]{11}[ \\t\\-]?[0-9]{2}\\b"
+  },
+  "filters.finance.tvaFrance": {
+    from: [
+      "FR[0-9]{2}[\\s]?[0-9]{9}"
+    ],
+    to: "\\bFR[0-9]{2}[ ]?[0-9]{9}\\b"
+  },
+  "filters.finance.ssnUsa": {
+    from: [
+      "\\b[0-9]{3}[\\-\\s]?[0-9]{2}[\\-\\s]?[0-9]{4}\\b"
+    ],
+    to: "\\b[0-9]{3}[\\- \\t]?[0-9]{2}[\\- \\t]?[0-9]{4}\\b"
+  },
+  "filters.finance.itinUsa": {
+    from: [
+      "\\b9[0-9]{2}[\\-\\s]?[0-9]{2}[\\-\\s]?[0-9]{4}\\b"
+    ],
+    to: "\\b9[0-9]{2}[\\- \\t]?[0-9]{2}[\\- \\t]?[0-9]{4}\\b"
+  },
+  "filters.finance.iban": {
+    from: [
+      "[A-Z]{2}[0-9]{2}[A-Z0-9]{10,30}"
+    ],
+    to: "\\b[A-Z]{2}[0-9]{2}(?:[ ]?[A-Z0-9]{4}){2,7}(?:[ ]?[A-Z0-9]{1,4})?\\b",
+    caseSensitive: true
+  },
+  "filters.personal.gps": {
+    from: [
+      "[-+]?[0-9]{1,3}\\.[0-9]+[,\\s]+[-+]?[0-9]{1,3}\\.[0-9]+"
+    ],
+    to: "[-+]?[0-9]{1,3}\\.[0-9]+[, \\t]+[-+]?[0-9]{1,3}\\.[0-9]+"
+  },
+  "filters.hr.matricule": {
+    from: [
+      "(?:Matricule|matricule)[:\\s]+[0-9A-Z]{6,15}"
+    ],
+    to: "(?:Matricule|matricule)[: \\t]+(?=[A-Z]*[0-9])[0-9A-Z]{6,15}"
+  },
+  "filters.system.windowsPath": {
+    from: [
+      "[A-Z]:\\\\(?:[^\\\\/:*?\"<>|\\r\\n]+\\\\)*[^\\\\/:*?\"<>|\\r\\n]*"
+    ],
+    to: "[A-Z]:\\\\(?=[^\\\\/:*?\"<>|\\r\\n])(?:[^\\\\/:*?\"<>|\\r\\n]+\\\\)*[^\\\\/:*?\"<>|\\r\\n]*"
+  },
+  "filters.personal.email": {
+    from: [
+      "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
+    ],
+    to: "[a-zA-Z0-9._%+-]+@(?!vsphere\\.local:\\*\\*\\*REDACTED)[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
   }
 };
 
@@ -248,24 +400,37 @@ export const REPLACEMENT_MIGRATIONS: Record<string, { from: string; to: string }
 };
 
 /**
- * Broad default filters (paths, plain numbers, long tokens). They are applied
- * after all the other filters, so that a card number, a connection string or
- * a crypto address is masked as such before a generic pattern cuts it up.
+ * Order in which the default filters are applied. Specific filters come first;
+ * e-mail addresses next (a Sentry DSN or a vCenter login contains one); broad
+ * filters (paths, plain numbers, generic tokens) last, most structured first,
+ * so that a card number, a connection string, an IBAN or a hash is masked as
+ * such before a generic pattern cuts it up. User filters keep their place.
  */
-const BROAD_FILTERS = new Set([
-  'filters.developer.azureClientSecret', 'filters.system.windowsPath', 'filters.system.unixPath',
-  'filters.finance.nirFrance', 'filters.finance.siretFrance', 'filters.finance.sirenFrance', 'filters.finance.ribFrance',
-  'filters.finance.ssnUsa', 'filters.finance.einUsa', 'filters.finance.routingUsa', 'filters.finance.itinUsa',
-  'filters.finance.utrUk', 'filters.finance.iban', 'filters.finance.cvv', 'filters.finance.solana',
-  'filters.personal.phone', 'filters.personal.ipv4', 'filters.personal.ipv6', 'filters.personal.mac',
-  'filters.personal.birthdate', 'filters.personal.address', 'filters.personal.postalCode', 'filters.personal.gps',
-  'filters.system.md5Hash', 'filters.system.sha256Hash', 'filters.system.macAddress'
-]);
+const LATE_FILTERS = ['filters.personal.email'];
+const BROAD_FILTERS = [
+  'filters.system.sha256Hash', 'filters.system.md5Hash', 'filters.system.macAddress', 'filters.personal.mac',
+  'filters.personal.ipv6', 'filters.personal.ipv4', 'filters.finance.iban', 'filters.finance.ribFrance',
+  'filters.finance.siretFrance', 'filters.finance.nirFrance', 'filters.finance.sirenFrance',
+  'filters.finance.ssnUsa', 'filters.finance.itinUsa', 'filters.finance.einUsa', 'filters.finance.routingUsa',
+  'filters.finance.utrUk', 'filters.finance.cvv', 'filters.personal.birthdate', 'filters.personal.phone',
+  'filters.personal.gps', 'filters.personal.address', 'filters.personal.postalCode',
+  'filters.system.windowsPath', 'filters.system.unixPath', 'filters.finance.solana',
+  'filters.developer.azureClientSecret'
+];
 
-/** Filters in the order they are applied (specific first, broad last; stable otherwise). */
+function matchRank(key: string | undefined): number {
+  if (!key) return 0;
+  const broad = BROAD_FILTERS.indexOf(key);
+  if (broad !== -1) return 2 + broad;
+  return LATE_FILTERS.includes(key) ? 1 : 0;
+}
+
+/** Filters in the order they are applied (stable within the same rank). */
 export function inMatchOrder<T extends { descriptionKey?: string }>(filters: T[]): T[] {
-  const broad = (f: T) => !!f.descriptionKey && BROAD_FILTERS.has(f.descriptionKey);
-  return [...filters.filter(f => !broad(f)), ...filters.filter(broad)];
+  return filters
+    .map((f, i) => ({ f, i, rank: matchRank(f.descriptionKey) }))
+    .sort((x, y) => x.rank - y.rank || x.i - y.i)
+    .map(x => x.f);
 }
 
 export function defaultSettings(): AppSettings {

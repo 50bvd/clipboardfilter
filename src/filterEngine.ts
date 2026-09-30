@@ -337,8 +337,10 @@ export function applyRules(
     const next = result.replace(rule.regex, (...args: any[]) => {
       const match: string = args[0];
       if (match === '') return '';
-      n++;
-      return rule.constant !== null ? rule.constant : expand(rule.parts, args);
+      const replacement = rule.constant !== null ? rule.constant : expand(rule.parts, args);
+      // Already masked text (e.g. "postgresql://***REDACTED***") is not counted again
+      if (replacement !== match) n++;
+      return replacement;
     });
     if (n > 0) {
       result = next;

@@ -202,3 +202,40 @@ test('with every filter enabled, specific filters win over broad ones', () => {
   const prose = 'Budget : 1500 euros. Réseau / système. Réunion à 14h30, version 1.2.3.';
   assert.equal(applyRules(compileRules(all), prose).filtered, prose);
 });
+
+test('with every filter enabled: no filter crosses a line, each format keeps its own filter', () => {
+  const { inMatchOrder } = require('../dist/filterManager');
+  const set = compileRules(inMatchOrder(defaults.map(f => ({ ...f, enabled: true }))));
+  const run = (t) => applyRules(set, t, true);
+  const ids = (r) => r.details.map(d => d.id);
+
+  // Numbers at the end of a line are not joined with the next line
+  const lines = 'UTR : 1234567890\n066 next line\nMatricule: 123456\n091 next line';
+  assert.equal(run(lines).filtered.split('\n').length, 4);
+
+  // A 64-character Wi-Fi PSK is masked whole (nothing left behind)
+  const psk = run('PSK:' + 'ab'.repeat(32));
+  assert.equal(psk.filtered, 'PSK:***REDACTED***');
+
+  // Lowercase base58 is not an IBAN; a hex hash is not a Solana address
+  assert.deepEqual(ids(run('7EcDhSYGxXyscszYEp35KHN8vvw3svAuLKTzXwCFLtV')), ['d72']);
+  assert.deepEqual(ids(run('a1'.repeat(16))), ['d101']);
+  // An IBAN is masked as an IBAN, not as a VAT or SIRET number
+  assert.deepEqual(ids(run('FR7630006000011234567890189')), ['d66']);
+});
+
+test('filtering is stable: no filter changes or counts again what another filter produced', () => {
+  const { inMatchOrder } = require('../dist/filterManager');
+  const set = compileRules(inMatchOrder(defaults.map(f => ({ ...f, enabled: true }))));
+  for (const f of defaults) {
+    const text = ` ${f.replacement} `;
+    const r = applyRules(set, text);
+    assert.equal(r.filtered, text, f.descriptionKey);
+    assert.equal(r.count, 0, f.descriptionKey);
+  }
+  // Filtering an already filtered text changes nothing
+  const once = applyRules(set, SAMPLE).filtered;
+  const twice = applyRules(set, once);
+  assert.equal(twice.filtered, once);
+  assert.equal(twice.count, 0);
+});
