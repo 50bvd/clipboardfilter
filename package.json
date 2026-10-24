@@ -180,8 +180,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.20.4",
-    "electron": "^44.4.5",
-    "electron-builder": "^26.15.3",
+    "electron": "^44.9.3",
+    "electron-builder": "^26.18.0",
     "typescript": "^5.9.3"
   },
   "desktopName": "com.clipboardfilter.app.desktop",
