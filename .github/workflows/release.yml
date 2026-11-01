@@ -130,7 +130,7 @@ jobs:
             cp "$RUNNER_TEMP/ClipboardFilter-codesign.cer" release/
           fi
 
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           # Windows installers go through the signing job first
           name: ClipboardFilter-${{ matrix.platform }}${{ matrix.platform == 'windows' && '-unsigned' || '' }}
@@ -174,7 +174,7 @@ jobs:
       - name: Upload the installers to sign
         if: steps.cfg.outputs.sign == 'true'
         id: to-sign
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ClipboardFilter-windows-to-sign
           path: unsigned/*.exe
@@ -200,7 +200,7 @@ jobs:
         if: steps.cfg.outputs.sign != 'true'
         run: mkdir -p signed && cp unsigned/* signed/
 
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ClipboardFilter-windows
           path: signed/*
